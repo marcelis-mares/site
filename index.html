@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MARES Consultoria Empresarial | Decisão sem dados é achismo</title>
 <meta name="description" content="Consultoria de gestão orientada por dados. Transformamos seus dados em decisões estratégicas e crescimento previsível. Diagnóstico MARES.">
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','673278761920486');fbq('track','PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=673278761920486&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel Code -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -591,15 +602,15 @@ footer{background:var(--navy3);color:var(--muted);padding:54px 0 30px;border-top
       <div class="eyebrow">Vamos conversar</div>
       <h2 class="sec-title" style="color:var(--blue)">Vamos conversar sobre o seu Diagnóstico MARES</h2>
       <div class="form">
-        <label>Nome</label><input type="text" placeholder="Seu nome">
-        <label>E-mail</label><input type="email" placeholder="voce@empresa.com.br">
-        <label>WhatsApp</label><input type="tel" placeholder="(00) 00000-0000">
-        <label>Empresa</label><input type="text" placeholder="Nome da empresa">
+        <label>Nome</label><input name="Nome" type="text" placeholder="Seu nome">
+        <label>E-mail</label><input name="E-mail" type="email" placeholder="voce@empresa.com.br">
+        <label>WhatsApp</label><input name="WhatsApp" type="tel" placeholder="(00) 00000-0000">
+        <label>Empresa</label><input name="Empresa" type="text" placeholder="Nome da empresa">
         <label>Faturamento aproximado</label>
-        <select><option>Selecione</option><option>Até R$ 50 mil/mês</option><option>R$ 50 mil a R$ 200 mil/mês</option><option>R$ 200 mil a R$ 1 mi/mês</option><option>Acima de R$ 1 mi/mês</option></select>
-        <label>Como podemos te ajudar?</label><textarea placeholder="Conte um pouco do seu momento"></textarea>
+        <select name="Faturamento"><option>Selecione</option><option>Até R$ 50 mil/mês</option><option>R$ 50 mil a R$ 200 mil/mês</option><option>R$ 200 mil a R$ 1 mi/mês</option><option>Acima de R$ 1 mi/mês</option></select>
+        <label>Como podemos te ajudar?</label><textarea name="Mensagem" placeholder="Conte um pouco do seu momento"></textarea>
         <button class="btn" onclick="submitForm(event)">Agendar conversa</button>
-        <div class="ok">Recebemos seu contato. Em breve a equipe MARES fala com você.</div>
+        <div class="ok">Cadastro recebido! Fale agora com a nossa equipe no WhatsApp.<br><a href="https://wa.me/5541992488092?text=Ol%C3%A1%2C%20acabei%20de%20me%20cadastrar%20no%20site%20da%20MARES." target="_blank" rel="noopener" class="btn" style="display:inline-block;margin-top:12px;background:#25D366">Chamar no WhatsApp</a></div>
       </div>
     </div>
   </section>
@@ -624,15 +635,15 @@ footer{background:var(--navy3);color:var(--muted);padding:54px 0 30px;border-top
           <p class="body">Instagram: <a href="https://instagram.com/marcelis.pereira" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600">@marcelis.pereira</a> · <a href="https://instagram.com/mares_lideranca" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600">@mares_lideranca</a><br>LinkedIn: <a href="https://www.linkedin.com/in/marcelis-pereira" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600">/in/marcelis-pereira</a><br>Site: <a href="https://maresconsultoria.com.br" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600">maresconsultoria.com.br</a></p>
         </div>
         <div class="form" style="margin-top:0">
-          <label>Nome</label><input type="text" placeholder="Seu nome">
-          <label>E-mail</label><input type="email" placeholder="voce@empresa.com.br">
-          <label>WhatsApp</label><input type="tel" placeholder="(00) 00000-0000">
-          <label>Empresa</label><input type="text" placeholder="Nome da empresa">
+          <label>Nome</label><input name="Nome" type="text" placeholder="Seu nome">
+          <label>E-mail</label><input name="E-mail" type="email" placeholder="voce@empresa.com.br">
+          <label>WhatsApp</label><input name="WhatsApp" type="tel" placeholder="(00) 00000-0000">
+          <label>Empresa</label><input name="Empresa" type="text" placeholder="Nome da empresa">
           <label>Faturamento aproximado</label>
-          <select><option>Selecione</option><option>Até R$ 50 mil/mês</option><option>R$ 50 mil a R$ 200 mil/mês</option><option>R$ 200 mil a R$ 1 mi/mês</option><option>Acima de R$ 1 mi/mês</option></select>
-          <label>Como podemos te ajudar?</label><textarea placeholder="Conte um pouco do seu momento"></textarea>
+          <select name="Faturamento"><option>Selecione</option><option>Até R$ 50 mil/mês</option><option>R$ 50 mil a R$ 200 mil/mês</option><option>R$ 200 mil a R$ 1 mi/mês</option><option>Acima de R$ 1 mi/mês</option></select>
+          <label>Como podemos te ajudar?</label><textarea name="Mensagem" placeholder="Conte um pouco do seu momento"></textarea>
           <button class="btn" onclick="submitForm(event)">Agendar conversa</button>
-          <div class="ok">Recebemos seu contato. Em breve a equipe MARES fala com você.</div>
+          <div class="ok">Cadastro recebido! Fale agora com a nossa equipe no WhatsApp.<br><a href="https://wa.me/5541992488092?text=Ol%C3%A1%2C%20acabei%20de%20me%20cadastrar%20no%20site%20da%20MARES." target="_blank" rel="noopener" class="btn" style="display:inline-block;margin-top:12px;background:#25D366">Chamar no WhatsApp</a></div>
         </div>
       </div>
     </div>
@@ -685,10 +696,18 @@ function toggleFaq(btn){
 }
 function scrollToForm(){document.getElementById('formsec').scrollIntoView({behavior:'smooth'});}
 function goDiag(){ go('diagnostico'); setTimeout(function(){ var f=document.getElementById('formsec'); if(f) f.scrollIntoView({behavior:'smooth'}); }, 350); }
+var WEB3FORMS_KEY='0807768e-222f-4004-9e5a-3e4ed80611b0';
 function submitForm(e){
   e.preventDefault();
-  var ok=e.target.parentElement.querySelector('.ok');
-  if(ok) ok.style.display='block';
+  var wrap=e.target.closest('.form'); var btn=e.target;
+  var payload={access_key:WEB3FORMS_KEY, subject:'Novo cadastro pelo site MARES', from_name:'Site MARES'};
+  wrap.querySelectorAll('[name]').forEach(function(el){ payload[el.name]=el.value; });
+  if(!payload['Nome'] || !payload['E-mail']){ alert('Por favor, preencha ao menos nome e e-mail.'); return; }
+  var original=btn.textContent; btn.textContent='Enviando...'; btn.disabled=true;
+  fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+   .then(function(r){return r.json();})
+   .then(function(j){ if(j.success){ wrap.querySelector('.ok').style.display='block'; btn.style.display='none'; if(window.fbq) fbq('track','Lead'); } else { throw new Error(j.message||'erro'); } })
+   .catch(function(){ btn.textContent=original; btn.disabled=false; alert('Nao consegui enviar agora. Tente de novo ou chame no WhatsApp.'); });
 }
 
 function animateCount(el){
