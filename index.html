@@ -497,7 +497,6 @@ footer{background:var(--navy3);color:var(--muted);padding:54px 0 30px;border-top
           <div class="videowrap">
             <iframe src="https://drive.google.com/file/d/1winodsetncFWBXX2XhLBp5h4MSbrIetw/preview" allow="autoplay; fullscreen" allowfullscreen referrerpolicy="no-referrer"></iframe>
           </div>
-          <a class="btn" style="margin-top:14px" href="https://drive.google.com/file/d/1winodsetncFWBXX2XhLBp5h4MSbrIetw/view" target="_blank" rel="noopener">Assistir ao depoimento</a>
         </div>
       </div>
     </div>
@@ -667,7 +666,8 @@ footer{background:var(--navy3);color:var(--muted);padding:54px 0 30px;border-top
 </div>
 
 <script>
-function go(id){
+function showPage(id){
+  if(!document.getElementById(id)) id='home';
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   document.querySelectorAll('[data-nav]').forEach(a=>a.classList.toggle('active',a.dataset.nav===id));
@@ -675,6 +675,10 @@ function go(id){
   window.scrollTo({top:0,behavior:'smooth'});
   if(id==='home'){ setTimeout(playStats,250); }
 }
+function go(id){
+  if(('#'+id)===location.hash){ showPage(id); } else { location.hash=id; }
+}
+window.addEventListener('hashchange', function(){ showPage(location.hash.slice(1)||'home'); });
 function toggleFaq(btn){
   const qa=btn.parentElement;qa.classList.toggle('open');
   btn.querySelector('.plus').textContent=qa.classList.contains('open')?'-':'+';
@@ -712,6 +716,7 @@ function playStats(){
   var io=new IntersectionObserver(function(entries){ entries.forEach(function(e){ if(e.isIntersecting){ playStats(); io.unobserve(band); } }); },{threshold:.35});
   io.observe(band);
 })();
+showPage(location.hash.slice(1)||'home');
 </script>
 </body>
 </html>
