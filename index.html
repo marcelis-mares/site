@@ -706,7 +706,7 @@ function submitForm(e){
   var original=btn.textContent; btn.textContent='Enviando...'; btn.disabled=true;
   fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
    .then(function(r){return r.json();})
-   .then(function(j){ if(j.success){ var okd=wrap.querySelector('.ok'); okd.style.display='block'; btn.style.display='none'; if(window.fbq) fbq('track','Lead'); var msg=(payload['Mensagem']||'').trim(); var txt='Olá, acabei de me cadastrar no site da MARES.'+(msg?(' Quero falar sobre: '+msg):''); var wa=okd.querySelector('a'); if(wa) wa.href='https://wa.me/5541992488092?text='+encodeURIComponent(txt); } else { throw new Error(j.message||'erro'); } })
+   .then(function(j){ if(j.success){ var okd=wrap.querySelector('.ok'); okd.style.display='block'; btn.style.display='none'; if(window.fbq) fbq('track','Lead'); var nome=(payload['Nome']||'').trim(), emp=(payload['Empresa']||'').trim(), fat=(payload['Faturamento']||'').trim(), msg=(payload['Mensagem']||'').trim(); var txt=(nome?('Olá, sou '+nome+'. '):'Olá! ')+'Acabei de me cadastrar no site da MARES.'; if(emp) txt+=' Empresa: '+emp+'.'; if(fat && fat!=='Selecione') txt+=' Faturamento: '+fat+'.'; if(msg) txt+=' Quero falar sobre: '+msg; var wa=okd.querySelector('a'); if(wa) wa.href='https://wa.me/5541992488092?text='+encodeURIComponent(txt); } else { throw new Error(j.message||'erro'); } })
    .catch(function(){ btn.textContent=original; btn.disabled=false; alert('Nao consegui enviar agora. Tente de novo ou chame no WhatsApp.'); });
 }
 
