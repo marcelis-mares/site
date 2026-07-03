@@ -155,7 +155,7 @@ footer{background:var(--navy3);color:var(--muted);padding:54px 0 30px;border-top
 .hero-photo img{width:100%;height:100%;object-fit:cover;display:block}
 .pal-hero-img{width:100%;border-radius:18px;object-fit:cover;aspect-ratio:16/10;box-shadow:0 20px 50px rgba(0,0,0,.35)}
 
-.videowrap{position:relative;width:100%;aspect-ratio:16/9;border-radius:18px;overflow:hidden;box-shadow:0 20px 50px rgba(6,24,42,.30);background:#000}
+.videowrap{position:relative;width:100%;max-width:340px;aspect-ratio:9/16;border-radius:18px;overflow:hidden;box-shadow:0 20px 50px rgba(6,24,42,.30);background:#000;margin:0 auto}
 .videowrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .case-split{display:grid;grid-template-columns:1fr 1fr;gap:38px;align-items:center;margin-top:30px}
 @media(max-width:900px){.case-split{grid-template-columns:1fr}}
@@ -187,7 +187,7 @@ footer{background:var(--navy3);color:var(--muted);padding:54px 0 30px;border-top
       <a onclick="go('palestras')" data-nav="palestras">Palestras</a>
       <a onclick="go('cases')" data-nav="cases">Cases</a>
       <a onclick="go('contato')" data-nav="contato">Contato</a>
-      <button class="btn" onclick="go('diagnostico')">Quero o Diagnóstico MARES</button>
+      <button class="btn" onclick="goDiag()">Quero o Diagnóstico MARES</button>
     </nav>
     <button class="hamb" onclick="document.getElementById('menu').classList.toggle('show')"><span></span><span></span><span></span></button>
   </div>
@@ -680,6 +680,7 @@ function toggleFaq(btn){
   btn.querySelector('.plus').textContent=qa.classList.contains('open')?'-':'+';
 }
 function scrollToForm(){document.getElementById('formsec').scrollIntoView({behavior:'smooth'});}
+function goDiag(){ go('diagnostico'); setTimeout(function(){ var f=document.getElementById('formsec'); if(f) f.scrollIntoView({behavior:'smooth'}); }, 350); }
 function submitForm(e){
   e.preventDefault();
   var ok=e.target.parentElement.querySelector('.ok');
