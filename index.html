@@ -278,6 +278,19 @@ footer{background:var(--navy3);color:var(--muted);padding:54px 0 30px;border-top
     </div>
   </section>
 
+  <section class="dark" id="gratis">
+    <div class="container">
+      <div class="eyebrow">Comece de graça</div>
+      <h2 class="sec-title">Descubra onde sua empresa está, sem pagar nada</h2>
+      <p class="lead">Três diagnósticos gratuitos e rápidos, feitos pela MARES. Faça um agora e receba um retrato do seu momento.</p>
+      <div class="grid3">
+        <div class="card"><h3>RaioX MARES</h3><p>A maturidade da sua empresa em 7 dimensões estratégicas. Cerca de 5 minutos.</p><div class="cta-row"><a class="btn" href="https://raiox.mareslideranca.com.br/?utm_source=site&utm_medium=referral&utm_content=home_gratis" target="_blank" rel="noopener">Fazer o RaioX</a></div></div>
+        <div class="card"><h3>Sonda MARES</h3><p>Em que profundidade você decide? Mapeia os seus 5 pilares. Cerca de 3 minutos.</p><div class="cta-row"><a class="btn" href="https://sonda.mareslideranca.com.br/?utm_source=site&utm_medium=referral&utm_content=home_gratis" target="_blank" rel="noopener">Fazer a Sonda</a></div></div>
+        <div class="card"><h3>Teste de Temperamentos</h3><p>Seu perfil de liderança: Tubarão, Golfinho, Polvo ou Tartaruga.</p><div class="cta-row"><a class="btn" href="https://teste.mareslideranca.com.br/?utm_source=site&utm_medium=referral&utm_content=home_gratis" target="_blank" rel="noopener">Descobrir meu perfil</a></div></div>
+      </div>
+    </div>
+  </section>
+
   <section>
     <div class="container">
       <div class="eyebrow">O que a MARES faz por você</div>
@@ -710,12 +723,17 @@ function toggleFaq(btn){
 function scrollToForm(){document.getElementById('formsec').scrollIntoView({behavior:'smooth'});}
 function goDiag(){ go('diagnostico'); setTimeout(function(){ var f=document.getElementById('formsec'); if(f) f.scrollIntoView({behavior:'smooth'}); }, 350); }
 var WEB3FORMS_KEY='0807768e-222f-4004-9e5a-3e4ed80611b0';
+var APPSCRIPT_URL='';
+var RD_TOKEN='10b02ef74f4e5da88354848634e7bbeb';
 function submitForm(e){
   e.preventDefault();
   var wrap=e.target.closest('.form'); var btn=e.target;
   var payload={access_key:WEB3FORMS_KEY, subject:'Novo cadastro pelo site MARES', from_name:'Site MARES'};
   wrap.querySelectorAll('[name]').forEach(function(el){ payload[el.name]=el.value; });
   if(!payload['Nome'] || !payload['E-mail']){ alert('Por favor, preencha ao menos nome e e-mail.'); return; }
+  payload.Origem='Site maresconsultoria';
+  if(APPSCRIPT_URL){ fetch(APPSCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}).catch(function(){}); }
+  if(RD_TOKEN){ fetch('https://api.rd.services/platform/conversions?api_key='+RD_TOKEN,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event_type:'CONVERSION',event_family:'CDP',payload:{conversion_identifier:'Cadastro Site MARES',email:payload['E-mail']||'',name:payload['Nome']||'',personal_phone:payload['WhatsApp']||'',company_name:payload['Empresa']||'',cf_faturamento:payload['Faturamento']||'',cf_mensagem:payload['Mensagem']||''}})}).catch(function(){}); }
   var original=btn.textContent; btn.textContent='Enviando...'; btn.disabled=true;
   fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
    .then(function(r){return r.json();})
