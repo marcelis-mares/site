@@ -1,9 +1,67 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://www.maresconsultoria.com.br/</loc>
-    <lastmod>2026-07-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
-  </url>
-</urlset>
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Serviços | MARES Consultoria Empresarial</title><meta name="description" content="Consultoria, mentoria, planejamento estratégico, inteligência de dados, workshops e palestras. Comece pelo Mapa de Maturidade."><link rel="canonical" href="https://www.maresconsultoria.com.br/servicos/"><meta property="og:type" content="website"><meta property="og:site_name" content="MARES Consultoria Empresarial"><meta property="og:title" content="Serviços | MARES Consultoria Empresarial"><meta property="og:description" content="Consultoria, mentoria, planejamento estratégico, inteligência de dados, workshops e palestras. Comece pelo Mapa de Maturidade."><meta property="og:url" content="https://www.maresconsultoria.com.br/servicos/"><meta property="og:image" content="https://www.maresconsultoria.com.br/og-image.jpg"><meta property="og:locale" content="pt_BR"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Serviços | MARES Consultoria Empresarial"><meta name="twitter:description" content="Consultoria, mentoria, planejamento estratégico, inteligência de dados, workshops e palestras. Comece pelo Mapa de Maturidade."><meta name="twitter:image" content="https://www.maresconsultoria.com.br/og-image.jpg"><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="../styles.css"><!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','673278761920486');fbq('track','PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=673278761920486&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel Code --><script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Organization","name":"MARES Consultoria Empresarial","url":"https://www.maresconsultoria.com.br/","description":"Consultoria de gestão orientada por dados. Transforma dados em decisões estratégicas e crescimento previsível.","areaServed":"BR","email":"comercial@mareslideranca.com.br","telephone":"+55-41-99248-8092","founder":{"@type":"Person","name":"Marcelis Pereira","jobTitle":"Estrategista de negócios e fundadora da MARES","alumniOf":"Universidade Federal do Espírito Santo (UFES)","sameAs":["https://www.instagram.com/marcelis.pereira","https://www.linkedin.com/in/marcelis-pereira"]},"sameAs":["https://www.instagram.com/marcelis.pereira","https://www.instagram.com/mares_lideranca","https://www.linkedin.com/in/marcelis-pereira"]}
+</script><script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"MARES Consultoria Empresarial","url":"https://www.maresconsultoria.com.br/","inLanguage":"pt-BR"}
+</script><script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Service","serviceType":"Consultoria de gestão empresarial orientada por dados","name":"Diagnóstico MARES","provider":{"@type":"Organization","name":"MARES Consultoria Empresarial","url":"https://www.maresconsultoria.com.br/"},"areaServed":"BR","description":"Diagnóstico completo e plano de ação estratégico para a empresa crescer com previsibilidade, unindo Pessoas, Dados e Gestão."}
+</script></head><body><header><div class="container nav"><a href="../" class="brand-link"><img class="logo" src="../assets/logo-mares.png" alt="MARES Consultoria Empresarial"></a><nav class="menu" id="menu"><a href="../">Início</a><a href="../sobre/">Sobre</a><a href="../metodo/">Método</a><a href="../servicos/" class="active">Serviços</a><a href="../palestras/">Palestras</a><a href="../cases/">Cases</a><a href="../contato/">Contato</a><a class="btn" href="../diagnostico/#formsec">Quero o Diagnóstico MARES</a></nav><button class="hamb" onclick="document.getElementById('menu').classList.toggle('show')"><span></span><span></span><span></span></button></div></header><div class="page">
+  <section class="dark">
+    <div class="container">
+      <div class="eyebrow">Serviços</div>
+      <h1 class="hero-title">Como posso te ajudar?</h1>
+      <div class="gradbar"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="grid2">
+        <div class="card"><h3>Consultoria Empresarial</h3><p>Para empresas que buscam um plano de ação claro, com acompanhamento personalizado e foco em crescimento estruturado.</p></div>
+        <div class="card"><h3>Mentoria para Líderes e Empresários</h3><p>Para líderes que querem evoluir a visão, melhorar a gestão e oxigenar a forma de liderar, com clareza na tomada de decisão por dados.</p></div>
+        <div class="card"><h3>Planejamento Estratégico</h3><p>Diagnóstico e estruturação de novos modelos de expansão alinhados às tendências de mercado.</p></div>
+        <div class="card"><h3>Inteligência de Dados</h3><p>Implementação de BI e KPIs para decisões mais assertivas.</p></div>
+        <div class="card"><h3>Workshops e Palestras</h3><p>Conteúdos personalizados para organizações e eventos.</p></div>
+        <div class="card"><h3>Formação de Líderes</h3><p>Liderança Oxigênio: líderes conectados com propósito e inovação para resultados duradouros.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sand">
+    <div class="container">
+      <div class="eyebrow">Por onde começar</div>
+      <h2 class="sec-title">Do primeiro passo ao programa completo</h2>
+      <div class="ladder">
+        <div class="rung">
+          <h3>Mapa de Maturidade MARES</h3>
+          <div class="price">valor na conversa</div>
+          <p style="font-size:14px;color:#54606b;margin-bottom:10px">Porta de entrada. Um mini-diagnóstico rápido que mostra em que ponto sua empresa está e entrega um primeiro plano de ação. Prove o método antes do programa completo.</p>
+          <ul><li>Diagnóstico rápido de maturidade</li><li>Primeiro plano de ação</li><li>Leva ao Diagnóstico MARES</li></ul>
+          <div class="cta-row"><button class="btn btn-dark" onclick="go('contato')">Começar pelo Mapa</button></div>
+        </div>
+        <div class="rung hi">
+          <h3>Diagnóstico MARES</h3>
+          <div class="price">sob consulta</div>
+          <p style="font-size:14px;color:#54606b;margin-bottom:10px">Programa completo: diagnóstico e plano de ação estratégico, com mapa de maturidade, plano de ação visual e workshop de devolutiva. Prazo de 90 a 120 dias.</p>
+          <ul><li>Indicadores completos</li><li>Mapa de maturidade + plano visual</li><li>Workshop de devolutiva com o time</li></ul>
+          <div class="cta-row"><button class="btn" onclick="go('diagnostico')">Quero o Diagnóstico MARES</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- PALESTRAS --></div><footer><div class="container"><div class="foot"><div><img class="logo" src="../assets/logo-mares.png" alt="MARES Consultoria Empresarial"><p>Pessoas, Dados e Gestão.</p><p style="margin-top:10px;max-width:320px">Transformando negócios e desenvolvendo líderes. Consultoria de gestão orientada por dados.</p></div><div><h4>Navegação</h4><a href="../sobre/">Sobre</a><a href="../metodo/">Método</a><a href="../servicos/">Serviços</a><a href="../palestras/">Palestras</a><a href="../cases/">Cases</a></div><div><h4>Contato</h4><a href="../diagnostico/">Diagnóstico MARES</a><a href="../contato/">Fale conosco</a><a href="https://instagram.com/marcelis.pereira" target="_blank" rel="noopener">@marcelis.pereira</a><a href="https://instagram.com/mares_lideranca" target="_blank" rel="noopener">@mares_lideranca</a><a href="https://maresconsultoria.com.br" target="_blank" rel="noopener">maresconsultoria.com.br</a></div></div><div class="copyright">MARES Consultoria Empresarial, Marcelis Pereira. Transformando negócios e desenvolvendo líderes.</div></div></footer><div class="wa" onclick="window.open('https://wa.me/5541992488092','_blank')" title="Fale no WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.5-.1-.7.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-1.5-.8-2.5-1.4-3.5-3.1-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5s-.7-1.6-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.3 5.2 4.6 1.9.8 2.7.9 3.6.8.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3M12 2a10 10 0 0 0-8.6 15l-1.3 4.7L7 20.3A10 10 0 1 0 12 2"/></svg>
+</div><script src="../app.js"></script></body></html>
