@@ -561,7 +561,9 @@ const CONFIG = {
   // Confira em RD > Configurações > Campos personalizados (coluna do meio).
   RD_CAMPO_FATURAMENTO: 'cf_faixa_de_faturamento_anual',
   RD_CAMPO_FUNCIONARIOS: 'cf_numero_de_funcionarios',
-  RD_CAMPO_MOMENTO: 'cf_momento_da_empresa',
+  RD_CAMPO_MOMENTO: 'cf_estagio_de_maturidade',
+  RD_CAMPO_OBSERVACOES: 'cf_observacoes_raiox',
+  RD_IDENTIFICADOR_NIVEL: 'raiox-nivel-',
   RD_CAMPO_MENSAGEM: 'cf_mensagem_diagnostico_raiox',
 
   // 3) WhatsApp de destino do CTA final.
@@ -913,16 +915,35 @@ function calcular(){
   return {media, nivel, porPilar, forte: ord[0], fraco: ord[ord.length-1]};
 }
 
+/* monta o texto que vai para o campo Observações RaioX no RD */
+function textoObservacoes(){
+  const limpo = t => String(t || '').replace(/;/g, ',').trim();
+  const partes = respostas.map((r, i) => {
+    const q = PERGUNTAS[i];
+    const escolha = (r && q.o[r-1]) ? q.o[r-1] : 'sem resposta';
+    return (i+1) + ') ' + limpo(q.t) + ' ' + limpo(escolha) + ' [' + (r || 0) + '/5]';
+  });
+  const r = resultado;
+  const cab = r ? [limpo(r.nivel.nome), 'Nota ' + r.media.toFixed(2).replace('.', ','),
+                   'Mais forte ' + limpo(r.forte.nome), 'Mais fraca ' + limpo(r.fraco.nome)] : [];
+  return cab.concat(partes).join('; ');
+}
+
 /* ======================= RESULTADO ======================= */
 function finalizar(){
   $('#preenche').style.width = '100%';
   resultado = calcular();
   tela('#tela-load');
 
-  enviarRD(CONFIG.RD_IDENTIFICADOR_RESULTADO, {
+  const numeroNivel = NIVEIS.indexOf(resultado.nivel) + 1;
+  const extraRD = {
     nivel: resultado.nivel.nome,
-    pontuacao: resultado.media.toFixed(2)
-  });
+    pontuacao: resultado.media.toFixed(2),
+    [CONFIG.RD_CAMPO_OBSERVACOES]: textoObservacoes()
+  };
+  enviarRD(CONFIG.RD_IDENTIFICADOR_RESULTADO, extraRD);
+  /* segunda conversão, só com o número do nível, para a automação separar os e-mails */
+  enviarRD(CONFIG.RD_IDENTIFICADOR_NIVEL + numeroNivel, extraRD);
   enviarPlanilha();
   try{ fbq('track','CompleteRegistration',{content_name:'RaioX MARES', value:Number(resultado.media.toFixed(2)), currency:'BRL'}); }catch(e){}
 
@@ -1067,6 +1088,7 @@ function enviarPlanilha(){
     nivel_texto: r.nivel.texto,
     whatsapp_url: montarWhats('Quero agendar minha pré-mentoria.'),
     respostas: respostas.join('|'),
+    observacoes: textoObservacoes(),
     origem: location.href
   };
   fetch(CONFIG.SHEETS_WEBHOOK,{
