@@ -887,6 +887,20 @@ function enviarRD(identificador, extra){
   }).catch(e => console.warn('[RD] falha ao enviar conversão', e));
 }
 
+/* texto com todas as respostas, para a planilha e para o e-mail */
+function textoObservacoes(){
+  const limpo = t => String(t || '').replace(/;/g, ',').trim();
+  const partes = respostas.map((r, i) => {
+    const q = PERGUNTAS[i];
+    const escolha = (r && q.o[r-1]) ? q.o[r-1] : 'sem resposta';
+    return (i+1) + ') ' + limpo(q.t) + ' ' + limpo(escolha) + ' [' + (r || 0) + '/5]';
+  });
+  const r = resultado;
+  const cab = r ? [limpo(r.nivel.nome), 'Nota ' + r.media.toFixed(2).replace('.', ','),
+                   'Mais forte ' + limpo(r.forte.nome), 'Mais fraco ' + limpo(r.fraco.nome)] : [];
+  return cab.concat(partes).join('; ');
+}
+
 function enviarPlanilha(){
   if (!CONFIG.SHEETS_WEBHOOK) { console.warn('[Sonda] webhook da planilha não configurado'); return; }
   const r = resultado;
@@ -911,6 +925,14 @@ function enviarPlanilha(){
     nivel_texto: r.nivel.texto,
     whatsapp_url: montarWhats('Quero agendar minha pré-mentoria.'),
     respostas: respostas.join('|'),
+    observacoes: textoObservacoes(),
+    teste: 'Sonda',
+    dimensoes: r.porPilar.map(p => ({chave:p.chave, nome:p.nome, sub:p.sub, nota:p.media.toFixed(2), faixa:p.faixa, cor:p.cor})),
+    dimensao_forte: r.forte.nome,
+    dimensao_fraca: r.fraco.nome,
+    dimensao_forte_nota: r.forte.media.toFixed(2),
+    dimensao_fraca_nota: r.fraco.media.toFixed(2),
+    perguntas_respostas: respostas.map((v,i) => ({pergunta:PERGUNTAS[i].t, resposta: v ? PERGUNTAS[i].o[v-1] : '', nota:v})),
     origem: location.href
   };
   fetch(CONFIG.SHEETS_WEBHOOK,{
