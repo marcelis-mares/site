@@ -416,6 +416,31 @@ fbq('init','673278761920486');fbq('track','PageView');
           <div class="msg-erro" id="e-faturamento">Escolha a faixa de faturamento.</div>
         </div>
 
+        <div class="campo">
+          <label for="f-funcionarios">Número de funcionários</label>
+          <select id="f-funcionarios" name="funcionarios" required>
+            <option value="" disabled selected>Selecione o tamanho da equipe</option>
+            <option value="Até 5 pessoas">Até 5 pessoas</option>
+            <option value="De 6 a 20 pessoas">De 6 a 20 pessoas</option>
+            <option value="De 21 a 50 pessoas">De 21 a 50 pessoas</option>
+            <option value="De 51 a 100 pessoas">De 51 a 100 pessoas</option>
+            <option value="Mais de 100 pessoas">Mais de 100 pessoas</option>
+          </select>
+          <div class="msg-erro" id="e-funcionarios">Escolha o tamanho da equipe.</div>
+        </div>
+
+        <div class="campo">
+          <label for="f-momento">Qual contexto reflete o momento da sua empresa hoje?</label>
+          <select id="f-momento" name="momento" required>
+            <option value="" disabled selected>Selecione o momento</option>
+            <option value="Validando o produto ou serviço">Ainda estou validando o produto ou serviço</option>
+            <option value="Ampliando vendas do que já foi validado, foco em fazer caixa">Já validei e agora amplio vendas, o foco é fazer caixa para crescer</option>
+            <option value="Tenho caixa e preciso escalar">Tenho caixa e preciso escalar</option>
+            <option value="Cresci rápido e preciso organizar para crescer com previsibilidade">Crescemos bastante e agora preciso organizar para crescer com previsibilidade</option>
+          </select>
+          <div class="msg-erro" id="e-momento">Escolha o momento da empresa.</div>
+        </div>
+
         <div id="aviso-form" role="alert"></div>
         <button type="submit" class="btn" style="width:100%;margin-top:8px" id="btn-comecar">Começar o diagnóstico</button>
         <p class="privacidade">Seus dados ficam com a MARES e são usados para enviar o resultado e falar sobre o Diagnóstico MARES. Nada de spam.</p>
@@ -535,6 +560,8 @@ const CONFIG = {
   // Identificadores dos campos personalizados no RD Station.
   // Confira em RD > Configurações > Campos personalizados (coluna do meio).
   RD_CAMPO_FATURAMENTO: 'cf_faixa_de_faturamento_anual',
+  RD_CAMPO_FUNCIONARIOS: 'cf_numero_de_funcionarios',
+  RD_CAMPO_MOMENTO: 'cf_momento_da_empresa',
   RD_CAMPO_MENSAGEM: 'cf_mensagem_diagnostico_raiox',
 
   // 3) WhatsApp de destino do CTA final.
@@ -765,6 +792,19 @@ wa.addEventListener('input', e => {
   e.target.value = v;
 });
 
+/* limpa o aviso de erro assim que a pessoa corrige o campo */
+['nome','email','whatsapp','empresa','faturamento','funcionarios','momento'].forEach(id => {
+  const el = document.getElementById('f-'+id);
+  if (!el) return;
+  const limpar = () => {
+    el.classList.remove('erro');
+    const er = document.getElementById('e-'+id);
+    if (er) er.classList.remove('on');
+  };
+  el.addEventListener('input', limpar);
+  el.addEventListener('change', limpar);
+});
+
 function valida(id, ok){
   const el = $('#f-'+id), er = $('#e-'+id);
   if (el) el.classList.toggle('erro', !ok);
@@ -779,13 +819,17 @@ $('#form-lead').addEventListener('submit', e => {
   const whats = $('#f-whatsapp').value.trim();
   const emp   = $('#f-empresa').value.trim();
   const fat   = $('#f-faturamento').value;
+  const func  = $('#f-funcionarios').value;
+  const mom   = $('#f-momento').value;
 
   const ok = [
     valida('nome',  nome.length >= 3 && nome.trim().includes(' ')),
     valida('email', /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)),
     valida('whatsapp', whats.replace(/\D/g,'').length >= 10),
     valida('empresa', emp.length >= 2),
-    valida('faturamento', fat !== '')
+    valida('faturamento', fat !== ''),
+    valida('funcionarios', func !== ''),
+    valida('momento', mom !== '')
   ].every(Boolean);
   if (!ok) {
     const faltando = [];
@@ -794,6 +838,8 @@ $('#form-lead').addEventListener('submit', e => {
     if ($('#f-whatsapp').classList.contains('erro'))    faltando.push('WhatsApp com DDD');
     if ($('#f-empresa').classList.contains('erro'))     faltando.push('empresa');
     if ($('#f-faturamento').classList.contains('erro')) faltando.push('faixa de faturamento');
+    if ($('#f-funcionarios').classList.contains('erro')) faltando.push('número de funcionários');
+    if ($('#f-momento').classList.contains('erro'))      faltando.push('momento da empresa');
 
     const av = $('#aviso-form');
     av.innerHTML = '<b>Falta preencher</b>' + faltando.join(' · ');
@@ -804,7 +850,7 @@ $('#form-lead').addEventListener('submit', e => {
   }
   $('#aviso-form').classList.remove('on');
 
-  lead = {nome, email, whatsapp: whats, empresa: emp, faturamento: fat, mensagem: ''};
+  lead = {nome, email, whatsapp: whats, empresa: emp, faturamento: fat, funcionarios: func, momento: mom, mensagem: ''};
   enviarRD(CONFIG.RD_IDENTIFICADOR_LEAD, {});
   try{ fbq('track','Lead',{content_name:'RaioX MARES'}); }catch(e){}
   tela('#tela-quiz');
@@ -982,6 +1028,8 @@ function enviarRD(identificador, extra){
       personal_phone: lead.whatsapp,
       company_name: lead.empresa,
       [CONFIG.RD_CAMPO_FATURAMENTO]: lead.faturamento || '',
+      [CONFIG.RD_CAMPO_FUNCIONARIOS]: lead.funcionarios || '',
+      [CONFIG.RD_CAMPO_MOMENTO]: lead.momento || '',
       [CONFIG.RD_CAMPO_MENSAGEM]: lead.mensagem || '',
       ...extra
     }
@@ -1005,6 +1053,8 @@ function enviarPlanilha(){
     whatsapp: lead.whatsapp,
     empresa: lead.empresa,
     faturamento: lead.faturamento || '',
+    funcionarios: lead.funcionarios || '',
+    momento: lead.momento || '',
     mensagem: lead.mensagem || '',
     media: r.media.toFixed(2),
     nivel: r.nivel.nome,
