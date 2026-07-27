@@ -564,6 +564,18 @@ const CONFIG = {
   RD_CAMPO_MOMENTO: 'cf_estagio_de_maturidade',
   RD_CAMPO_OBSERVACOES: 'cf_observacoes_raiox',
   RD_IDENTIFICADOR_NIVEL: 'raiox-nivel-',
+  RD_CAMPO_NIVEL: 'cf_cf_raiox_nivel',
+  RD_CAMPO_PONTUACAO: 'cf_cf_raiox_pontuacao_geral',
+  RD_CAMPO_CRITICA: 'cf_cf_raiox_dimensao_critica',
+  RD_CAMPO_PILAR: {
+    ES:'cf_cf_raiox_estrutura',
+    DE:'cf_cf_raiox_decisao',
+    PE:'cf_cf_raiox_pessoas',
+    IN:'cf_cf_raiox_inovacao',
+    TE:'cf_cf_raiox_tecnologia',
+    CL:'cf_cf_raiox_cliente',
+    MV:'cf_cf_raiox_mkt_vendas'
+  },
   RD_CAMPO_MENSAGEM: 'cf_mensagem_diagnostico_raiox',
 
   // 3) WhatsApp de destino do CTA final.
@@ -936,11 +948,19 @@ function finalizar(){
   tela('#tela-load');
 
   const numeroNivel = NIVEIS.indexOf(resultado.nivel) + 1;
+  const virgula = n => Number(n).toFixed(2).replace('.', ',');
   const extraRD = {
     nivel: resultado.nivel.nome,
     pontuacao: resultado.media.toFixed(2),
+    [CONFIG.RD_CAMPO_NIVEL]: resultado.nivel.nome,
+    [CONFIG.RD_CAMPO_PONTUACAO]: virgula(resultado.media),
+    [CONFIG.RD_CAMPO_CRITICA]: resultado.fraco.nome,
     [CONFIG.RD_CAMPO_OBSERVACOES]: textoObservacoes()
   };
+  resultado.porPilar.forEach(p => {
+    const campo = CONFIG.RD_CAMPO_PILAR[p.chave];
+    if (campo) extraRD[campo] = virgula(p.media);
+  });
   enviarRD(CONFIG.RD_IDENTIFICADOR_RESULTADO, extraRD);
   /* segunda conversão, só com o número do nível, para a automação separar os e-mails */
   enviarRD(CONFIG.RD_IDENTIFICADOR_NIVEL + numeroNivel, extraRD);
