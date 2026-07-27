@@ -121,7 +121,7 @@ function montarEmailLead(d) {
     +   '<div style="font-size:12px;letter-spacing:2px;color:#9fc4d8;text-transform:uppercase;">' + nomeTeste + '</div>'
     +   '<div style="font-size:24px;color:#ffffff;padding-top:8px;font-weight:bold;">' + esc(d.nivel || '') + '</div>'
     +   '<div style="font-size:14px;color:#9fc4d8;padding-top:4px;">'
-    +     esc(d.nivel_prof || '') + ' · nota ' + virgula(d.media) + ' de 5,00</div>'
+    +     esc(d.nivel_prof || '') + ' · nota ' + virgula(d.media) + ' de ' + virgula(escala(d)) + '</div>'
     + '</div>'
 
     + '<div style="padding:30px 32px 8px 32px;font-size:16px;line-height:1.65;">'
@@ -167,9 +167,10 @@ function montarEmailLead(d) {
 function blocoDimensoes(d) {
   var dims = d.dimensoes || [];
   if (!dims.length) return '';
+  var max = escala(d);
   var linhas = dims.map(function (p) {
     var nota = parseFloat(String(p.nota).replace(',', '.')) || 0;
-    var pct = Math.max(4, Math.round(nota / 5 * 100));
+    var pct = Math.max(4, Math.round(nota / max * 100));
     var cor = p.faixa === 'baixo' ? '#c8502c' : (p.faixa === 'alto' ? '#15A5A8' : '#e0a33c');
     return ''
       + '<tr><td style="padding:0 0 14px 0;">'
@@ -202,7 +203,7 @@ function blocoRespostas(d) {
     return '<tr>'
       + '<td style="padding:0 0 10px 0;font-size:13px;line-height:1.5;color:#5b6b78;">'
       +   '<strong style="color:#22303c;">' + (i + 1) + '. ' + esc(q.pergunta) + '</strong><br>'
-      +   esc(q.resposta) + ' <span style="color:#9aa6b1;">(' + (q.nota || 0) + ' de 5)</span>'
+      +   esc(q.resposta) + ' <span style="color:#9aa6b1;">(' + (q.nota || 0) + ' de ' + escala(d) + ')</span>'
       + '</td></tr>';
   }).join('');
 
@@ -218,7 +219,7 @@ function textoSimples(d, primeiro, nomeTeste) {
   var l = [];
   l.push('Oi' + (primeiro ? ', ' + primeiro : '') + '.');
   l.push('');
-  l.push('Seu ' + nomeTeste + ': ' + (d.nivel || '') + ', nota ' + virgula(d.media) + ' de 5,00.');
+  l.push('Seu ' + nomeTeste + ': ' + (d.nivel || '') + ', nota ' + virgula(d.media) + ' de ' + virgula(escala(d)) + '.');
   l.push('');
   l.push(d.nivel_texto || '');
   l.push('');
@@ -276,6 +277,12 @@ function esc(t) {
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+/* quantos pontos vale cada pergunta: RaioX vai de 1 a 5, Sonda de 1 a 4 */
+function escala(d) {
+  var e = parseInt(d && d.escala, 10);
+  return (e && e > 1) ? e : 5;
+}
+
 function virgula(n) {
   var v = parseFloat(String(n).replace(',', '.'));
   return isNaN(v) ? '' : v.toFixed(2).replace('.', ',');
@@ -299,6 +306,7 @@ function conferirRemetente() {
 function testarEnvio() {
   var exemplo = {
     teste: 'RaioX',
+    escala: 5,
     sessao: 'teste-' + new Date().getTime(),
     nome: 'Marcelis Pereira',
     primeiro_nome: 'Marcelis',
