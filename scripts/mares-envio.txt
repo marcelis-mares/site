@@ -1,0 +1,332 @@
+/**
+ * MARES · Recebe o resultado do RaioX e da Sonda, grava na planilha
+ * e dispara o e-mail com o diagnóstico completo, na hora.
+ *
+ * Como publicar: Implantar > Nova implantação > Tipo: App da Web
+ * Executar como: Eu · Quem tem acesso: Qualquer pessoa
+ * Copie o endereço gerado e me mande, que eu ligo nas duas páginas.
+ */
+
+/* ============ AJUSTES ============ */
+var PLANILHA_ID     = '1Zj0XEtRNaOOZYhOoCu8jTjMEdaOpBR1TpMZ8gEpG6Hk';  // planilha MARES Resultados
+var REMETENTE       = 'atendimento@mareslideranca.com.br';  // de onde sai o e-mail
+var AVISO_INTERNO   = 'atendimento@mareslideranca.com.br';  // quem recebe o aviso da equipe
+var RESPONDER_PARA  = 'atendimento@mareslideranca.com.br';  // para onde vai a resposta
+var NOME_REMETENTE  = 'Marcelis Pereira · MARES';
+var WHATSAPP        = 'https://wa.me/5541992488092';
+var LARANJA         = '#dc6220';
+var MARINHO         = '#06182a';
+
+/**
+ * Envia usando o endereço definido em REMETENTE.
+ * Se o script for do próprio atendimento@, sai direto.
+ * Se for de outra conta que tenha o atendimento@ como alias verificado
+ * em Gmail > Ver todas as configurações > Contas > Enviar e-mail como,
+ * o alias é usado. Sem alias, cai no envio padrão da conta dona do script.
+ */
+function enviar(msg) {
+  var eu = Session.getActiveUser().getEmail();
+  if (REMETENTE && REMETENTE !== eu) {
+    var aliases = [];
+    try { aliases = GmailApp.getAliases(); } catch (e) {}
+    if (aliases.indexOf(REMETENTE) !== -1) {
+      GmailApp.sendEmail(msg.to, msg.subject, msg.body, {
+        htmlBody: msg.htmlBody,
+        name: msg.name,
+        replyTo: msg.replyTo,
+        from: REMETENTE
+      });
+      return;
+    }
+  }
+  MailApp.sendEmail(msg);
+}
+
+/* ============ ENTRADA ============ */
+function doPost(e) {
+  var resposta = { ok: false };
+  try {
+    var d = JSON.parse(e.postData.contents);
+    var aba = gravar(d);
+    resposta.gravado = true;
+
+    if (aba.novo) {
+      try { enviar(montarEmailLead(d)); resposta.email = true; }
+      catch (err) { resposta.erroEmail = String(err); }
+
+      try { enviar(montarEmailInterno(d)); resposta.interno = true; }
+      catch (err) { resposta.erroInterno = String(err); }
+    } else {
+      resposta.duplicado = true;
+    }
+    resposta.ok = true;
+  } catch (err) {
+    resposta.erro = String(err);
+  }
+  return ContentService.createTextOutput(JSON.stringify(resposta))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function doGet() {
+  return ContentService.createTextOutput('MARES online. Envios restantes hoje: ' +
+    MailApp.getRemainingDailyQuota());
+}
+
+/* ============ PLANILHA ============ */
+function gravar(d) {
+  var nomeAba = (d.teste === 'Sonda') ? 'Sonda' : 'RaioX';
+  var ss = SpreadsheetApp.openById(PLANILHA_ID);
+  var aba = ss.getSheetByName(nomeAba) || ss.insertSheet(nomeAba);
+
+  var colunas = ['data', 'sessao', 'nome', 'email', 'whatsapp', 'empresa',
+                 'faturamento', 'funcionarios', 'momento', 'nivel', 'media',
+                 'dimensao_forte', 'dimensao_fraca', 'mensagem', 'observacoes', 'origem'];
+
+  if (aba.getLastRow() === 0) {
+    aba.appendRow(colunas);
+    aba.getRange(1, 1, 1, colunas.length).setFontWeight('bold');
+    aba.setFrozenRows(1);
+  }
+
+  /* não grava nem manda e-mail duas vezes para a mesma sessão */
+  if (d.sessao && aba.getLastRow() > 1) {
+    var achou = aba.getRange(2, 2, aba.getLastRow() - 1, 1)
+                   .createTextFinder(d.sessao).matchEntireCell(true).findNext();
+    if (achou) return { novo: false };
+  }
+
+  aba.appendRow(colunas.map(function (c) {
+    if (c === 'data') return new Date();
+    return d[c] === undefined ? '' : d[c];
+  }));
+  return { novo: true };
+}
+
+/* ============ E-MAIL PARA O LEAD ============ */
+function montarEmailLead(d) {
+  var primeiro = d.primeiro_nome || (d.nome || '').split(' ')[0] || '';
+  var eRaioX = (d.teste !== 'Sonda');
+  var nomeTeste = eRaioX ? 'RaioX MARES' : 'Sonda MARES';
+
+  var assunto = primeiro
+    ? primeiro + ', seu ' + nomeTeste + ' ficou pronto'
+    : 'Seu ' + nomeTeste + ' ficou pronto';
+
+  var html = ''
+    + '<div style="margin:0;padding:24px 12px;background:#f4f6f8;">'
+    + '<div style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:14px;overflow:hidden;'
+    +   'font-family:Arial,Helvetica,sans-serif;color:#22303c;">'
+
+    + '<div style="background:' + MARINHO + ';padding:24px 32px;">'
+    +   '<div style="font-size:12px;letter-spacing:2px;color:#9fc4d8;text-transform:uppercase;">' + nomeTeste + '</div>'
+    +   '<div style="font-size:24px;color:#ffffff;padding-top:8px;font-weight:bold;">' + esc(d.nivel || '') + '</div>'
+    +   '<div style="font-size:14px;color:#9fc4d8;padding-top:4px;">'
+    +     esc(d.nivel_prof || '') + ' · nota ' + virgula(d.media) + ' de 5,00</div>'
+    + '</div>'
+
+    + '<div style="padding:30px 32px 8px 32px;font-size:16px;line-height:1.65;">'
+    +   '<p style="margin:0 0 18px 0;">Oi' + (primeiro ? ', ' + esc(primeiro) : '') + '.</p>'
+    +   '<p style="margin:0 0 22px 0;">' + esc(d.nivel_texto || '') + '</p>'
+    + '</div>'
+
+    + blocoDimensoes(d)
+
+    + '<div style="padding:6px 32px 8px 32px;font-size:16px;line-height:1.65;">'
+    +   '<p style="margin:0 0 18px 0;">Seu terreno mais firme hoje é <strong>' + esc(d.dimensao_forte || '') + '</strong>. '
+    +   'O que mais trava o crescimento é <strong>' + esc(d.dimensao_fraca || '') + '</strong>, e é por aí que eu começaria.</p>'
+    +   '<p style="margin:0 0 22px 0;">Se quiser conversar sobre o que fazer primeiro no seu caso, me chama. '
+    +   'Eu leio e respondo pessoalmente.</p>'
+    + '</div>'
+
+    + '<div style="padding:0 32px 30px 32px;">'
+    +   '<a href="' + WHATSAPP + '" style="display:inline-block;background:' + LARANJA + ';color:#ffffff;'
+    +   'padding:15px 30px;border-radius:8px;font-size:16px;font-weight:bold;text-decoration:none;">'
+    +   'Quero conversar sobre meu resultado</a>'
+    + '</div>'
+
+    + blocoRespostas(d)
+
+    + '<div style="background:#f0f3f6;padding:22px 32px;font-size:13px;line-height:1.6;color:#5b6b78;">'
+    +   '<strong style="color:' + MARINHO + ';">Marcelis Pereira</strong><br>'
+    +   'MARES Consultoria Empresarial<br>Pessoas, Dados e Gestão'
+    + '</div>'
+
+    + '</div></div>';
+
+  return {
+    to: d.email,
+    subject: assunto,
+    htmlBody: html,
+    body: textoSimples(d, primeiro, nomeTeste),
+    name: NOME_REMETENTE,
+    replyTo: RESPONDER_PARA
+  };
+}
+
+/* barras de cada dimensão */
+function blocoDimensoes(d) {
+  var dims = d.dimensoes || [];
+  if (!dims.length) return '';
+  var linhas = dims.map(function (p) {
+    var nota = parseFloat(String(p.nota).replace(',', '.')) || 0;
+    var pct = Math.max(4, Math.round(nota / 5 * 100));
+    var cor = p.faixa === 'baixo' ? '#c8502c' : (p.faixa === 'alto' ? '#15A5A8' : '#e0a33c');
+    return ''
+      + '<tr><td style="padding:0 0 14px 0;">'
+      +   '<div style="font-size:14px;color:#22303c;padding-bottom:5px;">'
+      +     '<strong>' + esc(p.nome) + '</strong> '
+      +     '<span style="color:#7b8894;">' + esc(p.sub || '') + '</span>'
+      +     '<span style="float:right;color:#5b6b78;">' + virgula(p.nota) + '</span>'
+      +   '</div>'
+      +   '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" '
+      +     'style="background:#e7ecf0;border-radius:4px;"><tr>'
+      +     '<td width="' + pct + '%" style="background:' + cor + ';height:8px;border-radius:4px;font-size:0;line-height:0;">&nbsp;</td>'
+      +     '<td style="font-size:0;line-height:0;">&nbsp;</td>'
+      +   '</tr></table>'
+      + '</td></tr>';
+  }).join('');
+
+  return ''
+    + '<div style="padding:6px 32px 10px 32px;">'
+    + '<div style="font-size:13px;letter-spacing:1px;text-transform:uppercase;color:#7b8894;padding-bottom:14px;">'
+    +   'Suas dimensões</div>'
+    + '<table role="presentation" width="100%" cellpadding="0" cellspacing="0">' + linhas + '</table>'
+    + '</div>';
+}
+
+/* lista com as respostas dadas */
+function blocoRespostas(d) {
+  var lista = d.perguntas_respostas || [];
+  if (!lista.length) return '';
+  var itens = lista.map(function (q, i) {
+    return '<tr>'
+      + '<td style="padding:0 0 10px 0;font-size:13px;line-height:1.5;color:#5b6b78;">'
+      +   '<strong style="color:#22303c;">' + (i + 1) + '. ' + esc(q.pergunta) + '</strong><br>'
+      +   esc(q.resposta) + ' <span style="color:#9aa6b1;">(' + (q.nota || 0) + ' de 5)</span>'
+      + '</td></tr>';
+  }).join('');
+
+  return ''
+    + '<div style="padding:8px 32px 28px 32px;border-top:1px solid #e7ecf0;">'
+    + '<div style="font-size:13px;letter-spacing:1px;text-transform:uppercase;color:#7b8894;padding:18px 0 14px 0;">'
+    +   'O que você respondeu</div>'
+    + '<table role="presentation" width="100%" cellpadding="0" cellspacing="0">' + itens + '</table>'
+    + '</div>';
+}
+
+function textoSimples(d, primeiro, nomeTeste) {
+  var l = [];
+  l.push('Oi' + (primeiro ? ', ' + primeiro : '') + '.');
+  l.push('');
+  l.push('Seu ' + nomeTeste + ': ' + (d.nivel || '') + ', nota ' + virgula(d.media) + ' de 5,00.');
+  l.push('');
+  l.push(d.nivel_texto || '');
+  l.push('');
+  l.push('Dimensão mais forte: ' + (d.dimensao_forte || ''));
+  l.push('Dimensão mais fraca: ' + (d.dimensao_fraca || ''));
+  l.push('');
+  l.push('Conversar comigo: ' + WHATSAPP);
+  l.push('');
+  l.push('Marcelis Pereira · MARES · Pessoas, Dados e Gestão');
+  return l.join('\n');
+}
+
+/* ============ AVISO INTERNO ============ */
+function montarEmailInterno(d) {
+  var linhas = [
+    ['Teste', d.teste || 'RaioX'],
+    ['Nome', d.nome],
+    ['Empresa', d.empresa],
+    ['E-mail', d.email],
+    ['WhatsApp', d.whatsapp],
+    ['Faturamento', d.faturamento],
+    ['Funcionários', d.funcionarios],
+    ['Momento da empresa', d.momento],
+    ['Nível', d.nivel],
+    ['Nota', virgula(d.media)],
+    ['Mais forte', d.dimensao_forte],
+    ['Mais fraca', d.dimensao_fraca],
+    ['Mensagem que escreveu', d.mensagem]
+  ].filter(function (x) { return x[1]; })
+   .map(function (x) {
+     return '<tr><td style="padding:4px 12px 4px 0;color:#5b6b78;">' + x[0] + '</td>'
+          + '<td style="padding:4px 0;"><strong>' + esc(String(x[1])) + '</strong></td></tr>';
+   }).join('');
+
+  var html = '<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#22303c;">'
+    + '<h2 style="margin:0 0 14px 0;">Novo resultado de ' + esc(d.teste || 'RaioX') + '</h2>'
+    + '<table cellpadding="0" cellspacing="0">' + linhas + '</table>'
+    + '<p style="margin:18px 0 6px 0;"><strong>Respostas completas</strong></p>'
+    + '<p style="font-size:13px;line-height:1.6;color:#5b6b78;">' + esc(d.observacoes || '') + '</p>'
+    + '<p><a href="' + WHATSAPP + '">Abrir conversa no WhatsApp</a></p>'
+    + '</div>';
+
+  return {
+    to: AVISO_INTERNO,
+    subject: 'Novo ' + (d.teste || 'RaioX') + ' · ' + (d.nome || '') + ' · ' + (d.empresa || ''),
+    htmlBody: html,
+    name: NOME_REMETENTE,
+    replyTo: d.email || RESPONDER_PARA
+  };
+}
+
+/* ============ APOIO ============ */
+function esc(t) {
+  return String(t === undefined || t === null ? '' : t)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function virgula(n) {
+  var v = parseFloat(String(n).replace(',', '.'));
+  return isNaN(v) ? '' : v.toFixed(2).replace('.', ',');
+}
+
+/* Rode esta função para conferir de qual endereço o e-mail vai sair */
+function conferirRemetente() {
+  var eu = Session.getActiveUser().getEmail();
+  var aliases = [];
+  try { aliases = GmailApp.getAliases(); } catch (e) {}
+  Logger.log('Conta dona do script: ' + eu);
+  Logger.log('Aliases disponíveis: ' + (aliases.length ? aliases.join(', ') : 'nenhum'));
+  Logger.log('Remetente configurado: ' + REMETENTE);
+  Logger.log(REMETENTE === eu || aliases.indexOf(REMETENTE) !== -1
+    ? 'OK, vai sair de ' + REMETENTE
+    : 'ATENÇÃO: vai sair de ' + eu + '. Crie o script na conta do atendimento@ ou cadastre o alias.');
+  Logger.log('Envios restantes hoje: ' + MailApp.getRemainingDailyQuota());
+}
+
+/* Rode esta função uma vez para testar sem precisar do site */
+function testarEnvio() {
+  var exemplo = {
+    teste: 'RaioX',
+    sessao: 'teste-' + new Date().getTime(),
+    nome: 'Marcelis Pereira',
+    primeiro_nome: 'Marcelis',
+    email: REMETENTE,
+    whatsapp: '(41) 99248-8092',
+    empresa: 'MARES',
+    faturamento: 'De R$2 milhões á R$10 milhões ano',
+    funcionarios: 'De 21 a 50 pessoas',
+    momento: 'Tenho caixa e preciso escalar',
+    media: '3.43',
+    nivel: 'Nível 3 · Estruturado',
+    nivel_prof: 'Maturidade estruturada',
+    nivel_texto: 'A empresa está se estruturando, mas ainda não escala com fluidez.',
+    dimensao_forte: 'Estrutura',
+    dimensao_fraca: 'Mkt & Vendas',
+    observacoes: 'Nível 3; Nota 3,43; teste',
+    dimensoes: [
+      { chave: 'ES', nome: 'Estrutura', sub: 'Organizacional', nota: '4.00', faixa: 'alto' },
+      { chave: 'DE', nome: 'Decisão', sub: 'Estratégia', nota: '3.00', faixa: 'medio' },
+      { chave: 'MV', nome: 'Mkt & Vendas', sub: 'Crescimento', nota: '2.00', faixa: 'baixo' }
+    ],
+    perguntas_respostas: [
+      { pergunta: 'Papéis e responsabilidades na empresa:', resposta: 'São claros e bem comunicados', nota: 4 },
+      { pergunta: 'O funil de vendas da empresa:', resposta: 'Existe vagamente, sem métricas', nota: 2 }
+    ]
+  };
+  gravar(exemplo);
+  enviar(montarEmailLead(exemplo));
+  enviar(montarEmailInterno(exemplo));
+  Logger.log('Enviado. Envios restantes hoje: ' + MailApp.getRemainingDailyQuota());
+}
