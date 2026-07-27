@@ -1109,6 +1109,11 @@ function enviarPlanilha(){
     whatsapp_url: montarWhats('Quero agendar minha pré-mentoria.'),
     respostas: respostas.join('|'),
     observacoes: textoObservacoes(),
+    teste: 'RaioX',
+    dimensoes: r.porPilar.map(p => ({chave:p.chave, nome:p.nome, sub:p.sub, nota:p.media.toFixed(2), faixa:p.faixa, cor:p.cor})),
+    dimensao_forte_nota: r.forte.media.toFixed(2),
+    dimensao_fraca_nota: r.fraco.media.toFixed(2),
+    perguntas_respostas: respostas.map((v,i) => ({pergunta:PERGUNTAS[i].t, resposta: v ? PERGUNTAS[i].o[v-1] : '', nota:v})),
     origem: location.href
   };
   fetch(CONFIG.SHEETS_WEBHOOK,{
