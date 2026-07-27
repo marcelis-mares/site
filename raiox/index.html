@@ -1110,6 +1110,7 @@ function enviarPlanilha(){
     respostas: respostas.join('|'),
     observacoes: textoObservacoes(),
     teste: 'RaioX',
+    escala: PERGUNTAS[0].o.length,
     dimensoes: r.porPilar.map(p => ({chave:p.chave, nome:p.nome, sub:p.sub, nota:p.media.toFixed(2), faixa:p.faixa, cor:p.cor})),
     dimensao_forte_nota: r.forte.media.toFixed(2),
     dimensao_fraca_nota: r.fraco.media.toFixed(2),
