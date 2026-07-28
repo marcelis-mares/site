@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://www.maresconsultoria.com.br/sitemap.xml
+# atualizado em 28/07/2026
