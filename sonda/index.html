@@ -704,7 +704,9 @@ $('#btn-iniciar').addEventListener('click', () => tela('#tela-form'));
 /* ======================= FORMULÁRIO ======================= */
 const wa = $('#f-whatsapp');
 wa.addEventListener('input', e => {
-  let v = e.target.value.replace(/\D/g,'').slice(0,11);
+  let v = e.target.value.replace(/\D/g,'');
+  if (v.length > 11 && v.startsWith('55')) v = v.slice(2);
+  v = v.slice(0,11);
   if (v.length > 6)      v = `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
   else if (v.length > 2) v = `(${v.slice(0,2)}) ${v.slice(2)}`;
   else if (v.length > 0) v = `(${v}`;
@@ -915,6 +917,12 @@ $('#btn-refazer').addEventListener('click', () => {
 });
 
 /* ======================= ENVIOS ======================= */
+function telefoneE164(v){
+  let d = String(v || '').replace(/\D/g,'');
+  if (d.length > 11 && d.startsWith('55')) d = d.slice(2);
+  d = d.slice(0,11);
+  return d ? '+55' + d : '';
+}
 function enviarRD(identificador, extra){
   if (!CONFIG.RD_TOKEN || !lead.email) return;
   const payload = {
@@ -924,7 +932,8 @@ function enviarRD(identificador, extra){
       conversion_identifier: identificador,
       name: lead.nome,
       email: lead.email,
-      personal_phone: lead.whatsapp,
+      personal_phone: telefoneE164(lead.whatsapp),
+      mobile_phone: telefoneE164(lead.whatsapp),
       company_name: lead.empresa,
       [CONFIG.RD_CAMPO_FATURAMENTO]: lead.faturamento || '',
       [CONFIG.RD_CAMPO_MENSAGEM]: lead.mensagem || '',
