@@ -1,3 +1,11 @@
+/* Tipografia da marca, hospedada no proprio site */
+@font-face{font-family:'Aileron';src:url('/fonts/Aileron-Regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Aileron';src:url('/fonts/Aileron-SemiBold.woff2') format('woff2');font-weight:500 600;font-style:normal;font-display:swap}
+@font-face{font-family:'Aileron';src:url('/fonts/Aileron-Bold.woff2') format('woff2');font-weight:700 800;font-style:normal;font-display:swap}
+@font-face{font-family:'Bricolage Grotesque';src:url('/fonts/Bricolage-Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Bricolage Grotesque';src:url('/fonts/Bricolage-Bold.woff2') format('woff2');font-weight:600 700;font-style:normal;font-display:swap}
+@font-face{font-family:'Bricolage Grotesque';src:url('/fonts/Bricolage-ExtraBold.woff2') format('woff2');font-weight:800 900;font-style:normal;font-display:swap}
+
 
 :root{
   --navy:#06182a; --navy2:#081f33; --navy3:#071b2e;
@@ -5,11 +13,11 @@
   --sand:#FEEAD4; --white:#ffffff; --muted:#b9c6d3;
   --grad:linear-gradient(90deg,#E26220 0%,#15A5A8 55%,#1C6795 100%);
   --display:'Bricolage Grotesque',sans-serif;
-  --body:'Inter',sans-serif;
+  --body:'Aileron',system-ui,sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:var(--body);color:var(--navy);background:var(--white);line-height:1.6;-webkit-font-smoothing:antialiased}
+body{font-family:var(--body);color:var(--navy);background:var(--white);line-height:1.68;letter-spacing:.005em;-webkit-font-smoothing:antialiased}
 h1,h2,h3,h4{font-family:var(--display);line-height:1.1;font-weight:700}
 a{text-decoration:none;color:inherit}
 .container{max-width:1160px;margin:0 auto;padding:0 24px}
@@ -40,9 +48,9 @@ section{padding:84px 0}
 .dark .eyebrow{color:var(--orange-l)}
 .hero-title{font-size:clamp(38px,6vw,68px);font-weight:800}
 h2.sec-title{font-size:clamp(28px,4vw,44px);margin-bottom:16px}
-.lead{font-size:clamp(17px,2vw,21px);color:var(--muted);max-width:640px}
+.lead{font-size:clamp(18px,2vw,22px);line-height:1.62;color:var(--muted);max-width:660px}
 .dark .lead{color:#cdd8e3}
-p.body{font-size:17px;max-width:680px;margin-bottom:14px}
+p.body{font-size:18px;line-height:1.72;max-width:700px;margin-bottom:16px}
 .gradbar{height:6px;width:180px;background:var(--grad);border-radius:6px;margin:22px 0}
 .cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}
 
@@ -62,7 +70,7 @@ p.body{font-size:17px;max-width:680px;margin-bottom:14px}
 .dark .card{background:var(--navy2);border-color:rgba(255,255,255,.08)}
 .card h3{font-size:21px;margin-bottom:10px;color:var(--blue)}
 .dark .card h3{color:var(--orange-l)}
-.card p{font-size:15px;color:#54606b}
+.card p{font-size:16px;line-height:1.65;color:#54606b}
 .dark .card p{color:var(--muted)}
 .card .tag{display:inline-block;margin-top:14px;font-size:12px;font-weight:600;color:var(--turq);border:1px solid var(--turq);padding:3px 10px;border-radius:20px}
 
@@ -90,7 +98,7 @@ p.body{font-size:17px;max-width:680px;margin-bottom:14px}
 .rung li::before{content:'→';position:absolute;left:0;color:var(--turq);font-weight:700}
 
 .checklist{list-style:none;margin-top:24px;max-width:720px}
-.checklist li{padding:12px 0 12px 34px;position:relative;font-size:17px;border-bottom:1px solid rgba(255,255,255,.08)}
+.checklist li{padding:13px 0 13px 34px;position:relative;font-size:18px;line-height:1.6;border-bottom:1px solid rgba(255,255,255,.08)}
 .checklist li::before{content:'✓';position:absolute;left:0;color:var(--turq);font-weight:800;font-size:18px}
 
 .steps{counter-reset:s;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:36px}
@@ -165,6 +173,6 @@ footer{background:var(--navy3);color:var(--muted);padding:54px 0 30px;border-top
 
 .brand-link{display:inline-flex;align-items:center}
 
-.resposta-direta{max-width:760px;margin:18px 0 0;font-size:16px;line-height:1.7;color:var(--muted)}
+.resposta-direta{max-width:760px;margin:18px 0 0;font-size:17px;line-height:1.75;color:var(--muted)}
 .resposta-direta strong{color:var(--white);font-weight:600}
 @media(max-width:640px){.resposta-direta{font-size:15px}}
