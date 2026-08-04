@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Imersão Crescimento Previsível · 25, 26 e 27 de agosto · Marcelis Pereira | MARES</title>
+<meta name="description" content="Imersão online e gratuita para empresários e líderes. Descubra em 3 noites exatamente o que trava o crescimento da sua empresa. 25, 26 e 27 de agosto, 20h, com Marcelis Pereira.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://www.maresconsultoria.com.br/imersao/">
+<meta property="og:title" content="Imersão Crescimento Previsível · 3 noites, online e gratuito">
+<meta property="og:description" content="Descubra em 3 noites exatamente o que trava o crescimento da sua empresa. Com Marcelis Pereira, 25, 26 e 27 de agosto, 20h.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<!-- TROCAR pela URL final e por uma imagem 1200x630 hospedada no site -->
+<meta property="og:url" content="https://www.maresconsultoria.com.br/imersao/">
+<meta property="og:image" content="https://www.maresconsultoria.com.br/imersao/img/capa.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+  /* Aileron é a fonte de corpo da marca. Suba os arquivos em /fonts/ do site.
+     Enquanto não subir, cai na fonte do sistema (nunca em Inter, Roboto ou Arial). */
+  @font-face{font-family:'Aileron';src:url('/fonts/Aileron-Regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+  @font-face{font-family:'Aileron';src:url('/fonts/Aileron-SemiBold.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+  @font-face{font-family:'Aileron';src:url('/fonts/Aileron-Bold.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+
+  :root{
+    --azul:#06182a; --azul2:#0d2a3d; --azul3:#1c6795;
+    --laranja:#dc6220; --laranja-c:#f0a04a; --turq:#15a5a8;
+    --areia:#feead4; --claro:#dbe6ef; --cinza:#8fa6ba; --texto:#1a2530;
+    --texto2:#4a5a68; --texto3:#778794; --areia2:#f4f7fa;
+    --t-h2:clamp(28px,3.8vw,42px); --t-h3:20px; --t-body:17px; --t-sub:16.5px; --t-small:15.5px;
+    --display:'Bricolage Grotesque',system-ui,sans-serif;
+    --corpo:'Aileron',system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--corpo);color:var(--texto);background:#fff;line-height:1.62;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+  .narrow{max-width:780px;margin:0 auto}
+  h1,h2,h3{font-family:var(--display);line-height:1.1;letter-spacing:-.02em}
+  section{padding:56px 0}
+  @media(max-width:640px){section{padding:42px 0}}
+  img{max-width:100%}
+
+  .faixa{height:7px;background:linear-gradient(90deg,#dc6220 0%,#459fa2 50%,#1c6794 100%)}
+
+  /* TOPO */
+  .topo{background:var(--azul);padding:14px 0}
+  .topo .in{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .topo img{height:34px;width:auto;display:block}
+  .topo .quando{color:var(--claro);font-size:13.5px;letter-spacing:.06em}
+  .topo .quando b{color:var(--laranja-c)}
+
+  /* HERO */
+  .hero{background:var(--azul);color:#fff;padding:10px 0 44px;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;right:-200px;bottom:-280px;width:700px;height:700px;
+    border-radius:50%;border:1px solid rgba(21,165,168,.18);
+    box-shadow:0 0 0 60px rgba(21,165,168,.05),0 0 0 130px rgba(21,165,168,.04)}
+  .hero .wrap{position:relative;z-index:2}
+  .hero-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:44px;align-items:center}
+  @media(max-width:860px){.hero-grid{grid-template-columns:1fr;gap:28px}}
+  .selo{display:inline-block;background:rgba(220,98,32,.16);border:1px solid var(--laranja);
+    color:var(--laranja-c);font-size:12px;letter-spacing:.16em;font-weight:700;
+    padding:8px 14px;border-radius:6px;margin-bottom:18px}
+  .hero h1{font-size:clamp(40px,6.6vw,72px);font-weight:800;color:#fff;margin-bottom:4px;letter-spacing:-.035em}
+  .hero h1 em{font-style:normal;color:var(--laranja)}
+  .sobrenome{font-family:var(--display);font-size:clamp(14.5px,1.9vw,18px);font-weight:700;
+    color:var(--turq);letter-spacing:.06em;margin:12px 0 24px}
+  .promessa{font-family:var(--display);font-weight:700;font-size:clamp(21px,2.9vw,30px);
+    color:#fff;line-height:1.18;margin-bottom:16px;max-width:600px}
+  .promessa span{color:var(--laranja-c)}
+  .lead{font-size:clamp(16.5px,2vw,19.5px);color:var(--claro);max-width:600px;margin-bottom:16px}
+  .lead b{color:#fff}
+  .gratis{display:inline-flex;align-items:center;gap:9px;font-size:15px;color:var(--claro);
+    background:rgba(21,165,168,.14);border:1px solid rgba(21,165,168,.4);
+    padding:9px 15px;border-radius:7px;margin-bottom:26px}
+  .gratis b{color:#fff}
+  .btn{display:inline-block;background:var(--laranja);color:#fff;text-decoration:none;font-weight:700;
+    padding:19px 42px;border-radius:8px;font-size:16.5px;letter-spacing:.02em;transition:.2s;border:none;cursor:pointer;
+    box-shadow:0 10px 26px rgba(220,98,32,.28)}
+  .btn:hover{background:#c4551a;transform:translateY(-2px)}
+  .btn-sub{display:block;margin-top:12px;font-size:13.5px;color:var(--cinza)}
+  .fatos{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:36px}
+  @media(max-width:860px){.fatos{grid-template-columns:repeat(2,1fr)}}
+  .fato{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;
+    padding:12px 17px;font-size:13.5px;color:var(--claro)}
+  .fato b{color:#fff;display:block;font-family:var(--display);font-size:19px;font-weight:700}
+  .hero-foto{position:relative}
+  .hero-foto img{width:100%;border-radius:16px;display:block;box-shadow:0 24px 60px rgba(0,0,0,.45)}
+  .hero-foto .tarja{position:absolute;left:-10px;bottom:26px;background:var(--laranja);color:#fff;
+    font-family:var(--display);font-weight:700;font-size:15px;padding:10px 18px;border-radius:6px;
+    box-shadow:0 10px 24px rgba(0,0,0,.35)}
+  @media(max-width:860px){.hero-foto{max-width:340px;margin:0 auto}}
+
+
+  /* cronômetro */
+  .conta{display:flex;gap:10px;margin:0 0 26px}
+  .conta .box{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);
+    border-radius:10px;padding:12px 16px;text-align:center;min-width:78px}
+  .conta .box b{display:block;font-family:var(--display);font-weight:800;font-size:30px;
+    color:var(--laranja-c);line-height:1}
+  .conta .box span{font-size:12px;letter-spacing:.12em;color:var(--cinza);text-transform:uppercase}
+  .conta-lbl{font-size:13px;letter-spacing:.14em;color:var(--turq);font-weight:700;margin-bottom:10px}
+  @media(max-width:420px){.conta .box{min-width:66px;padding:10px 12px} .conta .box b{font-size:25px}}
+
+  /* CRED BAR */
+  .credbar{background:var(--areia);padding:22px 0}
+  .credbar .in{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;text-align:center}
+  .credbar b{display:block;font-family:var(--display);font-size:26px;color:var(--azul);font-weight:800;line-height:1.1}
+  .credbar span{font-size:13px;color:#8a6a4a;letter-spacing:.03em}
+
+  /* DOR */
+  .dor h2{font-size:var(--t-h2);margin-bottom:24px;color:var(--azul)}
+  .dor p{font-size:var(--t-body);margin-bottom:18px;color:var(--texto2)}
+  .achismos{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:28px 0}
+  .achismo{background:var(--areia2);border-left:3px solid var(--laranja);border-radius:0 10px 10px 0;
+    padding:15px 18px;font-size:16px;color:var(--texto2);font-style:italic}
+  .frase{font-family:var(--display);font-weight:700;font-size:clamp(22px,2.9vw,31px);color:var(--azul);
+    border-left:5px solid var(--laranja);padding-left:22px;margin:30px 0 0}
+
+  /* SAI COM */
+  .saicom{background:var(--azul);color:#fff}
+  .saicom h2{color:#fff;font-size:var(--t-h2);margin-bottom:10px}
+  .saicom .sub{color:var(--cinza);font-size:var(--t-sub);margin-bottom:30px;max-width:660px}
+  .entregas{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+  .entrega{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:26px 24px}
+  .entrega i{display:block;width:46px;height:3px;border-radius:2px;
+    background:linear-gradient(90deg,var(--laranja),var(--turq));margin-bottom:14px}
+  .entrega h3{color:#fff;font-size:var(--t-h3);margin-bottom:8px}
+  .entrega p{color:var(--claro);font-size:var(--t-small)}
+
+  /* NOITES */
+  .noites{background:#fff}
+  .noites h2{font-size:var(--t-h2);color:var(--azul);margin-bottom:10px}
+  .noites .sub{color:var(--texto3);font-size:var(--t-sub);margin-bottom:30px}
+  .noite{display:grid;grid-template-columns:120px 1fr;gap:26px;padding:28px 0;
+    border-bottom:1px solid #e6edf3;align-items:start}
+  .noite:last-of-type{border-bottom:none}
+  @media(max-width:640px){.noite{grid-template-columns:1fr;gap:12px}}
+  .noite-data{background:var(--azul);border-radius:12px;padding:16px 10px;text-align:center}
+  .noite-data b{display:block;font-family:var(--display);font-size:30px;color:#fff;font-weight:800;line-height:1}
+  .noite-data span{display:block;font-size:12px;color:var(--laranja-c);letter-spacing:.08em;margin-top:4px}
+  .noite-data u{display:block;font-size:12px;color:var(--cinza);text-decoration:none;margin-top:6px}
+  .noite-n{font-size:12px;letter-spacing:.16em;color:var(--laranja);font-weight:700;margin-bottom:6px}
+  .noite h3{font-size:var(--t-h3);color:var(--azul);margin-bottom:10px}
+  .noite p{color:var(--texto2);font-size:var(--t-body);margin-bottom:12px}
+  .noite ul{list-style:none;padding:0}
+  .noite li{position:relative;padding:5px 0 5px 24px;font-size:var(--t-small);color:var(--texto2)}
+  .noite li::before{content:"→";position:absolute;left:0;color:var(--turq);font-weight:700}
+  .noite .gancho{display:inline-block;background:var(--areia);color:#8a5a2a;font-size:13.5px;
+    padding:7px 13px;border-radius:6px;margin-top:12px;font-weight:600}
+
+  /* DIVERTIDO */
+  .divertido{background:var(--areia)}
+  .divertido h2{font-size:var(--t-h2);color:var(--azul);margin-bottom:12px}
+  .div-grid{display:grid;grid-template-columns:1fr 290px;gap:40px;align-items:center}
+  @media(max-width:860px){.div-grid{grid-template-columns:1fr}}
+  .divertido p{font-size:var(--t-body);color:var(--texto2);margin-bottom:18px}
+  .brinca{list-style:none;padding:0;margin-top:20px}
+  .brinca li{background:#fff;border-radius:10px;padding:16px 18px;margin-bottom:10px;
+    font-size:var(--t-small);color:var(--texto2);border-left:3px solid var(--turq)}
+  .brinca li b{color:var(--azul);font-family:var(--display);display:block;margin-bottom:2px;font-size:16px}
+  .poster{border-radius:14px;display:block;width:100%;box-shadow:0 18px 44px rgba(6,24,42,.28)}
+  .poster-cap{font-size:12.5px;color:#8a6a4a;text-align:center;margin-top:10px}
+
+  /* PROVA */
+  .prova{background:#fff}
+  .prova h2{font-size:var(--t-h2);color:var(--azul);margin-bottom:10px;text-align:center}
+  .prova .sub{text-align:center;color:var(--texto3);font-size:var(--t-sub);margin-bottom:30px}
+  .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;align-items:start}
+  .pcard{background:var(--areia2);border-radius:14px;overflow:hidden}
+  .pcard video{width:100%;aspect-ratio:9/16;object-fit:cover;display:block;background:#000}
+  .pcard img.print{width:100%;aspect-ratio:9/16;object-fit:cover;object-position:top center;display:block}
+  .pcard .txt{padding:20px 20px 22px}
+  .pcard .txt p{font-size:var(--t-small);color:var(--texto2);margin-bottom:12px}
+  .pcard .txt b{display:block;font-family:var(--display);font-size:15.5px;color:var(--azul)}
+  .pcard .txt span{font-size:13px;color:var(--texto3)}
+  .aspas{font-family:var(--display);font-size:34px;color:var(--laranja);line-height:.6;display:block;margin-bottom:6px}
+
+  /* QUEM */
+  .quem{background:var(--areia2)}
+  .quem h2{font-size:var(--t-h2);margin-bottom:26px;color:var(--azul)}
+  .duas{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:20px}
+  .col{border-radius:12px;padding:28px 26px;background:#fff}
+  .col.sim{border-top:4px solid var(--azul3)}
+  .col.nao{border-top:4px solid var(--texto3)}
+  .col h3{font-size:var(--t-h3);margin-bottom:14px;color:var(--azul)}
+  .col li{list-style:none;padding:9px 0 9px 26px;position:relative;font-size:var(--t-body);color:var(--texto2)}
+  .col.sim li::before{content:"→";position:absolute;left:0;color:var(--laranja);font-weight:700}
+  .col.nao li::before{content:"×";position:absolute;left:0;color:var(--texto3);font-weight:700}
+
+  /* MENTORA */
+  .mentora{background:var(--azul2);color:#fff}
+  .mentora h2{color:#fff;font-size:var(--t-h2);margin-bottom:20px}
+  .mentora p{color:var(--claro);font-size:var(--t-body);margin-bottom:16px}
+  .mentora-grid{display:grid;grid-template-columns:300px 1fr;gap:40px;align-items:start}
+  @media(max-width:760px){.mentora-grid{grid-template-columns:1fr;gap:26px}}
+  .mentora-foto{width:100%;border-radius:14px;display:block;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+  .assinatura{font-family:var(--display);font-weight:700;font-size:21px;color:#fff;margin-top:8px}
+  .assinatura span{display:block;font-family:var(--corpo);font-weight:400;font-size:13.5px;
+    color:var(--laranja-c);letter-spacing:.06em;margin-top:3px}
+  .creds{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:32px}
+  .cred{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:22px 20px}
+  .cred b{display:block;font-family:var(--display);font-size:29px;color:var(--laranja);font-weight:800;line-height:1.05;margin-bottom:10px}
+  .cred i{display:block;width:44px;height:3px;border-radius:2px;
+    background:linear-gradient(90deg,var(--laranja),var(--turq));margin-bottom:10px}
+  .cred span{font-size:13.5px;color:var(--claro);line-height:1.5;font-style:normal}
+  .selo-frase{background:rgba(21,165,168,.10);border:1px solid rgba(21,165,168,.35);border-radius:12px;
+    padding:20px 22px;margin-top:24px}
+  .selo-frase b{display:block;font-family:var(--display);font-size:16.5px;color:var(--turq);margin-bottom:6px}
+  .selo-frase span{font-size:14.5px;color:var(--claro)}
+
+  /* BONUS */
+  .bonus{background:#fff}
+  .bonus h2{font-size:var(--t-h2);color:var(--azul);margin-bottom:10px;text-align:center}
+  .bonus .sub{text-align:center;color:var(--texto3);margin-bottom:28px;font-size:var(--t-sub)}
+  .bgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+  .bcard{background:var(--areia2);border-radius:12px;padding:24px 22px;border-top:3px solid var(--laranja)}
+  .bcard b{display:block;font-family:var(--display);font-size:17px;color:var(--azul);margin-bottom:7px}
+  .bcard span{font-size:var(--t-small);color:var(--texto2)}
+  .bcard em{display:block;font-style:normal;font-size:12.5px;color:var(--laranja);
+    letter-spacing:.1em;font-weight:700;margin-bottom:8px}
+
+  /* FORM */
+  .inscricao{background:var(--azul);color:#fff}
+  .inscricao h2{color:#fff;font-size:var(--t-h2);margin-bottom:12px;text-align:center}
+  .inscricao .sub{text-align:center;color:var(--claro);font-size:17px;margin-bottom:30px;
+    max-width:620px;margin-left:auto;margin-right:auto}
+  .form-card{background:#fff;border-radius:16px;padding:34px 30px;max-width:560px;margin:0 auto;
+    box-shadow:0 24px 60px rgba(0,0,0,.35)}
+  @media(max-width:520px){.form-card{padding:26px 20px}}
+  .form-card .campo{margin-bottom:15px}
+  .form-card label{display:block;font-weight:600;font-size:14px;color:var(--azul);margin-bottom:5px}
+  .form-card input,.form-card select,.form-card textarea{width:100%;padding:14px 14px;border:1.5px solid #dbe3ea;
+    border-radius:9px;font-family:var(--corpo);font-size:15.5px;background:#fbfcfd;color:var(--texto)}
+  .form-card textarea{resize:vertical;min-height:86px;line-height:1.5}
+  .form-card label i{font-style:normal;font-weight:400;font-size:12.5px;color:var(--texto3);
+    letter-spacing:.04em;text-transform:uppercase;margin-left:6px}
+  .form-card select{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'><path d='M3 5l4 4 4-4' fill='none' stroke='%23778794' stroke-width='2'/></svg>");
+    background-repeat:no-repeat;background-position:right 14px center}
+  .form-card input:focus,.form-card select:focus,.form-card textarea:focus{outline:none;border-color:var(--laranja);
+    background:#fff;box-shadow:0 0 0 3px rgba(220,98,32,.10)}
+  .form-card .btn{width:100%;margin-top:8px}
+  .form-card .aviso{font-size:12.5px;color:var(--texto3);text-align:center;margin-top:14px;line-height:1.5}
+  .form-erro{display:none;background:#fdecea;border:1px solid #f2b8b0;color:#93261a;
+    border-radius:8px;padding:11px 14px;font-size:14px;margin-bottom:14px}
+  .form-ok{display:none;text-align:center}
+  .form-ok .check{width:64px;height:64px;border-radius:50%;background:rgba(21,165,168,.14);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+  .form-ok h3{font-family:var(--display);font-size:25px;color:var(--azul);margin-bottom:10px}
+  .form-ok p{font-size:15.5px;color:var(--texto2);margin-bottom:18px}
+  .btn-wpp{display:inline-flex;align-items:center;justify-content:center;gap:9px;width:100%;
+    background:#0d8a4f;color:#fff;text-decoration:none;font-weight:700;padding:16px;border-radius:9px;font-size:15.5px}
+  .btn-wpp:hover{background:#0a7342}
+  .btn-raiox{display:inline-flex;align-items:center;justify-content:center;width:100%;
+    background:transparent;color:var(--azul);border:1.5px solid #c3d2de;text-decoration:none;
+    font-weight:700;padding:15px;border-radius:9px;font-size:15px;margin-top:10px}
+  .btn-raiox:hover{border-color:var(--laranja);color:var(--laranja)}
+
+  /* FAQ */
+  .faq{background:var(--areia2)}
+  .faq h2{font-size:var(--t-h2);margin-bottom:26px;text-align:center;color:var(--azul)}
+  details{background:#fff;border-radius:10px;margin-bottom:12px;padding:20px 24px;cursor:pointer}
+  details summary{font-weight:600;font-size:16.5px;color:var(--azul);list-style:none;position:relative;padding-right:32px}
+  details summary::-webkit-details-marker{display:none}
+  details summary::after{content:"+";position:absolute;right:0;top:-3px;font-size:25px;color:var(--laranja);font-weight:300}
+  details[open] summary::after{content:"−"}
+  details p{margin-top:14px;color:var(--texto2);font-size:var(--t-body)}
+
+  /* FINAL */
+  .final{background:var(--azul);color:#fff;text-align:center}
+  .final h2{color:#fff;font-size:clamp(28px,4vw,44px);margin-bottom:18px}
+  .final h2 em{font-style:normal;color:var(--laranja)}
+  .final p{color:var(--claro);font-size:18px;max-width:620px;margin:0 auto 34px}
+
+  footer{background:#04101c;color:var(--cinza);text-align:center;padding:36px 22px;font-size:13.5px}
+  footer img{height:42px;width:auto;margin:0 auto 14px;display:block}
+  footer b{color:#fff;display:block;font-family:var(--display);font-size:16px;margin-bottom:4px}
+  footer .links{margin-top:14px;font-size:13px}
+  footer .links a{color:var(--cinza);text-decoration:none;margin:0 9px}
+  footer .links a:hover{color:#fff}
+
+
+  /* CTA intermediário */
+  .cta-mid{margin:44px auto 0;max-width:760px;text-align:center;
+    background:var(--areia);border:1px dashed #d9a877;border-radius:14px;padding:32px 28px}
+  .cta-mid.escuro{background:rgba(255,255,255,.05);border:1px dashed rgba(240,160,74,.55)}
+  .cta-mid p{font-family:var(--display);font-weight:700;font-size:clamp(19px,2.3vw,25px);
+    color:var(--azul);margin-bottom:18px;line-height:1.15}
+  .cta-mid.escuro p{color:#fff}
+  .cta-mid span.sel{display:block;font-size:13.5px;letter-spacing:.14em;font-weight:700;
+    color:var(--laranja);margin-bottom:10px}
+  .cta-mid .btn-sub{color:var(--texto3)}
+  .cta-mid.escuro .btn-sub{color:var(--cinza)}
+
+  /* BARRA FIXA */
+  .sticky{position:fixed;left:0;right:0;bottom:0;z-index:99;background:rgba(6,24,42,.97);
+    border-top:1px solid rgba(255,255,255,.12);padding:10px 14px;display:none;
+    align-items:center;gap:12px;backdrop-filter:blur(8px)}
+  .sticky .info{color:#fff;font-size:12.5px;line-height:1.25;flex:1}
+  .sticky .info b{color:var(--laranja-c);display:block;font-size:13.5px}
+  .sticky a{background:var(--laranja);color:#fff;text-decoration:none;font-weight:700;
+    padding:13px 18px;border-radius:7px;font-size:13.5px;white-space:nowrap}
+  @media(max-width:820px){.sticky{display:flex} body{padding-bottom:76px}}
+</style>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "WebSite",
+   "@id": "https://www.maresconsultoria.com.br/#website",
+   "name": "MARES Consultoria Empresarial",
+   "url": "https://www.maresconsultoria.com.br/",
+   "inLanguage": "pt-BR",
+   "publisher": {
+    "@id": "https://www.maresconsultoria.com.br/#organization"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "@id": "https://www.maresconsultoria.com.br/imersao/#breadcrumb",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Início",
+     "item": "https://www.maresconsultoria.com.br/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Imersão Crescimento Previsível",
+     "item": "https://www.maresconsultoria.com.br/imersao/"
+    }
+   ]
+  }
+ ]
+}
+</script></head>
+<body>
+
+<div class="faixa"></div>
+
+<div class="topo">
+  <div class="wrap in">
+    <img src="img/i1.png" alt="MARES Consultoria Empresarial">
+    <div class="quando">25, 26 e 27 DE AGOSTO &nbsp;·&nbsp; 20h &nbsp;·&nbsp; ONLINE &nbsp;·&nbsp; <b>GRATUITO</b></div>
+  </div>
+</div>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="selo">IMERSÃO ONLINE E GRATUITA · 3 NOITES</div>
+        <h1>Crescimento<br><em>Previsível</em></h1>
+        <div class="sobrenome">IMERSÃO COM MARCELIS PEREIRA · 25 A 27 DE AGOSTO</div>
+        <p class="promessa">Descubra em <span>3 noites</span> exatamente o que trava o crescimento da sua empresa.</p>
+        <p class="lead">Para quem cresceu e perdeu o controle, ou cresceu e empacou. <b>Conteúdo prático, diagnóstico e decisões que você aplica já na sua empresa.</b></p>
+        <div class="gratis">🪸 &nbsp;<b>100% gratuito</b> &nbsp;·&nbsp; ao vivo &nbsp;·&nbsp; vagas limitadas na sala</div>
+        <div class="conta-lbl">A PRIMEIRA NOITE COMEÇA EM</div>
+        <div class="conta" id="conta">
+          <div class="box"><b id="cd">--</b><span>dias</span></div>
+          <div class="box"><b id="ch">--</b><span>horas</span></div>
+          <div class="box"><b id="cm">--</b><span>min</span></div>
+          <div class="box"><b id="cs">--</b><span>seg</span></div>
+        </div>
+        <div>
+          <a href="#inscricao" class="btn">QUERO MINHA VAGA GRATUITA</a>
+          <span class="btn-sub">Leva 40 segundos. Você recebe o link no WhatsApp e no e-mail.</span>
+        </div>
+      </div>
+      <div class="hero-foto">
+        <img src="img/i2.jpg" alt="Marcelis Pereira, estrategista de negócios e fundadora da MARES">
+        <div class="tarja">Marcelis Pereira · Estatística</div>
+      </div>
+    </div>
+    <div class="fatos">
+      <div class="fato"><b>3</b>noites, 25 a 27/08</div>
+      <div class="fato"><b>20h</b>com 1h30 de duração</div>
+      <div class="fato"><b>Ao vivo</b>com mentoria na tela</div>
+      <div class="fato"><b>+20 anos</b>de consultoria empresarial</div>
+    </div>
+  </div>
+</header>
+
+<div class="credbar">
+  <div class="wrap in">
+    <div><b>+24%</b><span>de crescimento em até 12 meses (case documentado)</span></div>
+    <div><b>+20 anos</b><span>liderando em empresas públicas e privadas</span></div>
+    <div><b>Estatística</b><span>bacharel pela UFES</span></div>
+    <div><b>Norte a Sul</b><span>do Brasil, presencial e online</span></div>
+  </div>
+</div>
+
+<!-- ============ DOR ============ -->
+<section class="dor">
+  <div class="wrap narrow">
+    <h2>Ou você cresceu e perdeu o controle.<br>Ou cresceu, e parou.</h2>
+    <p>São as duas frases que eu mais escuto de empresário. E as duas têm a mesma origem: a empresa ficou maior do que a conta que você faz de cabeça.</p>
+    <p>Você fecha o mês sem saber o que fez o resultado acontecer. Comemora recorde de faturamento sem olhar o que sobrou. E toda semana, sem perceber, toma decisões que começam assim:</p>
+    <div class="achismos">
+      <div class="achismo">"Eu acho que o anúncio está funcionando."</div>
+      <div class="achismo">"Eu acho que ela é minha melhor vendedora."</div>
+      <div class="achismo">"Eu acho que esse produto vende mais."</div>
+      <div class="achismo">"Eu acho que esse mês vai ser melhor."</div>
+    </div>
+    <p>Multiplica por 52 semanas. Esse é o tamanho do dinheiro que você deixa na mesa sem enxergar. Não é falta de esforço, é falta de leitura. E leitura se aprende.</p>
+    <div class="frase">Decisão sem dados é achismo.</div>
+      <div class="cta-mid">
+        <span class="sel">VAGA GRATUITA</span>
+        <p>E é exatamente isso que vamos destravar em 3 noites.</p>
+        <a href="#inscricao" class="btn">QUERO MINHA VAGA GRATUITA</a>
+        <span class="btn-sub">25, 26 e 27 de agosto · 20h · online e gratuito</span>
+      </div>
+  </div>
+</section>
+
+<!-- ============ O QUE VOCÊ LEVA ============ -->
+<section class="saicom">
+  <div class="wrap">
+    <h2>Você não sai com anotação bonita.<br>Sai com 3 coisas na mão.</h2>
+    <p class="sub">Desenhada para caber na agenda de quem toca um negócio: 3 noites de 1h30, com um entregável concreto em cada uma.</p>
+    <div class="entregas">
+      <div class="entrega">
+        <i></i>
+        <h3>1. O raio-x da sua empresa</h3>
+        <p>O retrato de todas as áreas do negócio, com o nível de maturidade de cada uma e o ponto que mais trava o seu crescimento hoje.</p>
+      </div>
+      <div class="entrega">
+        <i></i>
+        <h3>2. O seu mapa de indicadores</h3>
+        <p>Quais números olhar toda semana em marketing, vendas e gestão, e o que fazer quando cada um sobe ou desce. Você monta o seu ao vivo.</p>
+      </div>
+      <div class="entrega">
+        <i></i>
+        <h3>3. O seu plano dos próximos 90 dias</h3>
+        <p>O que atacar primeiro, com prazo e responsável, e como usar IA para sustentar essa rotina sem perder o seu critério.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ AS 3 NOITES ============ -->
+<section class="noites">
+  <div class="wrap">
+    <h2>As 3 noites</h2>
+    <p class="sub">Sempre às 20h, ao vivo e online. 1h de conteúdo e 30 minutos de aplicação e perguntas.</p>
+
+    <div class="noite">
+      <div class="noite-data"><b>25</b><span>AGOSTO</span><u>segunda</u></div>
+      <div>
+        <div class="noite-n">NOITE 1</div>
+        <h3>Raio-X: o retrato do seu negócio</h3>
+        <p>A noite mais desconfortável e a mais libertadora. Passo por todas as áreas da empresa e mostro o que precisa ser acompanhado em cada uma.</p>
+        <ul>
+          <li>As áreas que sustentam o crescimento e o que olhar em cada uma</li>
+          <li>Os 4 níveis de maturidade, e como saber em qual a sua empresa está</li>
+          <li>Você preenche o seu raio-x e descobre o seu nível na hora</li>
+        </ul>
+        <span class="gancho">Você sai com: o raio-x da sua empresa preenchido</span>
+      </div>
+    </div>
+
+    <div class="noite">
+      <div class="noite-data"><b>26</b><span>AGOSTO</span><u>terça</u></div>
+      <div>
+        <div class="noite-n">NOITE 2</div>
+        <h3>Onde o dinheiro entra: marketing e vendas</h3>
+        <p>A área que dá o resultado mais rápido e onde quase todo mundo se perde. Abro na tela painéis reais de clientes e mostro, número por número, como se lê um funil de vendas.</p>
+        <ul>
+          <li>Os números de marketing e de vendas que decidem o seu mês</li>
+          <li>Por onde a sua receita vaza, e de onde veio de verdade cada real que entrou</li>
+          <li>Montagem guiada do seu mapa de indicadores</li>
+        </ul>
+        <span class="gancho">Você sai com: o seu mapa de indicadores montado</span>
+      </div>
+    </div>
+
+    <div class="noite">
+      <div class="noite-data"><b>27</b><span>AGOSTO</span><u>quarta</u></div>
+      <div>
+        <div class="noite-n">NOITE 3</div>
+        <h3>IA e hot seat, a mentoria ao vivo</h3>
+        <p>A noite em que a teoria vira decisão. Escolho casos reais de quem cumpriu as missões e resolvo ali, na frente de todo mundo. Hot seat, que em bom português é sentar na cadeira quente e ter o seu caso aberto ao vivo.</p>
+        <ul>
+          <li>Hot seat, a mentoria ao vivo: casos reais da sala resolvidos na hora</li>
+          <li>IA na rotina do empresário: o que ela já resolve e o que continua sendo só seu</li>
+          <li>O caso do cliente cuja IA montou um painel lindo e projetou a falência dele</li>
+          <li>Fechamento com o seu plano dos próximos 90 dias</li>
+        </ul>
+        <span class="gancho">Você sai com: o seu plano de 90 dias</span>
+      </div>
+    </div>
+
+      <div class="cta-mid">
+        <span class="sel">3 NOITES, 3 ENTREGAS</span>
+        <p>Reserve as 3 noites na agenda. A sua vaga é gratuita.</p>
+        <a href="#inscricao" class="btn">QUERO MINHA VAGA GRATUITA</a>
+        <span class="btn-sub">25, 26 e 27 de agosto · 20h · online e gratuito</span>
+      </div>
+  </div>
+</section>
+
+<!-- ============ DIVERTIDO ============ -->
+<section class="divertido">
+  <div class="wrap">
+    <div class="div-grid">
+      <div>
+        <h2>Não é webinário.<br>É imersão, e tem jogo.</h2>
+        <p>Empresário não aguenta mais slide. Aqui você participa, responde, mostra o seu número e sai com decisão tomada. E sim, a gente se diverte no processo.</p>
+        <ul class="brinca">
+          <li><b>Missão de cada noite</b>Uma tarefa de dez minutos para aplicar no seu negócio. As missões viram material da noite 3, então quem cumpre pode ter o próprio caso resolvido ao vivo.</li>
+          <li><b>Hot seat, a mentoria ao vivo</b>Empresários abrem o próprio caso na tela e a Marcelis analisa na hora.</li>
+          <li><b>Placar do achismo</b>Enquetes ao vivo para a sala descobrir quantos ali decidem no "eu acho que".</li>
+          <li><b>Sorteio na noite 3</b>Quem participa das 3 noites concorre a um diagnóstico individual com a Marcelis.</li>
+        </ul>
+      </div>
+      <div>
+        <img class="poster" src="img/i3.jpg" alt="Pôster da imersão: liderar com o poder dos dados">
+        <div class="poster-cap">O superpoder é dado. Sem capa, com número.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROVA SOCIAL ============ -->
+<section class="prova">
+  <div class="wrap">
+    <h2>Quem já sentou com a Marcelis</h2>
+    <p class="sub">3 minutos que explicam melhor do que qualquer texto meu.</p>
+    <div class="pgrid">
+
+      <div class="pcard">
+        <video controls preload="metadata" poster="img/i4.jpg" playsinline>
+          <source src="videos/depoimento-joao-rufino.mp4" type="video/mp4">
+        </video>
+        <div class="txt">
+          <span class="aspas">&ldquo;</span>
+          <p>Passei uns trinta minutos conversando com a Marcelis. Em poucos minutos ela abre os seus horizontes e te dá uma visão do seu próprio negócio que você não tinha.</p>
+          <b>[CONFIRMAR NOME]</b>
+          <span>Empresário, participante do Mapa da Escala</span>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <video controls preload="metadata" poster="img/i5.jpg" playsinline>
+          <source src="videos/depoimento-camila-arocha.mp4" type="video/mp4">
+        </video>
+        <div class="txt">
+          <span class="aspas">&ldquo;</span>
+          <p>É a primeira vez, nesses dezenove anos de carreira, que eu tenho uma mentora. Faz total diferença no meu desenvolvimento, no da equipe e no crescimento da empresa.</p>
+          <b>Camila</b>
+          <span>Gestora de marketing, mentorada pela Marcelis</span>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <img class="print" src="img/i6.jpg" alt="Comentário no Instagram sobre a palestra da Marcelis">
+        <div class="txt">
+          <span class="aspas">&ldquo;</span>
+          <p>Sua palestra foi enriquecedora e muito importante para reforçar a importância dos dados. Você compartilha conhecimentos que são densos de uma forma muito leve.</p>
+          <b>@fisiopriscilapaiva</b>
+          <span>Comentário no Instagram após o Mapa da Escala</span>
+        </div>
+      </div>
+
+    </div>
+
+      <div class="cta-mid">
+        <span class="sel">SUA VEZ</span>
+        <p>Nas 3 noites de agosto, o negócio que vai para a mesa é o seu.</p>
+        <a href="#inscricao" class="btn">QUERO MINHA VAGA GRATUITA</a>
+        <span class="btn-sub">25, 26 e 27 de agosto · 20h · online e gratuito</span>
+      </div>
+  </div>
+</section>
+
+<!-- ============ PARA QUEM ============ -->
+<section class="quem">
+  <div class="wrap">
+    <h2>Para quem é esta imersão</h2>
+    <div class="duas">
+      <div class="col sim">
+        <h3>É para você se</h3>
+        <ul>
+          <li>Você é dono ou sócio de uma empresa que já fatura e já tem time</li>
+          <li>Você cresceu e perdeu o controle do que faz o resultado acontecer, ou cresceu e empacou</li>
+          <li>Você sabe que precisa olhar número, mas não sabe qual nem por onde começar</li>
+          <li>Você é diretor ou líder e precisa sustentar resultado com dado, não com esforço</li>
+          <li>Você quer usar IA no dia a dia sem perder o seu critério</li>
+        </ul>
+      </div>
+      <div class="col nao">
+        <h3>Não é para você se</h3>
+        <ul>
+          <li>Você procura fórmula pronta ou atalho</li>
+          <li>Você quer palestra de motivação</li>
+          <li>Você quer um painel bonito sem decisão do outro lado</li>
+          <li>Você não pretende abrir nenhum número, nem para você mesmo</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MENTORA ============ -->
+<section class="mentora">
+  <div class="wrap">
+    <div class="mentora-grid">
+      <div>
+        <img class="mentora-foto" src="img/i7.jpg" alt="Marcelis Pereira">
+        <div class="assinatura">Marcelis Pereira<span>ESTRATEGISTA DE NEGÓCIOS</span></div>
+      </div>
+      <div>
+        <h2>Quem conduz</h2>
+        <p>Bacharel em Estatística pela UFES, mais de 20 anos de liderança em instituições públicas e privadas e atuação com empresas de Norte a Sul do Brasil. Idealizadora do Método MARES e do conceito Liderança Oxigênio.</p>
+        <p>O trabalho dela junta duas coisas que o mercado costuma separar: o rigor dos números e a leitura de gente. É daí que sai decisão que se sustenta.</p>
+        <div class="creds">
+          <div class="cred"><b>+24%</b><i></i><span>de crescimento em matrículas em 1 ano, em um centro universitário no Paraná, após a implantação do Método MARES</span></div>
+          <div class="cred"><b>+20 anos</b><i></i><span>de experiência em consultoria e liderança empresarial</span></div>
+          <div class="cred"><b>5 pilares</b><i></i><span>do Método MARES: transforMação, dAdos, lideRança, markEting e geStão</span></div>
+        </div>
+        <div class="selo-frase">
+          <b>Lidere com propósito. Decida com dados. Escale com estratégia.</b>
+          <span>É a frase que abre e fecha toda entrega da MARES. Nestas 3 noites ela vira método aplicado ao seu negócio.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BÔNUS ============ -->
+<section class="bonus">
+  <div class="wrap">
+    <h2>O que você recebe por se inscrever</h2>
+    <p class="sub">Tudo liberado assim que você se inscreve, mesmo antes da primeira noite.</p>
+    <div class="bgrid">
+      <div class="bcard"><em>AGORA</em><b>Raio-X MARES</b><span>Diagnóstico online gratuito, 21 perguntas, que mede a maturidade da sua empresa e aponta a área mais crítica. Quem preenche antes aproveita muito mais a primeira noite.</span></div>
+      <div class="bcard"><em>AGORA</em><b>Grupo fechado no WhatsApp</b><span>Onde chegam o link das salas, os lembretes, os materiais e as missões de cada noite.</span></div>
+      <div class="bcard"><em>DURANTE</em><b>Material das 3 noites</b><span>O mapa de indicadores, o checklist de organização dos seus números e o modelo de plano de 90 dias.</span></div>
+      <div class="bcard"><em>AO VIVO</em><b>Presença nas 3 noites</b><span>Quem participa ao vivo das 3 noites concorre ao sorteio de uma sessão de diagnóstico individual com a Marcelis.</span></div>
+    </div>
+
+      <div class="cta-mid">
+        <span class="sel">TUDO ISSO SEM PAGAR NADA</span>
+        <p>A inscrição leva menos de um minuto e a sala tem limite de participantes.</p>
+        <a href="#inscricao" class="btn">QUERO MINHA VAGA GRATUITA</a>
+        <span class="btn-sub">25, 26 e 27 de agosto · 20h · online e gratuito</span>
+      </div>
+  </div>
+</section>
+
+<!-- ============ INSCRIÇÃO ============ -->
+<section class="inscricao" id="inscricao">
+  <div class="wrap">
+    <h2>Garanta a sua vaga</h2>
+    <p class="sub">A inscrição é gratuita e leva menos de um minuto. A sala tem limite de participantes, e a ordem de entrada é por ordem de inscrição.</p>
+
+    <div class="form-card">
+      <form id="formImersao" novalidate>
+        <div class="form-erro" id="formErro"></div>
+
+        <div class="campo">
+          <label for="nome">Nome completo</label>
+          <input type="text" id="nome" name="nome" autocomplete="name" placeholder="Como você quer ser chamado">
+        </div>
+        <div class="campo">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" autocomplete="email" placeholder="seu@email.com.br">
+        </div>
+        <div class="campo">
+          <label for="tel">WhatsApp com DDD</label>
+          <input type="tel" id="tel" name="telefone" autocomplete="tel" placeholder="(41) 99248-8092">
+        </div>
+        <div class="campo">
+          <label for="empresa">Empresa</label>
+          <input type="text" id="empresa" name="empresa" autocomplete="organization" placeholder="Nome da sua empresa">
+        </div>
+        <div class="campo">
+          <label for="cargo">O seu papel hoje</label>
+          <select id="cargo" name="cargo">
+            <option value="">Selecione</option>
+            <option>Dono ou sócio</option>
+            <option>Diretor ou C-level</option>
+            <option>Líder (gerente, coordenador, supervisor)</option>
+            <option>Consultor ou autônomo</option>
+            <option>Outro</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label for="faturamento">Faturamento da empresa por mês</label>
+          <select id="faturamento" name="faturamento">
+            <option value="">Selecione</option>
+            <option>Até R$ 80 mil por mês</option>
+            <option>De R$ 80 mil a R$ 150 mil por mês</option>
+            <option>De R$ 150 mil a R$ 500 mil por mês</option>
+            <option>De R$ 500 mil a R$ 2 milhões por mês</option>
+            <option>Acima de R$ 2 milhões por mês</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="problema">Qual o principal problema que você quer resolver na imersão? <i>opcional</i></label>
+          <textarea id="problema" name="problema" rows="3" placeholder="Escreva com as suas palavras. Isso me ajuda a preparar as noites em cima do que a sala precisa."></textarea>
+        </div>
+
+        <button type="submit" class="btn" id="btnEnviar">QUERO PARTICIPAR DE GRAÇA</button>
+        <p class="aviso">Ao se inscrever você concorda em receber os avisos da imersão por e-mail e WhatsApp. Seus dados não são compartilhados com terceiros.</p>
+      </form>
+
+      <div class="form-ok" id="formOk">
+        <div class="check">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#15a5a8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <h3>Inscrição confirmada</h3>
+        <p>Faltam dois passos rápidos: entrar no grupo do WhatsApp, onde chega o link das salas, e preencher o seu Raio-X antes da noite 1.</p>
+        <a class="btn-wpp" id="linkGrupo" href="https://chat.whatsapp.com/Lun2wGYNxA5A7jI5sJNrpo" target="_blank" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.64-2.05-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.01-1.04 2.47s1.06 2.86 1.21 3.06c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.28.17-1.41-.07-.13-.27-.2-.57-.35zM12 2C6.48 2 2 6.48 2 12c0 1.77.46 3.42 1.27 4.86L2 22l5.28-1.24A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
+          ENTRAR NO GRUPO DO WHATSAPP
+        </a>
+        <a class="btn-raiox" href="https://raiox.mareslideranca.com.br" target="_blank" rel="noopener">FAZER O MEU RAIO-X AGORA (21 PERGUNTAS)</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="faq">
+  <div class="wrap narrow">
+    <h2>Perguntas frequentes</h2>
+    <details><summary>É gratuito mesmo? Onde está a pegadinha?</summary><p>É gratuito mesmo, sem pegadinha. Na terceira noite eu apresento os caminhos para quem quiser continuar comigo depois da imersão. Quem não quiser continuar sai com o raio-x preenchido, o mapa de indicadores montado e o plano de 90 dias na mão. Isso já vale as 3 noites.</p></details>
+    <details><summary>Preciso ter os números da minha empresa organizados?</summary><p>Não. Se estivesse organizado, você não precisaria desta imersão. A noite 1 é para enxergar onde está o buraco e a noite 2 é para montar a estrutura.</p></details>
+    <details><summary>Sou líder, não sou dono. Serve para mim?</summary><p>Serve. A diferença é o que cada um leva para o encontro. O líder que aprende a mostrar resultado com número, e não com esforço, é o que cresce. É isso que a gente treina aqui.</p></details>
+    <details><summary>O que é esse hot seat da noite 3?</summary><p>Hot seat, em bom português, é sentar na cadeira quente. Você abre o seu caso real na tela e eu resolvo ali, ao vivo, na frente de todo mundo. Quem cumpre as missões das noites 1 e 2 entra na fila para ser escolhido.</p></details>
+    <details><summary>E se eu não puder participar de uma das noites ao vivo?</summary><p>A gravação de cada noite fica disponível por tempo limitado no grupo. Mas o hot seat, as enquetes e o sorteio acontecem só ao vivo, então vale reservar as 3 noites na agenda.</p></details>
+    <details><summary>Qual é a duração de cada noite e onde acontece?</summary><p>Uma hora e meia, das 20h às 21h30, online e ao vivo por videochamada. O link chega no grupo do WhatsApp e no seu e-mail antes de cada noite.</p></details>
+
+      <div class="cta-mid">
+        <span class="sel">RESPONDIDA A SUA DÚVIDA?</span>
+        <p>Então guarde a sua vaga antes que a sala encha.</p>
+        <a href="#inscricao" class="btn">QUERO MINHA VAGA GRATUITA</a>
+        <span class="btn-sub">25, 26 e 27 de agosto · 20h · online e gratuito</span>
+      </div>
+  </div>
+</section>
+
+<!-- ============ FINAL ============ -->
+<section class="final">
+  <div class="wrap narrow">
+    <h2>Crescer não é crescer no susto.<br>É crescer com <em>previsibilidade</em>.</h2>
+    <p>3 noites. Uma decisão diferente por noite. E um jeito novo de olhar para os números que a sua empresa já produz todo dia.</p>
+    <a href="#inscricao" class="btn">QUERO MINHA VAGA GRATUITA</a>
+    <span class="btn-sub">25, 26 e 27 de agosto · 20h · online e gratuito</span>
+  </div>
+</section>
+
+<footer>
+  <img src="img/i1.png" alt="MARES Consultoria Empresarial">
+  <b>MARES Consultoria Empresarial</b>
+  @mares_lideranca &nbsp;·&nbsp; Pessoas, Dados e Gestão.
+  <div class="links">
+    <a href="https://maresconsultoria.com.br" target="_blank" rel="noopener">Site</a>·
+    <a href="https://instagram.com/marcelis.pereira" target="_blank" rel="noopener">Instagram</a>·
+    <a href="https://wa.me/5541992488092" target="_blank" rel="noopener">WhatsApp</a>
+  </div>
+</footer>
+
+<div class="sticky">
+  <div class="info"><b>Crescimento Previsível · 25 a 27/08</b>20h, ao vivo, gratuito</div>
+  <a href="#inscricao">QUERO MINHA VAGA</a>
+</div>
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Event",
+  "name":"Imersão Crescimento Previsível",
+  "description":"Imersão online e gratuita de 3 noites para empresários e líderes, para achar o gargalo que trava o crescimento da empresa, montar o mapa de indicadores e aplicar inteligência artificial na rotina de decisão.",
+  "startDate":"2026-08-25T20:00-03:00",
+  "endDate":"2026-08-27T21:30-03:00",
+  "eventAttendanceMode":"https://schema.org/OnlineEventAttendanceMode",
+  "eventStatus":"https://schema.org/EventScheduled",
+  "location":{"@type":"VirtualLocation","url":"https://www.maresconsultoria.com.br/imersao/"},
+  "image":["https://www.maresconsultoria.com.br/imersao/img/capa.jpg"],
+  "inLanguage":"pt-BR",
+  "isAccessibleForFree":true,
+  "offers":{"@type":"Offer","price":"0","priceCurrency":"BRL","availability":"https://schema.org/InStock","url":"https://www.maresconsultoria.com.br/imersao/","validFrom":"2026-08-03T00:00-03:00"},
+  "organizer":{"@type":"Organization","name":"MARES Consultoria Empresarial","url":"https://maresconsultoria.com.br"},
+  "performer":{"@type":"Person","name":"Marcelis Pereira","jobTitle":"Estrategista de negócios"}
+}
+</script>
+
+<script>
+/* =========================================================================
+   CONFIGURAÇÃO — preencher antes de publicar
+   ========================================================================= */
+var CFG = {
+  // Web3Forms: dispara o e-mail para a equipe. Pegue a chave em web3forms.com
+  web3formsKey : "0807768e-222f-4004-9e5a-3e4ed80611b0",
+  // Google Apps Script: grava a inscrição na planilha (mesmo padrão do site)
+  appsScriptUrl: "https://script.google.com/macros/s/AKfycbyI6D28IkKPnoI7z9bh4t9lWMWTy4J0eza6KHc6l1EHa9o3IbspQtJILwynU9alO_z7/exec",
+  // RD Station: token público e identificador de conversão desta landing
+  rdToken      : "10b02ef74f4e5da88354848634e7bbeb",
+  rdIdentificador: "imersao-crescimento-previsivel-ago-2026",
+  // Link do grupo de WhatsApp da imersão
+  linkGrupo    : "https://chat.whatsapp.com/Lun2wGYNxA5A7jI5sJNrpo"
+};
+
+
+/* ---------- contagem regressiva até a 1ª noite ---------- */
+(function(){
+  var alvo = new Date('2026-08-25T20:00:00-03:00').getTime();
+  var el = {d:document.getElementById('cd'),h:document.getElementById('ch'),
+            m:document.getElementById('cm'),s:document.getElementById('cs')};
+  if(!el.d) return;
+  function dois(n){ return n<10 ? '0'+n : ''+n; }
+  function tick(){
+    var falta = alvo - Date.now();
+    if (falta <= 0){
+      document.querySelector('.conta-lbl').textContent = 'A IMERSÃO JÁ COMEÇOU';
+      el.d.textContent='00'; el.h.textContent='00'; el.m.textContent='00'; el.s.textContent='00';
+      return;
+    }
+    var seg = Math.floor(falta/1000);
+    el.d.textContent = dois(Math.floor(seg/86400));
+    el.h.textContent = dois(Math.floor(seg%86400/3600));
+    el.m.textContent = dois(Math.floor(seg%3600/60));
+    el.s.textContent = dois(seg%60);
+  }
+  tick(); setInterval(tick, 1000);
+})();
+
+/* ---------- máscara de telefone (mesmo padrão do site MARES) ---------- */
+var tel = document.getElementById('tel');
+function mascara(v){
+  var d = (v||'').replace(/\D/g,'');
+  if (d.length > 11 && d.indexOf('55') === 0) d = d.slice(2);  // descarta o 55
+  d = d.slice(0,11);
+  if (d.length <= 2)  return d.length ? '(' + d : '';
+  if (d.length <= 6)  return '(' + d.slice(0,2) + ') ' + d.slice(2);
+  if (d.length <= 10) return '(' + d.slice(0,2) + ') ' + d.slice(2,6) + '-' + d.slice(6);
+  return '(' + d.slice(0,2) + ') ' + d.slice(2,7) + '-' + d.slice(7);
+}
+tel.addEventListener('input', function(){ this.value = mascara(this.value); });
+
+function telInternacional(v){
+  var d = (v||'').replace(/\D/g,'');
+  if (d.length > 11 && d.indexOf('55') === 0) d = d.slice(2);
+  return d ? '+55' + d : '';
+}
+
+/* ---------- utm ---------- */
+function utm(){
+  var p = new URLSearchParams(location.search), o = {};
+  ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){
+    if (p.get(k)) o[k] = p.get(k);
+  });
+  return o;
+}
+
+/* ---------- envio ---------- */
+var form   = document.getElementById('formImersao');
+var erro   = document.getElementById('formErro');
+var okBox  = document.getElementById('formOk');
+var btn    = document.getElementById('btnEnviar');
+
+document.getElementById('linkGrupo').href = CFG.linkGrupo;
+
+function mostraErro(msg){ erro.textContent = msg; erro.style.display = 'block'; }
+
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  erro.style.display = 'none';
+
+  var dados = {
+    nome       : document.getElementById('nome').value.trim(),
+    email      : document.getElementById('email').value.trim(),
+    telefone   : tel.value.trim(),
+    empresa    : document.getElementById('empresa').value.trim(),
+    cargo      : document.getElementById('cargo').value,
+    faturamento: document.getElementById('faturamento').value,
+    problema   : document.getElementById('problema').value.trim()
+  };
+
+  if (dados.nome.length < 3)                           return mostraErro('Escreva o seu nome completo.');
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(dados.email)) return mostraErro('Confira o seu e-mail.');
+  if (dados.telefone.replace(/\D/g,'').length < 10)    return mostraErro('Confira o seu WhatsApp com DDD.');
+
+  btn.disabled = true;
+  btn.textContent = 'ENVIANDO...';
+
+  var payload = Object.assign({}, dados, utm(), {
+    origem : 'LP Imersão Crescimento Previsível Agosto 2026',
+    pagina : location.href
+  });
+
+  var envios = [];
+
+  // 1) Web3Forms → e-mail para a equipe
+  if (CFG.web3formsKey.indexOf('COLE_AQUI') === -1) {
+    envios.push(fetch('https://api.web3forms.com/submit', {
+      method : 'POST',
+      headers: {'Content-Type':'application/json', 'Accept':'application/json'},
+      body   : JSON.stringify(Object.assign({
+        access_key: CFG.web3formsKey,
+        subject   : 'Nova inscrição · Imersão Crescimento Previsível'
+      }, payload))
+    }).catch(function(){}));
+  }
+
+  // 2) Google Apps Script → planilha
+  if (CFG.appsScriptUrl.indexOf('COLE_AQUI') === -1) {
+    envios.push(fetch(CFG.appsScriptUrl, {
+      method: 'POST', mode: 'no-cors',
+      headers: {'Content-Type':'text/plain;charset=utf-8'},
+      body  : JSON.stringify(payload)
+    }).catch(function(){}));
+  }
+
+  // 3) RD Station
+  if (CFG.rdToken.indexOf('COLE_AQUI') === -1) {
+    envios.push(fetch('https://www.rdstation.com.br/api/1.3/conversions', {
+      method : 'POST',
+      headers: {'Content-Type':'application/json'},
+      body   : JSON.stringify({
+        token_rdstation      : CFG.rdToken,
+        identificador        : CFG.rdIdentificador,
+        nome                 : dados.nome,
+        email                : dados.email,
+        telefone             : telInternacional(dados.telefone),
+        celular              : telInternacional(dados.telefone),
+        empresa              : dados.empresa,
+        cargo                : dados.cargo,
+        cf_faturamento_mensal: dados.faturamento,
+        cf_principal_problema: dados.problema
+      })
+    }).catch(function(){}));
+  }
+
+  Promise.all(envios).then(function(){
+    if (window.fbq) fbq('track', 'Lead', {content_name: 'Imersao Crescimento Previsivel Agosto 2026'});
+    form.style.display  = 'none';
+    okBox.style.display = 'block';
+    okBox.scrollIntoView({behavior:'smooth', block:'center'});
+  });
+});
+</script>
+
+<!-- Meta Pixel -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','673278761920486');
+fbq('track','PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=673278761920486&ev=PageView&noscript=1"/></noscript>
+
+<script src="../cookies.js" defer></script>
+</body>
+</html>
