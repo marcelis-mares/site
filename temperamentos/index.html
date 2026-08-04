@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Teste dos Temperamentos MARES · Descubra o seu perfil de liderança</title>
+<meta name="description" content="O Teste dos Temperamentos da Metodologia MARES identifica o seu temperamento predominante e o secundário entre Golfinho, Tubarão, Polvo e Tartaruga Marinha, e mostra como essa combinação aparece na sua forma de liderar.">
+<link rel="canonical" href="https://www.maresconsultoria.com.br/temperamentos/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Teste dos Temperamentos MARES · Descubra o seu perfil de liderança">
+<meta property="og:description" content="Golfinho, Tubarão, Polvo ou Tartaruga Marinha. Descubra o seu temperamento predominante e o secundário, e o que essa combinação diz sobre a sua liderança.">
+<meta property="og:url" content="https://www.maresconsultoria.com.br/temperamentos/">
+<meta property="og:image" content="https://www.maresconsultoria.com.br/og-image.jpg">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0D2A3D">
+
+<style>
+@font-face{font-family:'Aileron';src:url('/fonts/Aileron-Regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Aileron';src:url('/fonts/Aileron-SemiBold.woff2') format('woff2');font-weight:500 600;font-style:normal;font-display:swap}
+@font-face{font-family:'Aileron';src:url('/fonts/Aileron-Bold.woff2') format('woff2');font-weight:700 800;font-style:normal;font-display:swap}
+@font-face{font-family:'Bricolage Grotesque';src:url('/fonts/Bricolage-Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Bricolage Grotesque';src:url('/fonts/Bricolage-Bold.woff2') format('woff2');font-weight:600 700;font-style:normal;font-display:swap}
+@font-face{font-family:'Bricolage Grotesque';src:url('/fonts/Bricolage-ExtraBold.woff2') format('woff2');font-weight:800 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Aileron';src:url('/fonts/Aileron-Regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Aileron';src:url('/fonts/Aileron-SemiBold.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Aileron';src:url('/fonts/Aileron-Bold.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+
+/* ============ CONFIG DE MARCA ============ */
+:root{
+  --turquesa:#15A5A8;
+  --azul:#1C6795;
+  --laranja:#E26220;
+  --areia:#FEEAD4;
+  --fundo:#0D2A3D;
+  --fundo-2:#0A2131;
+  --fundo-3:#071A27;
+  --linha:rgba(254,234,212,.14);
+  --texto:#FEEAD4;
+  --texto-suave:rgba(254,234,212,.62);
+  --texto-fraco:rgba(254,234,212,.40);
+  --display:'Bricolage Grotesque',system-ui,sans-serif;
+  --corpo:'Aileron',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --raio:18px;
+  --max:920px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--corpo);
+  background:var(--fundo);
+  color:var(--texto);
+  min-height:100dvh;
+  line-height:1.6;
+  overflow-x:hidden;
+  position:relative;
+}
+/* fundo: gradiente de profundidade */
+body::before{
+  content:'';position:fixed;inset:0;z-index:-2;
+  background:
+    radial-gradient(1100px 620px at 50% -12%, rgba(21,165,168,.20), transparent 62%),
+    radial-gradient(900px 700px at 88% 8%, rgba(28,103,149,.26), transparent 60%),
+    linear-gradient(180deg,#0F3348 0%, var(--fundo) 34%, var(--fundo-2) 68%, var(--fundo-3) 100%);
+}
+/* textura de luz submersa */
+body::after{
+  content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;
+  background:
+    repeating-linear-gradient(112deg, transparent 0 62px, rgba(254,234,212,.022) 62px 63px),
+    repeating-linear-gradient(-104deg, transparent 0 92px, rgba(21,165,168,.03) 92px 93px);
+  mask-image:linear-gradient(180deg, rgba(0,0,0,.9), transparent 72%);
+  -webkit-mask-image:linear-gradient(180deg, rgba(0,0,0,.9), transparent 72%);
+}
+
+.wrap{max-width:var(--max);margin:0 auto;padding:0 22px}
+
+/* ============ TOPO ============ */
+header{padding:26px 0 0}
+.marca{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo img{height:34px;width:auto;display:block}
+@media(max-width:560px){.logo img{height:28px}}
+.res-marca{text-align:center;margin-bottom:24px}
+.res-marca img{height:44px;width:auto;opacity:.95}
+.cta-marca{height:38px;width:auto;opacity:.9;margin-bottom:20px}
+footer img{height:26px;width:auto;opacity:.5;margin-bottom:14px}
+.tagline{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--texto-fraco)}
+@media(max-width:560px){.tagline{display:none}}
+
+/* ============ TELAS ============ */
+.tela{display:none;animation:sobe .55s cubic-bezier(.2,.7,.3,1) both}
+.tela.on{display:block}
+@keyframes sobe{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ============ CAPA ============ */
+.capa{padding:52px 0 70px;text-align:center}
+.selo{
+  display:inline-flex;align-items:center;gap:9px;
+  border:1px solid var(--linha);border-radius:100px;
+  padding:7px 16px;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--turquesa);background:rgba(21,165,168,.07);margin-bottom:26px;
+}
+.selo b{width:6px;height:6px;border-radius:50%;background:var(--turquesa);animation:pulso 2.4s ease-in-out infinite}
+@keyframes pulso{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1.25)}}
+
+h1{
+  font-family:var(--display);font-weight:800;line-height:1.02;letter-spacing:-.03em;
+  font-size:clamp(2.4rem,7.4vw,4.5rem);margin-bottom:22px;
+}
+h1 em{
+  font-style:normal;display:block;
+  background:linear-gradient(94deg,var(--areia) 6%,var(--turquesa) 46%,var(--azul) 78%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.sub{font-size:clamp(1rem,2.1vw,1.16rem);color:var(--texto-suave);max-width:600px;margin:0 auto 14px}
+.tese{
+  font-family:var(--display);font-weight:700;font-size:clamp(1.02rem,2.2vw,1.2rem);
+  color:var(--areia);margin:0 auto 36px;max-width:560px;
+}
+.tese u{text-decoration:none;color:var(--laranja)}
+
+/* escala de profundidade */
+.escala{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:8px;
+  max-width:760px;margin:0 auto 40px;
+}
+.nivel{
+  border:1px solid var(--linha);border-radius:14px;padding:16px 8px 14px;
+  background:linear-gradient(180deg,rgba(254,234,212,.05),rgba(254,234,212,.015));
+  transition:transform .3s,border-color .3s;
+}
+.nivel:hover{transform:translateY(-4px);border-color:rgba(21,165,168,.4)}
+.nivel i{font-style:normal;font-size:23px;display:block;margin-bottom:7px}
+.nivel strong{display:block;font-family:var(--display);font-weight:700;font-size:13.5px;letter-spacing:.01em}
+.nivel small{display:block;font-size:10.5px;color:var(--texto-fraco);letter-spacing:.1em;text-transform:uppercase;margin-top:3px}
+@media(max-width:520px){.escala{grid-template-columns:repeat(2,1fr)}}
+
+/* botões */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  font-family:var(--display);font-weight:700;font-size:16px;letter-spacing:.01em;
+  border:0;border-radius:100px;padding:17px 40px;cursor:pointer;
+  background:linear-gradient(96deg,var(--laranja),#F0873F);
+  color:#12212B;box-shadow:0 12px 34px -12px rgba(226,98,32,.75);
+  transition:transform .22s,box-shadow .22s,filter .22s;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 18px 40px -12px rgba(226,98,32,.9);filter:brightness(1.05)}
+.btn:active{transform:translateY(0)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-ghost{
+  background:transparent;color:var(--texto);border:1px solid var(--linha);box-shadow:none;
+}
+.btn-ghost:hover{border-color:var(--turquesa);box-shadow:none;filter:none}
+.aviso{font-size:13px;color:var(--texto-fraco);margin-top:16px}
+.assina{font-size:12.5px;color:var(--texto-fraco);margin-top:34px;letter-spacing:.02em}
+
+/* ============ FORM ============ */
+.cartao{
+  border:1px solid var(--linha);border-radius:var(--raio);
+  background:linear-gradient(180deg,rgba(254,234,212,.055),rgba(254,234,212,.018));
+  padding:34px 30px;max-width:520px;margin:44px auto 60px;
+  backdrop-filter:blur(6px);
+}
+.cartao h2{font-family:var(--display);font-weight:700;font-size:1.55rem;letter-spacing:-.02em;margin-bottom:8px}
+.cartao p.det{color:var(--texto-suave);font-size:14.5px;margin-bottom:24px}
+.campo{margin-bottom:16px}
+.campo label{display:block;font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--texto-fraco);margin-bottom:7px}
+.campo input{
+  width:100%;padding:14px 16px;border-radius:12px;
+  border:1px solid var(--linha);background:rgba(7,26,39,.6);
+  color:var(--texto);font-family:var(--corpo);font-size:15.5px;transition:border-color .2s,box-shadow .2s;
+}
+.campo select,.campo textarea{
+  width:100%;padding:14px 16px;border-radius:12px;
+  border:1px solid var(--linha);background:rgba(7,26,39,.6);
+  color:var(--texto);font-family:var(--corpo);font-size:15.5px;transition:border-color .2s,box-shadow .2s;
+}
+.campo select{
+  appearance:none;-webkit-appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2315A5A8' stroke-width='2.4'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 15px center;background-size:17px;padding-right:44px;
+}
+.campo select option{background:#0A2131;color:var(--texto)}
+.campo select:invalid{color:rgba(254,234,212,.28)}
+.campo textarea{resize:vertical;min-height:104px;line-height:1.55}
+.campo select:focus,.campo textarea:focus{outline:0;border-color:var(--turquesa);box-shadow:0 0 0 3px rgba(21,165,168,.16)}
+.campo select.erro,.campo textarea.erro{border-color:#E2603F;box-shadow:0 0 0 3px rgba(226,96,63,.14)}
+.recado{
+  margin-top:26px;border:1px solid rgba(21,165,168,.34);border-radius:var(--raio);
+  padding:30px 28px;background:linear-gradient(155deg,rgba(21,165,168,.10),rgba(28,103,149,.07));
+}
+.recado-topo{display:flex;align-items:center;gap:18px;margin-bottom:18px}
+.recado-foto{
+  flex:0 0 78px;width:78px;height:78px;border-radius:50%;object-fit:cover;
+  border:2px solid rgba(21,165,168,.55);box-shadow:0 8px 22px -10px rgba(0,0,0,.7);
+}
+.recado h4{
+  font-family:var(--display);font-weight:700;font-size:1.06rem;line-height:1.35;
+  letter-spacing:-.01em;margin-bottom:6px;
+}
+.recado .quem{font-size:12.5px;color:var(--turquesa);letter-spacing:.02em}
+.recado p.det{color:var(--texto-suave);font-size:14.5px;margin-bottom:18px;line-height:1.62}
+.recado-acao{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px}
+#msg-ok{display:none;font-size:13.5px;color:var(--turquesa)}
+@media(max-width:560px){
+  .recado{padding:24px 20px}
+  .recado-topo{flex-direction:column;align-items:flex-start;gap:14px}
+  .recado-acao .btn{width:100%}
+}
+.campo input::placeholder,.campo textarea::placeholder{color:rgba(254,234,212,.28)}
+.campo input:focus{outline:0;border-color:var(--turquesa);box-shadow:0 0 0 3px rgba(21,165,168,.16)}
+.campo input.erro{border-color:#E2603F;box-shadow:0 0 0 3px rgba(226,96,63,.14)}
+.msg-erro{color:#F0A08A;font-size:12.5px;margin-top:6px;display:none}
+.msg-erro.on{display:block}
+#aviso-form{
+  display:none;margin:0 0 16px;padding:13px 16px;border-radius:12px;
+  background:rgba(226,96,63,.14);border:1px solid rgba(226,96,63,.42);
+  color:#F6B8A4;font-size:13.5px;line-height:1.5;
+}
+#aviso-form.on{display:block;animation:sobe .3s both}
+#aviso-form b{display:block;font-family:var(--display);font-weight:700;color:#FFD3C4;margin-bottom:3px}
+.privacidade{font-size:11.5px;color:var(--texto-fraco);margin-top:14px;line-height:1.5}
+
+/* ============ QUIZ ============ */
+.quiz{padding:30px 0 70px;max-width:740px;margin:0 auto}
+.barra-topo{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:12px}
+.passo{font-size:12px;letter-spacing:.11em;text-transform:uppercase;color:var(--texto-fraco)}
+.pilar-tag{
+  font-family:var(--display);font-weight:700;font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;
+  padding:5px 12px;border-radius:100px;border:1px solid currentColor;
+}
+.trilho{height:4px;border-radius:4px;background:rgba(254,234,212,.1);overflow:hidden;margin-bottom:36px}
+.preenche{height:100%;width:0;border-radius:4px;background:linear-gradient(90deg,var(--turquesa),var(--azul),var(--laranja));transition:width .5s cubic-bezier(.2,.7,.3,1)}
+
+.pergunta{
+  font-family:var(--display);font-weight:700;line-height:1.18;letter-spacing:-.02em;
+  font-size:clamp(1.4rem,3.6vw,2rem);margin-bottom:26px;
+}
+.opcoes{display:flex;flex-direction:column;gap:11px}
+.opcao{
+  display:flex;align-items:flex-start;gap:14px;width:100%;text-align:left;
+  padding:17px 19px;border-radius:14px;cursor:pointer;
+  border:1px solid var(--linha);background:rgba(254,234,212,.035);
+  color:var(--texto);font-family:var(--corpo);font-size:15.5px;line-height:1.45;
+  transition:border-color .2s,background .2s,transform .16s;
+}
+.opcao:hover{border-color:rgba(21,165,168,.5);background:rgba(21,165,168,.07);transform:translateX(3px)}
+.opcao.sel{border-color:var(--turquesa);background:rgba(21,165,168,.13)}
+.bolha{
+  flex:0 0 22px;height:22px;margin-top:1px;border-radius:50%;
+  border:1.5px solid rgba(254,234,212,.34);position:relative;transition:border-color .2s;
+}
+.opcao.sel .bolha{border-color:var(--turquesa)}
+.opcao.sel .bolha::after{
+  content:'';position:absolute;inset:4px;border-radius:50%;background:var(--turquesa);
+}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:30px}
+.voltar{
+  background:none;border:0;color:var(--texto-fraco);font-family:var(--corpo);font-size:14.5px;
+  cursor:pointer;padding:10px 4px;transition:color .2s;
+}
+.voltar:hover{color:var(--texto)}
+.voltar[hidden]{visibility:hidden}
+
+/* ============ CARREGANDO ============ */
+.mergulho{text-align:center;padding:90px 0 110px}
+.sonar{width:96px;height:96px;margin:0 auto 30px;position:relative}
+.sonar span{
+  position:absolute;inset:0;border-radius:50%;border:1.5px solid var(--turquesa);
+  animation:eco 2.1s cubic-bezier(.2,.7,.3,1) infinite;opacity:0;
+}
+.sonar span:nth-child(2){animation-delay:.7s}
+.sonar span:nth-child(3){animation-delay:1.4s}
+@keyframes eco{0%{transform:scale(.28);opacity:.9}100%{transform:scale(1);opacity:0}}
+.mergulho p{font-family:var(--display);font-weight:700;font-size:1.2rem}
+.mergulho small{color:var(--texto-fraco);font-size:13.5px}
+
+/* ============ RESULTADO ============ */
+.res{padding:34px 0 80px}
+.res-topo{text-align:center;margin-bottom:44px}
+.res-eyebrow{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--texto-fraco);margin-bottom:14px}
+.res-icone{font-size:60px;line-height:1;margin-bottom:12px}
+.res-nome{
+  font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-height:1;
+  font-size:clamp(2.3rem,7vw,4rem);margin-bottom:8px;
+}
+.res-prof{font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:var(--turquesa);margin-bottom:22px}
+.medidor{
+  max-width:480px;margin:0 auto 26px;
+}
+.medidor-trilho{height:8px;border-radius:8px;background:rgba(254,234,212,.1);position:relative;overflow:hidden}
+.medidor-fill{height:100%;width:0;border-radius:8px;background:linear-gradient(90deg,var(--turquesa),var(--azul),var(--laranja));transition:width 1.1s cubic-bezier(.2,.7,.3,1)}
+.medidor-legenda{display:flex;justify-content:space-between;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--texto-fraco);margin-top:9px}
+.res-nota{font-family:var(--display);font-weight:800;font-size:2.5rem;letter-spacing:-.03em;line-height:1}
+.res-nota small{font-size:1rem;font-weight:500;color:var(--texto-fraco)}
+.res-texto{
+  max-width:640px;margin:26px auto 0;color:var(--texto-suave);font-size:16px;line-height:1.72;
+}
+
+.bloco-titulo{
+  font-family:var(--display);font-weight:700;font-size:1.05rem;letter-spacing:.02em;
+  margin:52px 0 20px;padding-bottom:12px;border-bottom:1px solid var(--linha);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.bloco-titulo span{font-family:var(--corpo);font-weight:400;font-size:12px;color:var(--texto-fraco);letter-spacing:.04em;text-transform:none}
+
+.pilares{display:flex;flex-direction:column;gap:16px}
+.pilar{border:1px solid var(--linha);border-radius:14px;padding:18px 20px;background:rgba(254,234,212,.028)}
+.pilar-cab{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:11px}
+.pilar-nome{font-family:var(--display);font-weight:700;font-size:14.5px;letter-spacing:.03em}
+.pilar-nome b{color:var(--turquesa);margin-right:7px;font-size:12px;letter-spacing:.04em}
+.frase-dim{font-size:13.5px;color:var(--texto-fraco);font-style:italic;margin:-6px 0 20px}
+.pilar-nota{font-family:var(--display);font-weight:700;font-size:14.5px}
+.pilar-trilho{height:6px;border-radius:6px;background:rgba(254,234,212,.09);overflow:hidden}
+.pilar-fill{height:100%;width:0;border-radius:6px;transition:width .9s cubic-bezier(.2,.7,.3,1)}
+.pilar-diag{font-size:13.5px;color:var(--texto-suave);margin-top:10px;line-height:1.55}
+
+.destaques{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
+@media(max-width:640px){.destaques{grid-template-columns:1fr}}
+.destaque{border:1px solid var(--linha);border-radius:14px;padding:18px 20px}
+.destaque.forte{border-color:rgba(21,165,168,.35);background:rgba(21,165,168,.06)}
+.destaque.fraco{border-color:rgba(226,98,32,.35);background:rgba(226,98,32,.06)}
+.destaque h4{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--texto-fraco);margin-bottom:8px;font-weight:400}
+.destaque p{font-family:var(--display);font-weight:700;font-size:1.05rem;line-height:1.3}
+.destaque small{display:block;color:var(--texto-suave);font-size:13px;margin-top:7px;font-family:var(--corpo);font-weight:400;line-height:1.5}
+
+.cta{
+  margin-top:56px;border-radius:var(--raio);padding:38px 32px;text-align:center;
+  border:1px solid rgba(226,98,32,.3);
+  background:linear-gradient(150deg,rgba(226,98,32,.14),rgba(28,103,149,.12));
+}
+.cta h3{font-family:var(--display);font-weight:800;font-size:clamp(1.5rem,4vw,2.1rem);letter-spacing:-.025em;line-height:1.12;margin-bottom:14px}
+.cta p{color:var(--texto-suave);max-width:520px;margin:0 auto 26px;font-size:15.5px}
+.cta-linha{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+footer{border-top:1px solid var(--linha);padding:26px 0 40px;margin-top:60px;text-align:center}
+footer p{font-size:12.5px;color:var(--texto-fraco)}
+footer a{color:var(--texto-suave);text-decoration:none}
+footer a:hover{color:var(--turquesa)}
+
+/* ============ MENU DO SITE ============ */
+header.site-top{
+  position:sticky;top:0;z-index:80;padding:12px 0;
+  background:rgba(10,33,49,.93);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--linha);
+}
+.topo-in{display:flex;align-items:center;justify-content:space-between;gap:18px}
+.site-menu{display:flex;align-items:center;gap:18px}
+.site-menu a{color:var(--texto-suave);text-decoration:none;font-size:14px;white-space:nowrap;transition:color .2s}
+.site-menu a:hover{color:var(--areia)}
+.site-menu a.site-menu-cta{
+  color:var(--areia);border:1px solid rgba(226,98,32,.65);background:rgba(226,98,32,.18);
+  padding:8px 15px;border-radius:100px;font-weight:600;font-size:13.5px;
+}
+.site-menu a.site-menu-cta:hover{background:var(--laranja);border-color:var(--laranja)}
+.site-hamb{display:none;flex-direction:column;justify-content:center;gap:5px;width:44px;height:38px;padding:0 10px;border:1px solid var(--linha);border-radius:11px;background:transparent;cursor:pointer}
+.site-hamb span{display:block;height:2px;width:100%;background:var(--texto);border-radius:2px;transition:.25s}
+.site-hamb.x span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.site-hamb.x span:nth-child(2){opacity:0}
+.site-hamb.x span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+@media(max-width:960px){
+  .site-hamb{display:flex}
+  .site-menu{
+    display:none;position:absolute;top:100%;left:0;right:0;
+    flex-direction:column;align-items:flex-start;gap:0;
+    background:var(--fundo-2);border-bottom:1px solid var(--linha);
+    padding:8px 22px 20px;box-shadow:0 22px 40px rgba(0,0,0,.35);
+  }
+  .site-menu.aberto{display:flex}
+  .site-menu a{width:100%;padding:13px 0;font-size:15.5px;border-bottom:1px solid rgba(254,234,212,.07)}
+  .site-menu a.site-menu-cta{margin-top:14px;width:100%;text-align:center;border:1px solid rgba(226,98,32,.65)}
+}
+a.btn{text-decoration:none}
+.site-rodape-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 20px;margin-bottom:16px}
+.site-rodape-nav a{color:var(--texto-suave);text-decoration:none;font-size:13.5px}
+.site-rodape-nav a:hover{color:var(--areia)}
+
+/* ============ ESPECÍFICO DO TESTE DOS TEMPERAMENTOS ============ */
+
+/* os quatro animais na capa */
+.bichos{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:660px;margin:0 auto 38px}
+.bicho{
+  border:1px solid var(--linha);border-radius:14px;padding:18px 8px 15px;
+  background:linear-gradient(180deg,rgba(254,234,212,.05),rgba(254,234,212,.015));
+  transition:transform .3s,border-color .3s;
+}
+.bicho:hover{transform:translateY(-4px);border-color:rgba(21,165,168,.4)}
+.bicho i{font-style:normal;font-size:30px;display:block;margin-bottom:8px;line-height:1}
+.bicho strong{display:block;font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.01em}
+.bicho small{display:block;font-size:10.5px;color:var(--texto-fraco);letter-spacing:.1em;text-transform:uppercase;margin-top:4px}
+@media(max-width:520px){.bichos{grid-template-columns:repeat(2,1fr)}}
+
+/* grade de características */
+.instrucao{
+  border:1px solid rgba(21,165,168,.3);border-radius:14px;padding:15px 18px;
+  background:rgba(21,165,168,.07);color:var(--texto-suave);font-size:14px;line-height:1.55;margin-bottom:22px;
+}
+.instrucao b{color:var(--areia);font-family:var(--display);font-weight:700}
+.grade{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+@media(max-width:640px){.grade{grid-template-columns:1fr}}
+.item{
+  display:flex;align-items:flex-start;gap:12px;width:100%;text-align:left;
+  padding:13px 15px;border-radius:12px;cursor:pointer;
+  border:1px solid var(--linha);background:rgba(254,234,212,.035);
+  color:var(--texto);font-family:var(--corpo);font-size:14.5px;line-height:1.4;
+  transition:border-color .18s,background .18s,transform .14s;
+}
+.item:hover{border-color:rgba(21,165,168,.5);background:rgba(21,165,168,.07)}
+.item.sel{border-color:var(--turquesa);background:rgba(21,165,168,.14)}
+.caixa{
+  flex:0 0 20px;height:20px;margin-top:1px;border-radius:6px;
+  border:1.5px solid rgba(254,234,212,.34);position:relative;transition:border-color .18s,background .18s;
+}
+.item.sel .caixa{border-color:var(--turquesa);background:var(--turquesa)}
+.item.sel .caixa::after{
+  content:'';position:absolute;left:6px;top:2px;width:5px;height:10px;
+  border:solid #071A27;border-width:0 2.4px 2.4px 0;transform:rotate(43deg);
+}
+.contador{font-size:12.5px;color:var(--texto-fraco);margin-top:18px}
+.contador b{color:var(--turquesa);font-weight:400}
+
+/* desempate */
+.duelo{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px}
+@media(max-width:640px){.duelo{grid-template-columns:1fr}}
+.lado{
+  border:1px solid var(--linha);border-radius:16px;padding:22px 20px;cursor:pointer;
+  background:rgba(254,234,212,.035);transition:border-color .2s,background .2s,transform .16s;
+  text-align:left;color:var(--texto);font-family:var(--corpo);
+}
+.lado:hover{border-color:rgba(21,165,168,.5);background:rgba(21,165,168,.07);transform:translateY(-3px)}
+.lado i{font-style:normal;font-size:34px;display:block;margin-bottom:10px;line-height:1}
+.lado strong{display:block;font-family:var(--display);font-weight:700;font-size:1.1rem;margin-bottom:8px}
+.lado span{display:block;font-size:14px;color:var(--texto-suave);line-height:1.6}
+
+/* resultado */
+.res-par{display:flex;align-items:center;justify-content:center;gap:26px;flex-wrap:wrap;margin-bottom:6px}
+.res-bicho{text-align:center}
+.res-bicho i{font-style:normal;font-size:64px;line-height:1;display:block}
+.res-bicho b{display:block;font-family:var(--display);font-weight:800;font-size:1.5rem;letter-spacing:-.02em;margin-top:6px}
+.res-bicho small{display:block;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--texto-fraco);margin-top:4px}
+.res-bicho.sec i{font-size:44px;opacity:.9}
+.res-bicho.sec b{font-size:1.15rem}
+.mais{font-family:var(--display);font-weight:800;font-size:1.6rem;color:var(--texto-fraco)}
+.selo-classe{
+  display:inline-block;border-radius:100px;padding:6px 16px;margin:18px 0 0;
+  font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;border:1px solid currentColor;
+}
+.selo-classe.natural{color:var(--turquesa);background:rgba(21,165,168,.08)}
+.selo-classe.oposta{color:var(--laranja);background:rgba(226,98,32,.08)}
+.selo-classe.uncategorized{color:#7FB4D8;background:rgba(28,103,149,.12)}
+
+.barras{display:flex;flex-direction:column;gap:13px;margin-top:8px}
+.barra-linha{display:grid;grid-template-columns:150px 1fr 46px;align-items:center;gap:12px}
+@media(max-width:560px){.barra-linha{grid-template-columns:110px 1fr 40px;gap:9px}}
+.barra-nome{font-family:var(--display);font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:7px}
+.barra-nome i{font-style:normal;font-size:17px}
+.barra-trilho{height:9px;border-radius:9px;background:rgba(254,234,212,.09);overflow:hidden}
+.barra-fill{height:100%;width:0;border-radius:9px;transition:width 1s cubic-bezier(.2,.7,.3,1)}
+.barra-num{font-family:var(--display);font-weight:700;font-size:13.5px;text-align:right;color:var(--texto-suave)}
+
+.nota-escopo{
+  margin-top:34px;border:1px solid var(--linha);border-radius:14px;padding:16px 18px;
+  font-size:12.5px;color:var(--texto-fraco);line-height:1.6;
+}
+.lista-limpa{list-style:none;padding:0;margin:10px 0 0}
+.lista-limpa li{
+  position:relative;padding-left:20px;margin-bottom:9px;
+  color:var(--texto-suave);font-size:14.5px;line-height:1.55;
+}
+.lista-limpa li::before{content:'';position:absolute;left:0;top:9px;width:7px;height:7px;border-radius:50%;background:var(--turquesa)}
+.lista-limpa.atencao li::before{background:var(--laranja)}
+#enviando{display:none;font-size:13.5px;color:var(--turquesa);margin-top:14px}
+</style>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','673278761920486');fbq('track','PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=673278761920486&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel Code -->
+<script src="../cookies.js" defer></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Organization",
+   "@id": "https://www.maresconsultoria.com.br/#organization",
+   "name": "MARES Consultoria Empresarial",
+   "alternateName": "MARES",
+   "url": "https://www.maresconsultoria.com.br/",
+   "logo": {
+    "@type": "ImageObject",
+    "url": "https://www.maresconsultoria.com.br/assets/logo-mares.png"
+   },
+   "image": "https://www.maresconsultoria.com.br/og-image.jpg",
+   "description": "Consultoria de gestão orientada por dados. Une Pessoas, Dados e Gestão para transformar informação dispersa em decisão estratégica e crescimento previsível.",
+   "slogan": "Decisão sem dados é achismo",
+   "email": "comercial@mareslideranca.com.br",
+   "telephone": "+5541992488092",
+   "founder": {
+    "@id": "https://www.maresconsultoria.com.br/#marcelis"
+   },
+   "areaServed": {
+    "@type": "Country",
+    "name": "Brasil"
+   },
+   "location": [
+    {
+     "@type": "Place",
+     "name": "Espírito Santo",
+     "address": {
+      "@type": "PostalAddress",
+      "addressRegion": "ES",
+      "addressCountry": "BR"
+     }
+    },
+    {
+     "@type": "Place",
+     "name": "Curitiba",
+     "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Curitiba",
+      "addressRegion": "PR",
+      "addressCountry": "BR"
+     }
+    }
+   ],
+   "knowsAbout": [
+    "Consultoria empresarial",
+    "Gestão orientada por dados",
+    "Planejamento estratégico",
+    "Inteligência de dados",
+    "Maturidade de dados",
+    "Business Intelligence",
+    "Indicadores de desempenho",
+    "Desenvolvimento de líderes",
+    "Mentoria para empresários",
+    "Liderança Oxigênio"
+   ],
+   "sameAs": [
+    "https://www.instagram.com/marcelis.pereira",
+    "https://www.instagram.com/mares_lideranca",
+    "https://www.linkedin.com/in/marcelis-pereira"
+   ]
+  },
+  {
+   "@type": "Person",
+   "@id": "https://www.maresconsultoria.com.br/#marcelis",
+   "name": "Marcelis Pereira",
+   "jobTitle": "Estrategista de negócios e fundadora da MARES",
+   "description": "Bacharel em Estatística pela UFES, com mais de 20 anos de liderança em projetos estratégicos em instituições públicas e privadas. Fundadora da MARES Consultoria Empresarial e idealizadora do conceito Liderança Oxigênio.",
+   "url": "https://www.maresconsultoria.com.br/sobre/",
+   "image": "https://www.maresconsultoria.com.br/marcelis-sobre.jpg",
+   "worksFor": {
+    "@id": "https://www.maresconsultoria.com.br/#organization"
+   },
+   "alumniOf": {
+    "@type": "CollegeOrUniversity",
+    "name": "Universidade Federal do Espírito Santo"
+   },
+   "knowsAbout": [
+    "Estatística aplicada a negócios",
+    "Gestão orientada por dados",
+    "Liderança Oxigênio",
+    "Formação de líderes",
+    "Planejamento estratégico"
+   ],
+   "sameAs": [
+    "https://www.instagram.com/marcelis.pereira",
+    "https://www.linkedin.com/in/marcelis-pereira"
+   ]
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://www.maresconsultoria.com.br/#website",
+   "name": "MARES Consultoria Empresarial",
+   "url": "https://www.maresconsultoria.com.br/",
+   "inLanguage": "pt-BR",
+   "publisher": {
+    "@id": "https://www.maresconsultoria.com.br/#organization"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "@id": "https://www.maresconsultoria.com.br/temperamentos/#breadcrumb",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Início",
+     "item": "https://www.maresconsultoria.com.br/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Teste dos Temperamentos MARES",
+     "item": "https://www.maresconsultoria.com.br/temperamentos/"
+    }
+   ]
+  }
+ ]
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "WebApplication",
+ "@id": "https://www.maresconsultoria.com.br/temperamentos/#app",
+ "name": "Teste dos Temperamentos MARES",
+ "url": "https://www.maresconsultoria.com.br/temperamentos/",
+ "description": "Teste gratuito da Metodologia MARES que identifica o temperamento predominante e o secundário entre Golfinho, Tubarão, Polvo e Tartaruga Marinha, e explica como essa combinação aparece na forma de liderar.",
+ "applicationCategory": "BusinessApplication",
+ "operatingSystem": "Navegador web",
+ "inLanguage": "pt-BR",
+ "isAccessibleForFree": true,
+ "offers": {
+  "@type": "Offer",
+  "price": "0",
+  "priceCurrency": "BRL"
+ },
+ "provider": {
+  "@id": "https://www.maresconsultoria.com.br/#organization"
+ },
+ "author": {
+  "@id": "https://www.maresconsultoria.com.br/#marcelis"
+ },
+ "about": {
+  "@type": "Thing",
+  "name": "Temperamentos e liderança"
+ }
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "@id": "https://www.maresconsultoria.com.br/temperamentos/#faq",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "O que o Teste dos Temperamentos MARES mede?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Ele identifica o temperamento predominante e o secundário da pessoa entre os quatro perfis da Metodologia MARES: Golfinho, que é o sanguíneo; Tubarão, que é o colérico; Polvo, que é o melancólico; e Tartaruga Marinha, que é o fleumático. O resultado descreve tendências de comportamento e de liderança, não determina caráter, competência nem destino profissional."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Temperamento é a mesma coisa que signo?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Não. O estudo dos temperamentos vem da biologia comportamental e observa padrões de reação, comunicação e tomada de decisão. Não tem relação com astrologia."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Quanto tempo leva para responder?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Em torno de oito minutos. São 200 características apresentadas em dez telas, e a pessoa marca apenas as que reconhece em si."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "O resultado é um diagnóstico psicológico?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Não. A análise apresenta tendências comportamentais como ferramenta de autoconhecimento e desenvolvimento de liderança. Não substitui avaliação psicológica e não deve ser usada para decisão de contratação, demissão ou promoção."
+   }
+  }
+ ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-top">
+  <div class="wrap topo-in">
+    <a class="logo" href="../"><img src="../assets/logo-mares.png" alt="MARES Consultoria Empresarial"></a>
+    <button class="site-hamb" id="hamb" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+    <nav class="site-menu" id="menu">
+      <a href="../">Início</a>
+      <a href="../sobre/">Sobre</a>
+      <a href="../metodo/">Método</a>
+      <a href="../servicos/">Serviços</a>
+      <a href="../palestras/">Palestras</a>
+      <a href="../cases/">Cases</a>
+      <a href="../contato/">Contato</a>
+      <a class="site-menu-cta" href="../diagnostico/">Quero o Diagnóstico MARES</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ===================== CAPA ===================== -->
+  <section class="tela on" id="t-capa">
+    <div class="capa">
+      <div class="selo"><b></b> Metodologia MARES · Liderança Oxigênio</div>
+      <h1>Qual é o seu <em>temperamento</em></h1>
+      <p class="sub">O jeito como você decide, comunica e reage sob pressão não é aleatório. Ele segue um padrão, e esse padrão tem nome.</p>
+      <p class="tese">Descubra o seu perfil <u>predominante</u> e o <u>secundário</u>, e o que essa combinação faz com a sua liderança.</p>
+
+      <div class="bichos">
+        <div class="bicho"><i>🐬</i><strong>Golfinho</strong><small>Sanguíneo</small></div>
+        <div class="bicho"><i>🦈</i><strong>Tubarão</strong><small>Colérico</small></div>
+        <div class="bicho"><i>🐙</i><strong>Polvo</strong><small>Melancólico</small></div>
+        <div class="bicho"><i>🐢</i><strong>Tartaruga</strong><small>Fleumático</small></div>
+      </div>
+
+      <button class="btn" id="ir-dados">Começar o teste</button>
+      <p class="aviso">200 características · cerca de 8 minutos · gratuito</p>
+      <p class="assina">Liderar não é um cargo, é uma postura.</p>
+    </div>
+
+    <div class="res-texto" style="margin-bottom:60px">
+      <p>O estudo dos temperamentos não é astrologia nem signo. É biologia comportamental, e observa padrões de reação, de comunicação e de tomada de decisão que se repetem ao longo da vida. O temperamento predominante é aquele que aparece no piloto automático, quando você não está pensando em como agir, e principalmente quando está sob pressão. O secundário é o que complementa, suaviza ou tensiona essa base.</p>
+      <p style="margin-top:14px">Este teste faz parte do Guia do Autoconhecimento da Metodologia MARES e é a mesma ferramenta que a Marcelis aplica nas formações de liderança.</p>
+    </div>
+  </section>
+
+  <!-- ===================== DADOS ===================== -->
+  <section class="tela" id="t-dados">
+    <div class="cartao">
+      <h2>Antes de começar</h2>
+      <p class="det">A análise completa chega no seu e-mail assim que você terminar. Por isso precisamos saber para onde enviar.</p>
+
+      <div id="aviso-form"><b>Faltou preencher</b><span id="aviso-txt">Confira os campos marcados abaixo.</span></div>
+
+      <div class="campo">
+        <label for="f-nome">Nome completo</label>
+        <input type="text" id="f-nome" autocomplete="name" placeholder="Como você se chama">
+        <div class="msg-erro" id="e-nome">Escreva o seu nome.</div>
+      </div>
+      <div class="campo">
+        <label for="f-email">E-mail</label>
+        <input type="email" id="f-email" autocomplete="email" placeholder="voce@empresa.com.br">
+        <div class="msg-erro" id="e-email">Confira o e-mail, a análise vai para ele.</div>
+      </div>
+      <div class="campo">
+        <label for="f-whats">WhatsApp</label>
+        <input type="tel" id="f-whats" autocomplete="tel" inputmode="numeric" placeholder="(41) 99999-9999">
+        <div class="msg-erro" id="e-whats">Informe um número com DDD.</div>
+      </div>
+      <div class="campo">
+        <label for="f-empresa">Empresa ou setor</label>
+        <input type="text" id="f-empresa" autocomplete="organization" placeholder="Onde você atua">
+        <div class="msg-erro" id="e-empresa">Diga onde você atua.</div>
+      </div>
+      <div class="campo">
+        <label for="f-nivel">Enquadramento profissional</label>
+        <select id="f-nivel" required>
+          <option value="" disabled selected>Selecione</option>
+          <option>Gestão estratégica (empresário, CEO, diretoria, consultoria estratégica)</option>
+          <option>Operação estratégica (assessoria executiva, consultoria executiva, PMO)</option>
+          <option>Gestão tática ou operacional (gerência, coordenação, supervisão)</option>
+          <option>Operação tática (analista, especialista, líder operacional)</option>
+          <option>Operação (assistente, auxiliar, estagiário, linha de produção)</option>
+          <option>Outro</option>
+        </select>
+        <div class="msg-erro" id="e-nivel">Escolha uma opção.</div>
+      </div>
+      <div class="campo">
+        <label for="f-geracao">Faixa de nascimento</label>
+        <select id="f-geracao" required>
+          <option value="" disabled selected>Selecione</option>
+          <option>Baby Boomers (1946 a 1964)</option>
+          <option>Geração X (1965 a 1980)</option>
+          <option>Millennials (1981 a 1996)</option>
+          <option>Geração Z (1997 a 2012)</option>
+          <option>Geração Alpha (2013 em diante)</option>
+        </select>
+        <div class="msg-erro" id="e-geracao">Escolha uma opção.</div>
+      </div>
+
+      <button class="btn" id="ir-quiz" style="width:100%;margin-top:8px">Começar</button>
+      <p class="privacidade">Seus dados ficam com a MARES e são usados para enviar o resultado e conteúdos de liderança. Você pode pedir a remoção quando quiser. Leia a <a href="../politica-de-privacidade/" style="color:var(--texto-suave)">política de privacidade</a>.</p>
+    </div>
+  </section>
+
+  <!-- ===================== QUIZ ===================== -->
+  <section class="tela" id="t-quiz">
+    <div class="quiz">
+      <div class="barra-topo">
+        <span class="passo" id="passo">Tela 1 de 10</span>
+        <span class="passo" id="marcadas">0 marcadas</span>
+      </div>
+      <div class="trilho"><div class="preenche" id="preenche"></div></div>
+
+      <div class="instrucao">
+        <b>Marque com sinceridade tudo o que se parece com você.</b> Não existe resposta certa, nem quantidade certa. Responda pensando em como você é de verdade no dia a dia, e não em como gostaria de ser. Se não reconhecer nenhuma característica da tela, é só avançar.
+      </div>
+
+      <div class="grade" id="grade"></div>
+
+      <div class="nav">
+        <button class="voltar" id="voltar">← Voltar</button>
+        <button class="btn" id="avancar">Avançar</button>
+      </div>
+      <p class="contador">Você já marcou <b id="total-marcadas">0</b> características até aqui.</p>
+    </div>
+  </section>
+
+  <!-- ===================== COMO VOCÊ APRENDE ===================== -->
+  <section class="tela" id="t-aprender">
+    <div class="quiz">
+      <span class="passo">Quase lá · opcional</span>
+      <h2 class="pergunta" style="margin-top:14px">Como você faz para aprender?</h2>
+      <p class="res-texto" style="margin:0 0 24px">Marque o que combina com você. Isso não entra no cálculo do seu temperamento, serve para a MARES saber em que formato o conteúdo chega melhor até você.</p>
+      <div class="grade" id="grade-aprender"></div>
+      <div class="nav">
+        <button class="voltar" id="pular-aprender">Pular esta pergunta</button>
+        <button class="btn" id="ver-resultado">Ver o meu resultado</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== DESEMPATE ===================== -->
+  <section class="tela" id="t-desempate">
+    <div class="quiz">
+      <span class="passo">Última pergunta</span>
+      <h2 class="pergunta" style="margin-top:14px" id="desempate-titulo">Dois perfis apareceram com a mesma força.</h2>
+      <p class="res-texto" style="margin:0 0 26px">Isso acontece e não é erro. Para não escolher por sorteio, leia as duas descrições e diga qual delas se parece mais com o seu dia a dia real.</p>
+      <div class="duelo" id="duelo"></div>
+    </div>
+  </section>
+
+  <!-- ===================== CALCULANDO ===================== -->
+  <section class="tela" id="t-calculando">
+    <div class="mergulho">
+      <div class="sonar"><span></span><span></span><span></span></div>
+      <p>Lendo o seu perfil</p>
+      <small>Somando as marcações e montando a sua análise</small>
+    </div>
+  </section>
+
+  <!-- ===================== RESULTADO ===================== -->
+  <section class="tela" id="t-resultado">
+    <div class="res">
+      <div class="res-topo">
+        <div class="res-marca"><img src="../assets/logo-mares.png" alt="MARES"></div>
+        <p class="res-eyebrow">Seu resultado</p>
+        <div class="res-par" id="res-par"></div>
+        <div><span class="selo-classe" id="res-classe"></span></div>
+        <p class="res-texto" id="res-resumo"></p>
+      </div>
+
+      <h3 class="bloco-titulo">Como as marcações se distribuíram <span>quantidade de características reconhecidas em cada perfil</span></h3>
+      <div class="barras" id="res-barras"></div>
+
+      <h3 class="bloco-titulo">O que aparece de mais forte em você</h3>
+      <ul class="lista-limpa" id="res-fortes"></ul>
+
+      <h3 class="bloco-titulo">Onde vale prestar atenção</h3>
+      <ul class="lista-limpa atencao" id="res-atencao"></ul>
+
+      <div class="cta">
+        <h3>A análise completa está indo para o seu e-mail</h3>
+        <p id="cta-email">Nela você recebe a leitura da combinação entre os dois perfis, as orientações práticas de desenvolvimento e o caminho para aprofundar esse trabalho.</p>
+        <div class="cta-linha">
+          <a class="btn" id="cta-guia" href="https://chk.eduzz.com/2444237" target="_blank" rel="noopener">Conhecer o Guia do Autoconhecimento</a>
+          <a class="btn btn-ghost" id="cta-whats" href="#" target="_blank" rel="noopener">Falar com a equipe</a>
+        </div>
+        <p id="enviando">Enviando a sua análise…</p>
+      </div>
+
+      <div class="nota-escopo">
+        Esta análise apresenta tendências comportamentais e não constitui diagnóstico psicológico. Temperamento indica tendência de comportamento e de preferência, e não determina caráter, competência, inteligência, saúde mental nem destino profissional. O resultado não deve ser usado para decisão de contratação, demissão, promoção ou exclusão.
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <img src="../assets/logo-mares.png" alt="MARES Consultoria Empresarial">
+  <div class="site-rodape-nav"><a href="../">Início</a><a href="../sobre/">Sobre</a><a href="../metodo/">Método</a><a href="../servicos/">Serviços</a><a href="../palestras/">Palestras</a><a href="../cases/">Cases</a><a href="../contato/">Contato</a><a href="../diagnostico/">Diagnóstico MARES</a></div>
+  <p>© <span id="ano"></span> MARES Consultoria Empresarial · <a href="../">maresconsultoria.com.br</a> · Pessoas, Dados e Gestão.</p>
+</footer>
+<script>
+/* =======================================================================
+   TESTE DOS TEMPERAMENTOS MARES
+   Metodologia MARES · Liderança Oxigênio
+
+   Regras metodológicas obrigatórias, tiradas do manual técnico da MARES:
+   1. A ordem das colunas é fixa: S, C, M, F. Nunca ordenar por alfabeto.
+   2. Empate nunca é resolvido pela ordem da coluna nem pelo alfabeto.
+      A política oficial deste teste é a pergunta de desempate declarada.
+   3. O secundário nunca pode ser igual ao predominante.
+   4. A linguagem é probabilística: tende a, pode, costuma.
+   5. As forças vêm antes dos pontos de atenção.
+   6. Nada de diagnóstico clínico, prescrição terapêutica ou inferência
+      sobre traumas.
+   7. Combinação oposta sempre carrega o alerta de autoconhecimento.
+      Combinação natural sempre afirma que é comum e explica a força do
+      secundário.
+   8. Nenhum percentual é apresentado como medida de intensidade, porque
+      não existe regra de normalização validada. O que se mostra é a
+      contagem bruta de características reconhecidas.
+   ======================================================================= */
+
+const CONFIG = {
+  /* 1) Webhook do Google Apps Script que grava na planilha e envia o e-mail
+        com a análise completa. Enquanto estiver vazio, o teste funciona e o
+        lead chega no RD, mas o e-mail com a análise não é enviado. */
+  SHEETS_WEBHOOK: '',
+
+  /* 2) RD Station, token público em Integrações, API, token público. */
+  RD_TOKEN: '10b02ef74f4e5da88354848634e7bbeb',
+  RD_IDENTIFICADOR_LEAD: 'temperamentos-mares-inicio',
+  RD_IDENTIFICADOR_RESULTADO: 'temperamentos-mares-resultado',
+  RD_IDENTIFICADOR_PERFIL: 'temperamentos-predominante-',
+
+  /* 3) Campos personalizados do RD. Deixe vazio o que ainda não existir no
+        RD, porque campo inexistente faz o RD recusar a conversão inteira.
+        Depois de criar os campos, basta colar aqui o identificador. */
+  RD_CAMPO_PREDOMINANTE: '',
+  RD_CAMPO_SECUNDARIO: '',
+  RD_CAMPO_COMBINACAO: '',
+  RD_CAMPO_NIVEL: '',
+
+  /* 4) WhatsApp de destino e link do Guia do Autoconhecimento. */
+  WHATSAPP: '5541992488092',
+  GUIA: 'https://chk.eduzz.com/2444237'
+};
+window.TEMPERAMENTOS_CONFIG = CONFIG;
+
+/* ======================= DICIONÁRIO OFICIAL =======================
+   Ordem fixa. Não alterar, não reordenar.                          */
+const ORDEM = ['S','C','M','F'];
+
+const PERFIS = {
+  S: {
+    animal:'Golfinho', nome:'Sanguíneo', icone:'🐬', cor:'#F0A04A',
+    sintese:'Comunicativo, relacional, espontâneo e mobilizador.',
+    abertura:'Sua predominância Golfinho indica uma energia relacional, comunicativa e capaz de mobilizar pessoas por entusiasmo e conexão.',
+    descricao:'O Golfinho ganha energia nas relações, comunica com naturalidade e costuma gerar entusiasmo. Percebe possibilidades rapidamente e mobiliza pessoas por conexão, leveza e presença. Em liderança, tende a aproximar o time, estimular a participação e criar movimento.',
+    modular:'O Golfinho acrescenta expressão, sociabilidade, criatividade e maior capacidade de mobilização.',
+    curta:'Ganha energia nas pessoas, comunica com facilidade, se entusiasma rápido e costuma puxar o grupo pelo ânimo.',
+    forcas:['Comunicação e persuasão','Sociabilidade e formação de vínculos','Criatividade e leitura rápida de possibilidades','Entusiasmo que contagia o grupo'],
+    atencao:['Dispersão e dificuldade de concluir o que começa','Impulsividade e decisões movidas pelo entusiasmo','Excesso de fala e pouca escuta','Baixa atenção a detalhes'],
+    desenvolvimento:['Transformar ideias em prioridades escritas, com prazo e responsável','Usar uma rotina fixa de acompanhamento para o que foi iniciado','Ouvir até o fim antes de responder','Registrar os acordos, porque o combinado esquecido vira retrabalho']
+  },
+  C: {
+    animal:'Tubarão', nome:'Colérico', icone:'🦈', cor:'#E26220',
+    sintese:'Direto, decidido, competitivo e orientado a resultados.',
+    abertura:'Sua predominância Tubarão indica uma postura direta, decisiva e orientada a transformar objetivos em movimento e resultado.',
+    descricao:'O Tubarão se orienta por objetivo, velocidade e resultado. Decide com firmeza, enfrenta obstáculos e tende a assumir o comando em cenários de pressão. Em liderança, oferece direção, energia de execução e coragem para as conversas difíceis.',
+    modular:'O Tubarão acrescenta decisão, objetividade, coragem e impulso de execução.',
+    curta:'Decide rápido, vai direto ao ponto, encara obstáculo de frente e assume o comando quando a pressão aumenta.',
+    forcas:['Decisão e iniciativa','Foco e objetividade','Assertividade nas conversas difíceis','Capacidade de execução sob pressão'],
+    atencao:['Impaciência com quem precisa de mais contexto','Centralização e dificuldade de delegar','Rigidez e competitividade excessiva','Comunicação dura e pouca escuta'],
+    desenvolvimento:['Ampliar a escuta antes de concluir','Explicar o porquê, e não apenas o que fazer','Calibrar o ritmo conforme a maturidade do time','Acompanhar o impacto humano das decisões, e não só o resultado']
+  },
+  M: {
+    animal:'Polvo', nome:'Melancólico', icone:'🐙', cor:'#1C6795',
+    sintese:'Analítico, criterioso, profundo e orientado à qualidade.',
+    abertura:'Sua predominância Polvo indica uma forma profunda e criteriosa de observar, analisar e construir resultados com qualidade.',
+    descricao:'O Polvo busca compreender em profundidade, conectar variáveis e garantir coerência. Analisa riscos, padrões e detalhes antes de concluir. Em liderança, contribui com qualidade, planejamento, consistência e decisões sustentadas por evidências.',
+    modular:'O Polvo acrescenta análise, planejamento, rigor e atenção à qualidade.',
+    curta:'Observa antes de agir, analisa em profundidade, enxerga o risco que os outros não viram e não abre mão da qualidade.',
+    forcas:['Análise e precisão','Organização e planejamento','Senso crítico e leitura de risco','Responsabilidade e padrão de qualidade'],
+    atencao:['Perfeccionismo e excesso de análise','Demora para concluir e autocrítica pesada','Rigidez de padrão','Dificuldade com o improviso'],
+    desenvolvimento:['Definir de antemão o que é bom o suficiente para aquela entrega','Testar em ciclos curtos em vez de esperar a versão perfeita','Separar risco real de preferência pessoal','Comunicar a conclusão de modo simples, sem todo o caminho da análise']
+  },
+  F: {
+    animal:'Tartaruga Marinha', nome:'Fleumático', icone:'🐢', cor:'#15A5A8',
+    sintese:'Calmo, estável, cooperativo e conciliador.',
+    abertura:'Sua predominância Tartaruga Marinha indica uma presença estável, cooperativa e capaz de gerar segurança nas relações e nos processos.',
+    descricao:'A Tartaruga Marinha valoriza estabilidade, harmonia e continuidade. Observa o ambiente, preserva as relações e tende a agir de modo ponderado. Em liderança, cria segurança, escuta com paciência e ajuda o grupo a manter o equilíbrio durante as mudanças.',
+    modular:'A Tartaruga Marinha acrescenta calma, constância, escuta e habilidade de conciliação.',
+    curta:'Mantém a calma quando o ambiente esquenta, escuta com paciência, evita o atrito e sustenta o ritmo no longo prazo.',
+    forcas:['Calma e consistência','Diplomacia e escuta','Paciência e cooperação','Confiabilidade ao longo do tempo'],
+    atencao:['Evitação de conflito e demora para se posicionar','Passividade diante do que precisa mudar','Resistência silenciosa em vez de discordância aberta','Acomodação'],
+    desenvolvimento:['Explicitar a opinião mesmo quando ela contraria o grupo','Definir prazo para as próprias decisões','Praticar conversas firmes sem esperar o momento perfeito','Tratar o desacordo como parte saudável da liderança']
+  }
+};
+
+/* ======================= CLASSIFICAÇÃO DAS COMBINAÇÕES =======================
+   natural   = {(C,M), (M,C), (S,F), (F,S)}
+   opposite  = {(C,F), (F,C), (M,S), (S,M)}
+   as demais são complementares não categorizadas                              */
+const NATURAIS = ['CM','MC','SF','FS'];
+const OPOSTAS  = ['CF','FC','MS','SM'];
+
+const COMBINACOES = {
+  /* naturais, texto oficial do manual */
+  CM:{classe:'natural', leitura:'Execução reforçada por análise, padrão e planejamento.',
+      texto:'Você tende a unir a decisão e a energia de execução do Tubarão à análise e ao rigor do Polvo. É uma combinação natural e comum: o secundário pode ajudar o seu impulso por resultados a ganhar método, planejamento e qualidade. O cuidado está em não transformar exigência em controle excessivo, nem velocidade em impaciência com quem precisa de mais contexto.'},
+  MC:{classe:'natural', leitura:'Análise reforçada por decisão, assertividade e ação.',
+      texto:'Você tende a unir a profundidade e o critério do Polvo à objetividade e à força de decisão do Tubarão. É uma combinação natural e comum: o secundário ajuda a análise a sair do campo das possibilidades e avançar para escolhas e execução. O cuidado está em equilibrar perfeccionismo e cobrança, definindo quando já existe evidência suficiente para agir.'},
+  SF:{classe:'natural', leitura:'Comunicação reforçada por calma, cooperação e estabilidade.',
+      texto:'Você tende a unir a comunicação e o entusiasmo do Golfinho à calma e à cooperação da Tartaruga Marinha. É uma combinação natural e comum: o secundário pode trazer estabilidade, escuta e continuidade às ideias e às relações. O cuidado está em evitar dispersão, adiamento de conflitos e acordos que não se transformam em responsabilidade clara.'},
+  FS:{classe:'natural', leitura:'Estabilidade reforçada por expressão, sociabilidade e entusiasmo.',
+      texto:'Você tende a unir a estabilidade e a escuta da Tartaruga Marinha à sociabilidade e à expressão do Golfinho. É uma combinação natural e comum: o secundário amplia a sua presença e a sua capacidade de envolver pessoas. O cuidado está em não usar a simpatia ou a conciliação para adiar posicionamentos necessários.'},
+
+  /* opostas, texto oficial do manual */
+  CF:{classe:'oposta', leitura:'Urgência tensionada por estabilidade.',
+      texto:'O resultado reúne tendências opostas: o Tubarão busca decisão, ritmo e confronto direto, enquanto a Tartaruga Marinha preserva estabilidade, harmonia e tempo de reflexão. Esses perfis podem coexistir, mas essa não é a combinação mais natural. Vale observar quando você acelera e quando recua, verificando se o teste retrata a sua realidade cotidiana, uma adaptação ao contexto ou uma forma como gostaria de agir.'},
+  FC:{classe:'oposta', leitura:'Conciliação tensionada por urgência e confronto.',
+      texto:'O resultado reúne tendências opostas: a Tartaruga Marinha prioriza estabilidade e conciliação, enquanto o Tubarão acrescenta urgência, direção e assertividade. Esses perfis podem coexistir, mas essa não é a combinação mais natural. O autoconhecimento ajuda a perceber se a firmeza aparece de forma consistente ou apenas em funções que exigem uma postura aprendida.'},
+  MS:{classe:'oposta', leitura:'Profundidade tensionada por espontaneidade.',
+      texto:'O resultado reúne tendências opostas: o Polvo busca profundidade, padrão e cautela, enquanto o Golfinho se move por expressão, novidade e interação. Esses perfis podem coexistir, mas essa não é a combinação mais natural. Observe a diferença entre o comportamento vivido e o desejado, especialmente em situações sociais, em decisões rápidas e em trabalhos que exigem precisão.'},
+  SM:{classe:'oposta', leitura:'Expressividade tensionada por cautela, crítica e detalhamento.',
+      texto:'O resultado reúne tendências opostas: o Golfinho tende à espontaneidade, à comunicação e ao movimento, enquanto o Polvo acrescenta análise, crítica e busca de qualidade. Esses perfis podem coexistir, mas essa não é a combinação mais natural. Vale revisar em quais contextos cada lado aparece e se a resposta representa hábitos reais ou expectativas sobre a própria atuação.'},
+
+  /* complementares não categorizadas */
+  SC:{classe:'uncategorized', leitura:'Comunicação ganha decisão e execução.',
+      texto:'Você tende a unir a comunicação e a energia relacional do Golfinho à objetividade e à força de decisão do Tubarão. O secundário acrescenta direção e capacidade de fechar: o que começa como ideia e mobilização tende a encontrar um caminho de execução. O cuidado está em não atropelar as pessoas que você acabou de envolver, e em garantir que a rapidez para decidir não vire promessa que depois não se sustenta.'},
+  CS:{classe:'uncategorized', leitura:'Execução ganha persuasão e conexão.',
+      texto:'Você tende a unir a decisão e o foco em resultado do Tubarão à persuasão e à conexão do Golfinho. O secundário acrescenta jogo de cintura e capacidade de trazer gente junto, o que costuma suavizar a dureza da cobrança. O cuidado está em não usar o carisma para contornar conversas que precisariam ser diretas, e em manter a consistência entre o que se promete no entusiasmo e o que se cobra depois.'},
+  MF:{classe:'uncategorized', leitura:'Qualidade ganha serenidade e continuidade.',
+      texto:'Você tende a unir a análise e o rigor do Polvo à serenidade e à constância da Tartaruga Marinha. O secundário acrescenta paciência e continuidade, o que costuma dar sustentação de longo prazo ao que você constrói com critério. O cuidado está em perceber quando análise e ponderação, juntas, viram adiamento, e em definir prazo para concluir mesmo sem ter todas as respostas.'},
+  FM:{classe:'uncategorized', leitura:'Estabilidade ganha critério e profundidade.',
+      texto:'Você tende a unir a estabilidade e a escuta da Tartaruga Marinha ao critério e à profundidade do Polvo. O secundário acrescenta consistência técnica e senso de qualidade ao seu jeito ponderado de conduzir. O cuidado está em não deixar que a soma de cautela e exigência interna se transforme em silêncio: opinião que não é dita não chega a ajudar o time.'}
+};
+
+const ALERTA_OPOSTA = 'Vale um cuidado extra aqui. Perfis opostos podem coexistir, mas essa não é a combinação mais natural. O resultado pode estar refletindo uma adaptação ao contexto em que você vive hoje, um papel que a função exige, uma imagem que você gostaria de ter ou uma tensão real entre dois lados seus. Nada disso invalida o teste. É justamente aí que o autoconhecimento tem mais a dizer, comparando o que você vive com o que você deseja.';
+</script>
+<script>
+const TELAS = [[{"g": "M", "i": 20, "t": "Sensibilidade e talento artístico"}, {"g": "S", "i": 7, "t": "Interage bem com as pessoas"}, {"g": "S", "i": 35, "t": "Animado"}, {"g": "F", "i": 35, "t": "Pouco se envolve com as atividades do próximo"}, {"g": "M", "i": 39, "t": "Evita ficar em evidência"}, {"g": "M", "i": 6, "t": "Reservado"}, {"g": "F", "i": 48, "t": "Vida regrada"}, {"g": "F", "i": 16, "t": "Quando pressionado fica mais lento"}, {"g": "C", "i": 26, "t": "Para atingir seus objetivos passa por cima do direito dos outros"}, {"g": "C", "i": 20, "t": "Intuitivo"}, {"g": "S", "i": 20, "t": "Coloca as pessoas para cima"}, {"g": "S", "i": 46, "t": "Quando passa por momentos difíceis esquece fácil"}, {"g": "S", "i": 27, "t": "Sensível / Emotivo"}, {"g": "C", "i": 49, "t": "Indiferente à vontade das outras pessoas"}, {"g": "C", "i": 14, "t": "Apresenta sugestões e ideias"}, {"g": "F", "i": 1, "t": "Tende a gostar de rotina"}, {"g": "C", "i": 43, "t": "Determinado e persistente"}, {"g": "M", "i": 13, "t": "Sacrifica-se pessoalmente"}, {"g": "M", "i": 33, "t": "Falta vigor, tende à preguiça"}, {"g": "F", "i": 49, "t": "Vacila entre o desejo de fazer e de não fazer alguma coisa"}], [{"g": "F", "i": 27, "t": "Disfarça sua obstinação com seu humor"}, {"g": "C", "i": 40, "t": "Atento"}, {"g": "C", "i": 45, "t": "Determinado"}, {"g": "C", "i": 1, "t": "Firme"}, {"g": "C", "i": 17, "t": "Não gosta de artes"}, {"g": "S", "i": 11, "t": "Dependendo o ambiente negocia seus valores morais"}, {"g": "M", "i": 32, "t": "Não procura as pessoas, deixa que elas o procurem"}, {"g": "S", "i": 37, "t": "Gosta de estar acompanhado"}, {"g": "M", "i": 36, "t": "Acha que sempre estão conspirando contra ele"}, {"g": "F", "i": 9, "t": "Cérebro organizado"}, {"g": "S", "i": 17, "t": "Instável em suas emoções"}, {"g": "M", "i": 5, "t": "Cumpridor de suas responsabilidades"}, {"g": "S", "i": 22, "t": "É entusiasmado quando participa de novos planos"}, {"g": "M", "i": 45, "t": "Desconfia com frequência das coisas"}, {"g": "C", "i": 35, "t": "Interessa pelo aspecto prático da vida"}, {"g": "S", "i": 10, "t": "Natural / Espontâneo"}, {"g": "F", "i": 46, "t": "Aprecia artes"}, {"g": "F", "i": 6, "t": "Pacificador nato"}, {"g": "M", "i": 43, "t": "Se compadece de si mesmo"}, {"g": "F", "i": 41, "t": "Egocêntrico"}], [{"g": "S", "i": 32, "t": "Espalhafatoso"}, {"g": "M", "i": 25, "t": "Analisa a situação"}, {"g": "C", "i": 9, "t": "É pouco influenciado"}, {"g": "S", "i": 16, "t": "Baixo rendimento"}, {"g": "M", "i": 26, "t": "Criativo"}, {"g": "C", "i": 0, "t": "Resistente a pedir desculpa"}, {"g": "S", "i": 28, "t": "Tem dificuldade de se concentrar"}, {"g": "C", "i": 24, "t": "Impulsivo"}, {"g": "C", "i": 47, "t": "Prepotente"}, {"g": "S", "i": 13, "t": "Agitado"}, {"g": "S", "i": 31, "t": "Vive para o momento presente"}, {"g": "M", "i": 17, "t": "Varia sua disposição de espírito conforme a situação"}, {"g": "C", "i": 25, "t": "Decidido"}, {"g": "M", "i": 47, "t": "Olha muito para dentro de si"}, {"g": "F", "i": 40, "t": "Quando mal-humorado usa isso contra os outros"}, {"g": "M", "i": 14, "t": "Medroso"}, {"g": "F", "i": 14, "t": "Cumpridor de suas obrigações e horários"}, {"g": "F", "i": 10, "t": "Desmotivado"}, {"g": "F", "i": 2, "t": "Raramente explode em raiva ou riso"}, {"g": "F", "i": 43, "t": "Mantém as emoções sob controle"}], [{"g": "F", "i": 47, "t": "Teimoso"}, {"g": "F", "i": 3, "t": "Tranquilo"}, {"g": "F", "i": 32, "t": "Frio"}, {"g": "S", "i": 39, "t": "Faz amigos com facilidade"}, {"g": "M", "i": 42, "t": "Tende ao desânimo profundo"}, {"g": "C", "i": 30, "t": "Facilmente toma decisões"}, {"g": "M", "i": 48, "t": "Consegue prever os obstáculos"}, {"g": "S", "i": 14, "t": "Sensível com as necessidades do próximo"}, {"g": "M", "i": 38, "t": "Revive acontecimentos e decisões passadas"}, {"g": "S", "i": 26, "t": "Gosta de crianças"}, {"g": "S", "i": 40, "t": "Verdadeiro"}, {"g": "C", "i": 29, "t": "Líder nato"}, {"g": "C", "i": 12, "t": "É influenciador"}, {"g": "C", "i": 33, "t": "Bravo"}, {"g": "C", "i": 42, "t": "Frustra os outros por sua insatisfação"}, {"g": "F", "i": 24, "t": "Prático e suficiente"}, {"g": "M", "i": 44, "t": "Triste"}, {"g": "S", "i": 8, "t": "Contagiante"}, {"g": "F", "i": 33, "t": "Prefere só observar"}, {"g": "M", "i": 3, "t": "Dificuldade em fazer amizades"}], [{"g": "C", "i": 48, "t": "Disciplinado"}, {"g": "M", "i": 4, "t": "Dificuldade para perdoar"}, {"g": "F", "i": 23, "t": "Contemplativo"}, {"g": "C", "i": 41, "t": "Vibra com muitas atividades"}, {"g": "C", "i": 27, "t": "As diversidades viram desafios"}, {"g": "M", "i": 1, "t": "Não decepciona os que dependem dele"}, {"g": "F", "i": 12, "t": "Gosta de convívio social"}, {"g": "S", "i": 44, "t": "Infiel"}, {"g": "C", "i": 8, "t": "Profere declarações maldosas e irônicas"}, {"g": "F", "i": 42, "t": "Econômico ao extremo"}, {"g": "C", "i": 39, "t": "Direto"}, {"g": "M", "i": 34, "t": "Confiança em sua capacidade"}, {"g": "S", "i": 5, "t": "Arrepende-se pela mesma coisa várias vezes"}, {"g": "M", "i": 27, "t": "Não é desocupado"}, {"g": "F", "i": 21, "t": "Resistente"}, {"g": "M", "i": 16, "t": "Apreciador de artes"}, {"g": "S", "i": 33, "t": "Gentil"}, {"g": "S", "i": 19, "t": "Tende a ser sensual"}, {"g": "S", "i": 29, "t": "Fala constantemente não deixando o outro falar"}, {"g": "F", "i": 0, "t": "Sensato"}], [{"g": "C", "i": 16, "t": "Não é dado a detalhes"}, {"g": "M", "i": 21, "t": "Detalhista"}, {"g": "C", "i": 5, "t": "Agressividade"}, {"g": "F", "i": 7, "t": "É de bom coração, mas não deixa transparecer"}, {"g": "F", "i": 45, "t": "Despreocupado com as circunstâncias ao redor"}, {"g": "C", "i": 21, "t": "Delicado"}, {"g": "S", "i": 0, "t": "Confiante"}, {"g": "M", "i": 46, "t": "Reservado quanto a expor suas ideias"}, {"g": "S", "i": 25, "t": "Curiosidade infantilizada"}, {"g": "M", "i": 8, "t": "Facilidade para diagnosticar problemas"}, {"g": "C", "i": 10, "t": "Divertido"}, {"g": "M", "i": 2, "t": "Interesse excessivo em sua condição física"}, {"g": "C", "i": 46, "t": "Autônomo"}, {"g": "S", "i": 18, "t": "Se relaciona profundamente"}, {"g": "F", "i": 20, "t": "Ponderado"}, {"g": "S", "i": 30, "t": "Desanima com facilidade"}, {"g": "F", "i": 34, "t": "Demorado"}, {"g": "S", "i": 34, "t": "Bondoso"}, {"g": "F", "i": 37, "t": "Gosta de mediar conflitos"}, {"g": "M", "i": 28, "t": "Para tomar decisão pensa sempre na parte negativa"}], [{"g": "C", "i": 4, "t": "Insistente"}, {"g": "S", "i": 49, "t": "Mais coração que razão com as pessoas"}, {"g": "S", "i": 2, "t": "Começa e não termina o que planeja"}, {"g": "F", "i": 29, "t": "Protela com frequência as tarefas"}, {"g": "F", "i": 39, "t": "Conservador por comodismo"}, {"g": "M", "i": 30, "t": "Inseguro"}, {"g": "M", "i": 49, "t": "Gosta de agradar e servir pessoas"}, {"g": "S", "i": 12, "t": "Estimulante"}, {"g": "F", "i": 26, "t": "Racional"}, {"g": "C", "i": 32, "t": "É irônico com os sentimentos dos outros"}, {"g": "C", "i": 36, "t": "Vingativo"}, {"g": "M", "i": 22, "t": "Crítico inflexível"}, {"g": "M", "i": 37, "t": "Tudo o que o afeta é algo material"}, {"g": "M", "i": 7, "t": "Fala pouco, mas é muito preciso no que diz"}, {"g": "S", "i": 3, "t": "Egocêntrico"}, {"g": "F", "i": 5, "t": "Inclinado à autoanálise complacente"}, {"g": "C", "i": 19, "t": "Arrogante"}, {"g": "C", "i": 2, "t": "Mais razão que coração"}, {"g": "S", "i": 45, "t": "Acorda de bom humor"}, {"g": "F", "i": 28, "t": "Sente mais emoções do que demonstra"}], [{"g": "F", "i": 44, "t": "Mais espectador que modificador de circunstâncias"}, {"g": "S", "i": 48, "t": "Ternura e Compaixão"}, {"g": "F", "i": 31, "t": "Trabalha bem sob pressão"}, {"g": "M", "i": 9, "t": "Não se compromete a fazer mais do que pode"}, {"g": "S", "i": 38, "t": "Horário ou compromisso tem dificuldade em cumprir"}, {"g": "M", "i": 40, "t": "Sensível emocionalmente"}, {"g": "F", "i": 4, "t": "Bom conselheiro"}, {"g": "C", "i": 15, "t": "Não vacila sob pressão"}, {"g": "C", "i": 44, "t": "Temperamento forte"}, {"g": "C", "i": 22, "t": "Cérebro esperto"}, {"g": "C", "i": 34, "t": "Competente"}, {"g": "F", "i": 22, "t": "Eficiente"}, {"g": "S", "i": 41, "t": "Pouco prático e desorganizado"}, {"g": "C", "i": 11, "t": "Falta de compaixão ao próximo"}, {"g": "F", "i": 13, "t": "Fino gosto pelas coisas"}, {"g": "S", "i": 4, "t": "Não teme o futuro"}, {"g": "M", "i": 41, "t": "Fica alimentando desejos de vingança"}, {"g": "S", "i": 24, "t": "Primeiro fala depois pensa"}, {"g": "M", "i": 0, "t": "Evita envolver-se em conflitos"}, {"g": "M", "i": 19, "t": "Pensa mais no outro"}], [{"g": "F", "i": 25, "t": "Observa a vida sem se envolver"}, {"g": "M", "i": 18, "t": "Profissionalmente correto"}, {"g": "S", "i": 21, "t": "Divertido"}, {"g": "C", "i": 3, "t": "Tende a ter úlcera"}, {"g": "F", "i": 30, "t": "Acomodado"}, {"g": "M", "i": 23, "t": "Emocional"}, {"g": "F", "i": 15, "t": "Sem compromisso"}, {"g": "S", "i": 6, "t": "Explode e em seguida esquece"}, {"g": "S", "i": 47, "t": "Não conhece suas limitações"}, {"g": "F", "i": 18, "t": "Tem indecisões frequentes"}, {"g": "S", "i": 1, "t": "Falta de disciplina"}, {"g": "C", "i": 18, "t": "As críticas não abalam com facilidade"}, {"g": "F", "i": 17, "t": "Senso de humor mordaz"}, {"g": "S", "i": 23, "t": "Compromete-se sem pensar"}, {"g": "C", "i": 28, "t": "Rancoroso"}, {"g": "M", "i": 35, "t": "Reflexivo"}, {"g": "M", "i": 11, "t": "Ofende-se muito facilmente"}, {"g": "M", "i": 12, "t": "Egoísta"}, {"g": "C", "i": 23, "t": "Precipitado, age na fúria"}, {"g": "C", "i": 6, "t": "Orgulhoso"}], [{"g": "S", "i": 9, "t": "Extrovertido"}, {"g": "M", "i": 10, "t": "Gosta de ficar sozinho"}, {"g": "C", "i": 38, "t": "Otimista"}, {"g": "F", "i": 19, "t": "Grosseiro"}, {"g": "M", "i": 24, "t": "Dado a suposições desfavoráveis"}, {"g": "F", "i": 11, "t": "Metódico, suas coisas estão sempre arrumadas"}, {"g": "M", "i": 29, "t": "Foge da realidade e gosta de fantasiar"}, {"g": "C", "i": 7, "t": "Situação desconhecida o desafia"}, {"g": "M", "i": 31, "t": "Confiável"}, {"g": "F", "i": 36, "t": "Sabe ouvir com paciência e atenção"}, {"g": "S", "i": 15, "t": "A sua vontade o faz ceder a tentações"}, {"g": "C", "i": 37, "t": "Prático"}, {"g": "M", "i": 15, "t": "Mal-humorado"}, {"g": "S", "i": 43, "t": "Barulhento"}, {"g": "C", "i": 31, "t": "Tem dificuldade para se concentrar em leitura"}, {"g": "S", "i": 36, "t": "Impulsividade"}, {"g": "F", "i": 38, "t": "Provoca gargalhada sem esboçar um sorriso"}, {"g": "S", "i": 42, "t": "Ingênuo"}, {"g": "F", "i": 8, "t": "Vagaroso"}, {"g": "C", "i": 13, "t": "Às vezes a sua ousadia gera danos"}]];
+</script>
+<script>
+/* =======================================================================
+   MOTOR
+   O motor de cálculo e o motor de texto são separados de propósito, como
+   pede o manual técnico: calcular() não conhece nenhum texto, e compor()
+   não recalcula nada.
+   ======================================================================= */
+
+const REGRAS_VERSAO = 'calc-1.0';
+const CONTEUDO_VERSAO = 'responses-1.0';
+const TESTE_VERSAO = 'MARES-TEMP-web-1.0';
+const SESSAO = 'TMP-' + Math.random().toString(36).slice(2,8).toUpperCase() + '-' + Date.now().toString(36).toUpperCase();
+
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+
+let lead = {};
+let marcadas = {S:[], C:[], M:[], F:[]};
+let tela = 0;
+let resultado = null;
+let desempates = [];
+let filaDesempate = null;
+
+/* ======================= UTILIDADES ======================= */
+function soDigitosBR(v){
+  let d = String(v||'').replace(/\D/g,'');
+  if (d.length > 11 && d.indexOf('55') === 0) d = d.slice(2);
+  return d.slice(0,11);
+}
+function telefoneE164(v){ const d = soDigitosBR(v); return d ? '+55'+d : ''; }
+function mascaraTelefone(v){
+  const d = soDigitosBR(v);
+  if (d.length > 6) return '('+d.slice(0,2)+') '+d.slice(2,7)+'-'+d.slice(7);
+  if (d.length > 2) return '('+d.slice(0,2)+') '+d.slice(2);
+  if (d.length > 0) return '('+d;
+  return '';
+}
+function emailValido(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(v||'').trim()); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function utms(){
+  const p = new URLSearchParams(location.search); const o = {};
+  ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(k => { if (p.get(k)) o[k] = p.get(k); });
+  return o;
+}
+function mostrar(id){
+  $$('.tela').forEach(t => t.classList.remove('on'));
+  $('#'+id).classList.add('on');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ======================= MOTOR DE CÁLCULO =======================
+   Não conhece texto nenhum. Devolve só números e chaves.          */
+function contar(){
+  const s = {};
+  ORDEM.forEach(k => { s[k] = marcadas[k].length; });
+  return s;
+}
+
+/* Devolve as chaves empatadas no topo de uma lista de candidatos.
+   A ordem devolvida é sempre a ORDEM fixa, nunca alfabética.      */
+function topo(scores, candidatos){
+  const max = Math.max.apply(null, candidatos.map(k => scores[k]));
+  return ORDEM.filter(k => candidatos.indexOf(k) >= 0 && scores[k] === max);
+}
+
+/* Resolve a hierarquia. Quando encontra empate, devolve o pedido de
+   desempate em vez de escolher sozinho. */
+function resolver(scores, escolhas){
+  escolhas = escolhas || {};
+  const total = ORDEM.reduce((a,k) => a + scores[k], 0);
+  if (total === 0) return {status:'needs_review', motivo:'sem_marcacoes'};
+
+  let candidatos = ORDEM.slice();
+  let empatados = topo(scores, candidatos);
+  let primary;
+  if (empatados.length === 1) {
+    primary = empatados[0];
+  } else {
+    const par = empatados[0] + empatados[1];
+    if (!escolhas[par]) return {status:'desempate', par:[empatados[0], empatados[1]], nivel:'predominante'};
+    const perdedor = empatados[0] === escolhas[par] ? empatados[1] : empatados[0];
+    const restantes = empatados.filter(k => k !== perdedor);
+    if (restantes.length > 1) {
+      const par2 = restantes[0] + restantes[1];
+      if (!escolhas[par2]) return {status:'desempate', par:[restantes[0], restantes[1]], nivel:'predominante'};
+      primary = escolhas[par2];
+    } else {
+      primary = restantes[0];
+    }
+  }
+
+  candidatos = ORDEM.filter(k => k !== primary);
+  if (Math.max.apply(null, candidatos.map(k => scores[k])) === 0) {
+    return {status:'needs_review', motivo:'secundario_zerado'};
+  }
+  empatados = topo(scores, candidatos);
+  let secondary;
+  if (empatados.length === 1) {
+    secondary = empatados[0];
+  } else {
+    const par = empatados[0] + empatados[1];
+    if (!escolhas[par]) return {status:'desempate', par:[empatados[0], empatados[1]], nivel:'secundario'};
+    const perdedor = empatados[0] === escolhas[par] ? empatados[1] : empatados[0];
+    const restantes = empatados.filter(k => k !== perdedor);
+    if (restantes.length > 1) {
+      const par2 = restantes[0] + restantes[1];
+      if (!escolhas[par2]) return {status:'desempate', par:[restantes[0], restantes[1]], nivel:'secundario'};
+      secondary = escolhas[par2];
+    } else {
+      secondary = restantes[0];
+    }
+  }
+
+  if (!secondary || secondary === primary) return {status:'needs_review', motivo:'secundario_invalido'};
+  if (scores[secondary] === 0) return {status:'needs_review', motivo:'secundario_zerado'};
+
+  const chave = primary + secondary;
+  const classe = NATURAIS.indexOf(chave) >= 0 ? 'natural'
+               : OPOSTAS.indexOf(chave) >= 0 ? 'oposta' : 'uncategorized';
+
+  return {
+    status:'ok', scores, total, primary, secondary, chave, classe,
+    confianca: Object.keys(escolhas).length ? 'calculated_com_desempate' : 'calculated',
+    ordenado: ORDEM.slice().sort((a,b) => scores[b] - scores[a] || ORDEM.indexOf(a) - ORDEM.indexOf(b))
+  };
+}
+
+/* ======================= MOTOR DE TEXTO =======================
+   Não recalcula nada. Só monta blocos a partir do resultado.     */
+function compor(r){
+  const P = PERFIS[r.primary], S = PERFIS[r.secondary], C = COMBINACOES[r.chave];
+  const blocos = {
+    abertura: P.abertura,
+    descricaoPredominante: P.descricao,
+    descricaoSecundario: S.descricao,
+    modularSecundario: S.modular,
+    combinacao: C.texto,
+    leitura: C.leitura,
+    alerta: r.classe === 'oposta' ? ALERTA_OPOSTA : '',
+    reforcoNatural: r.classe === 'natural'
+      ? 'Essa é uma combinação natural e comum. Na prática, o secundário funciona como reforço: ele não briga com a sua base, ele a completa.'
+      : '',
+    fortes: P.forcas.concat([S.forcas[0]]),
+    atencao: P.atencao.concat([S.atencao[0]]),
+    orientacoes: P.desenvolvimento.slice(0,3).concat([S.desenvolvimento[0]]),
+    fecho: 'Liderança não é um cargo, e sim uma postura. Quanto mais você reconhece as suas tendências, mais escolhas conscientes pode fazer na comunicação, nas decisões e na forma de conduzir pessoas.',
+    escopo: 'Esta análise apresenta tendências comportamentais e não constitui diagnóstico psicológico.'
+  };
+  blocos.resumo = P.abertura + ' ' + S.modular + ' ' + C.texto;
+  return blocos;
+}
+
+/* Checklist do manual antes de qualquer envio. */
+function validarTexto(html, r){
+  const faltas = [];
+  if (r.classe === 'oposta' && html.indexOf('não é a combinação mais natural') < 0) faltas.push('E008 alerta obrigatório ausente');
+  if (r.classe === 'natural' && html.indexOf('combinação natural e comum') < 0) faltas.push('E008 reforço de combinação natural ausente');
+  if (html.indexOf(CONFIG.GUIA) < 0) faltas.push('E009 link do Guia ausente');
+  if (html.indexOf('Equipe MARES') < 0) faltas.push('E009 assinatura ausente');
+  if (html.indexOf('não constitui diagnóstico') < 0) faltas.push('E009 nota de escopo ausente');
+  if (r.primary === r.secondary) faltas.push('E004 secundário igual ao predominante');
+  if (/%/.test(html)) faltas.push('E010 percentual sem regra validada');
+  return faltas;
+}
+
+/* ======================= E-MAIL ======================= */
+function montarEmail(r, b){
+  const P = PERFIS[r.primary], S = PERFIS[r.secondary];
+  const nome = (lead.nome||'').trim().split(' ')[0] || 'olá';
+  const li = arr => arr.map(x => '<li style="margin-bottom:8px">' + esc(x) + '</li>').join('');
+  const p = t => '<p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#20313d">' + esc(t) + '</p>';
+  const h = t => '<h3 style="font-family:Georgia,serif;font-size:16px;color:#06182a;margin:28px 0 10px">' + esc(t) + '</h3>';
+
+  return [
+    '<div style="font-family:Helvetica,Arial,sans-serif;max-width:620px;margin:0 auto;padding:28px 24px;background:#ffffff">',
+    '<p style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#15A5A8;margin:0 0 18px">MARES · Liderança Oxigênio</p>',
+    p('Olá, ' + nome + ','),
+    p('Seu resultado indica ' + P.animal + ', o ' + P.nome + ', como temperamento predominante, e ' + S.animal + ', o ' + S.nome + ', como temperamento secundário.'),
+    '<div style="border-left:3px solid #E26220;padding:2px 0 2px 16px;margin:0 0 22px">',
+    p(b.combinacao),
+    '</div>',
+    b.reforcoNatural ? p(b.reforcoNatural) : '',
+    b.alerta ? '<div style="background:#fdf3ec;border-radius:10px;padding:16px 18px;margin:0 0 22px">' + p(b.alerta) + '</div>' : '',
+    h('O seu predominante: ' + P.animal),
+    p(b.descricaoPredominante),
+    h('O seu secundário: ' + S.animal),
+    p(b.descricaoSecundario),
+    p(b.modularSecundario),
+    h('Pontos fortes em destaque'),
+    '<ul style="font-size:15px;line-height:1.6;color:#20313d;padding-left:20px;margin:0 0 16px">' + li(b.fortes) + '</ul>',
+    h('Pontos de atenção'),
+    '<ul style="font-size:15px;line-height:1.6;color:#20313d;padding-left:20px;margin:0 0 16px">' + li(b.atencao) + '</ul>',
+    h('Orientações para o desenvolvimento'),
+    '<ul style="font-size:15px;line-height:1.6;color:#20313d;padding-left:20px;margin:0 0 16px">' + li(b.orientacoes) + '</ul>',
+    '<div style="background:#06182a;border-radius:12px;padding:24px 22px;margin:30px 0 22px">',
+    '<p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#FEEAD4">' + esc(b.fecho) + '</p>',
+    '<p style="margin:0;font-size:15px;line-height:1.7;color:#FEEAD4">Para aprofundar esse processo, conheça a mentoria Guia do Autoconhecimento: <a href="' + CONFIG.GUIA + '" style="color:#F0A04A">' + CONFIG.GUIA + '</a></p>',
+    '</div>',
+    '<p style="font-size:12.5px;color:#66788a;line-height:1.6;margin:0 0 14px">' + esc(b.escopo) + ' Temperamento indica tendência de comportamento e de preferência, e não determina caráter, competência, inteligência, saúde mental nem destino profissional.</p>',
+    '<p style="font-size:13px;color:#20313d;margin:0">Equipe MARES | Liderança Oxigênio<br>@marcelis.pereira · mareslideranca.com.br · Guia do Autoconhecimento</p>',
+    '</div>'
+  ].join('');
+}
+
+/* ======================= TELA: CAPA E DADOS ======================= */
+$('#ir-dados').addEventListener('click', () => mostrar('t-dados'));
+
+$('#f-whats').addEventListener('input', e => { e.target.value = mascaraTelefone(e.target.value); });
+
+function validarDados(){
+  const campos = [
+    ['f-nome','e-nome', v => v.trim().length >= 2],
+    ['f-email','e-email', v => emailValido(v)],
+    ['f-whats','e-whats', v => soDigitosBR(v).length >= 10],
+    ['f-empresa','e-empresa', v => v.trim().length >= 2],
+    ['f-nivel','e-nivel', v => !!v],
+    ['f-geracao','e-geracao', v => !!v]
+  ];
+  let ok = true;
+  campos.forEach(([id, erro, teste]) => {
+    const el = $('#'+id);
+    const bom = teste(el.value);
+    el.classList.toggle('erro', !bom);
+    $('#'+erro).classList.toggle('on', !bom);
+    if (!bom) ok = false;
+  });
+  $('#aviso-form').classList.toggle('on', !ok);
+  return ok;
+}
+
+$('#ir-quiz').addEventListener('click', () => {
+  if (!validarDados()) { $('#aviso-form').scrollIntoView({behavior:'smooth', block:'center'}); return; }
+  lead = {
+    nome: $('#f-nome').value.trim(),
+    email: $('#f-email').value.trim(),
+    whatsapp: $('#f-whats').value.trim(),
+    empresa: $('#f-empresa').value.trim(),
+    nivel: $('#f-nivel').value,
+    geracao: $('#f-geracao').value
+  };
+  enviarRD(CONFIG.RD_IDENTIFICADOR_LEAD, {});
+  if (window.fbq) fbq('track','Lead',{content_name:'Teste dos Temperamentos MARES'});
+  tela = 0;
+  desenharTela();
+  mostrar('t-quiz');
+});
+
+/* ======================= TELA: QUIZ ======================= */
+function desenharTela(){
+  const itens = TELAS[tela];
+  $('#grade').innerHTML = itens.map((it,n) =>
+    '<button type="button" class="item' + (marcadas[it.g].indexOf(it.i) >= 0 ? ' sel' : '') + '" data-n="' + n + '">' +
+    '<span class="caixa"></span><span>' + esc(it.t) + '</span></button>'
+  ).join('');
+  $('#passo').textContent = 'Tela ' + (tela+1) + ' de ' + TELAS.length;
+  $('#preenche').style.width = ((tela) / TELAS.length * 100) + '%';
+  $('#voltar').hidden = tela === 0;
+  $('#avancar').textContent = tela === TELAS.length - 1 ? 'Ver o meu resultado' : 'Avançar';
+  atualizarContagem();
+
+  $$('#grade .item').forEach(b => b.addEventListener('click', () => {
+    const it = TELAS[tela][+b.dataset.n];
+    const arr = marcadas[it.g];
+    const pos = arr.indexOf(it.i);
+    if (pos >= 0) arr.splice(pos,1); else arr.push(it.i);
+    b.classList.toggle('sel', pos < 0);
+    atualizarContagem();
+  }));
+}
+function atualizarContagem(){
+  const nesta = $$('#grade .item.sel').length;
+  const tudo = ORDEM.reduce((a,k) => a + marcadas[k].length, 0);
+  $('#marcadas').textContent = nesta + ' nesta tela';
+  $('#total-marcadas').textContent = tudo;
+}
+$('#voltar').addEventListener('click', () => { if (tela > 0) { tela--; desenharTela(); window.scrollTo({top:0,behavior:'smooth'}); } });
+$('#avancar').addEventListener('click', () => {
+  if (tela < TELAS.length - 1) { tela++; desenharTela(); window.scrollTo({top:0,behavior:'smooth'}); return; }
+  perguntarAprendizagem();
+});
+
+/* ======================= COMO VOCÊ APRENDE (opcional) ======================= */
+const APRENDER = ['Ler livro','Assistir palestras','Participar de workshop','Participar de imersões',
+  'Estudar com professores','Estudar sozinho','Ter um mentor','Aprender com vídeos',
+  'Aprender em grupo','Aprender fazendo'];
+let aprender = [];
+let jaPerguntouAprender = false;
+
+function perguntarAprendizagem(){
+  if (jaPerguntouAprender) { concluir(); return; }
+  jaPerguntouAprender = true;
+  $('#grade-aprender').innerHTML = APRENDER.map((t,n) =>
+    '<button type="button" class="item" data-n="' + n + '"><span class="caixa"></span><span>' + esc(t) + '</span></button>'
+  ).join('');
+  $$('#grade-aprender .item').forEach(b => b.addEventListener('click', () => {
+    const t = APRENDER[+b.dataset.n];
+    const pos = aprender.indexOf(t);
+    if (pos >= 0) aprender.splice(pos,1); else aprender.push(t);
+    b.classList.toggle('sel', pos < 0);
+  }));
+  mostrar('t-aprender');
+}
+$('#pular-aprender').addEventListener('click', () => { aprender = []; concluir(); });
+$('#ver-resultado').addEventListener('click', () => concluir());
+
+/* ======================= DESEMPATE ======================= */
+function pedirDesempate(par, nivel){
+  filaDesempate = par;
+  const rotulo = nivel === 'predominante' ? 'predominante' : 'secundário';
+  $('#desempate-titulo').textContent = 'Dois perfis empataram no seu temperamento ' + rotulo + '.';
+  $('#duelo').innerHTML = par.map(k => {
+    const P = PERFIS[k];
+    return '<button type="button" class="lado" data-k="' + k + '"><i>' + P.icone + '</i>' +
+      '<strong>' + P.animal + '</strong><span>' + esc(P.curta) + '</span></button>';
+  }).join('');
+  $$('#duelo .lado').forEach(b => b.addEventListener('click', () => {
+    const escolhido = b.dataset.k;
+    desempates.push({par: par.join(''), escolhido, nivel});
+    concluir();
+  }));
+  mostrar('t-desempate');
+}
+
+/* ======================= CONCLUSÃO ======================= */
+function concluir(){
+  const scores = contar();
+  const escolhas = {};
+  desempates.forEach(d => { escolhas[d.par] = d.escolhido; });
+  const r = resolver(scores, escolhas);
+
+  if (r.status === 'desempate') { pedirDesempate(r.par, r.nivel); return; }
+
+  if (r.status === 'needs_review') {
+    mostrar('t-quiz');
+    $('#grade').scrollIntoView({behavior:'smooth', block:'start'});
+    alert(r.motivo === 'sem_marcacoes'
+      ? 'Você não marcou nenhuma característica. Volte e marque tudo o que reconhece em você, pode ser pouco ou muito.'
+      : 'As suas marcações não permitiram identificar um segundo perfil com segurança. Volte e revise as telas, marcando tudo o que reconhece em você.');
+    return;
+  }
+
+  if (r.total < 8) {
+    alert('Você marcou apenas ' + r.total + ' características em 200. Com tão poucas marcações o resultado fica frágil. Volte e marque tudo o que reconhece em você, sem economizar.');
+    return;
+  }
+
+  resultado = r;
+  mostrar('t-calculando');
+  setTimeout(() => { desenharResultado(); mostrar('t-resultado'); enviarTudo(); }, 1700);
+}
+
+/* ======================= TELA: RESULTADO ======================= */
+function desenharResultado(){
+  const r = resultado, b = compor(r);
+  const P = PERFIS[r.primary], S = PERFIS[r.secondary];
+
+  $('#res-par').innerHTML =
+    '<div class="res-bicho"><i>' + P.icone + '</i><b>' + P.animal + '</b><small>Predominante · ' + P.nome + '</small></div>' +
+    '<span class="mais">+</span>' +
+    '<div class="res-bicho sec"><i>' + S.icone + '</i><b>' + S.animal + '</b><small>Secundário · ' + S.nome + '</small></div>';
+
+  const selo = $('#res-classe');
+  selo.className = 'selo-classe ' + r.classe;
+  selo.textContent = r.classe === 'natural' ? 'Combinação natural'
+                   : r.classe === 'oposta' ? 'Combinação oposta'
+                   : 'Combinação complementar';
+
+  $('#res-resumo').innerHTML = '<span>' + esc(b.abertura) + ' ' + esc(b.modularSecundario) + '</span>' +
+    '<span style="display:block;margin-top:14px">' + esc(b.combinacao) + '</span>' +
+    (b.alerta ? '<span style="display:block;margin-top:14px">' + esc(b.alerta) + '</span>' : '') +
+    (b.reforcoNatural ? '<span style="display:block;margin-top:14px">' + esc(b.reforcoNatural) + '</span>' : '');
+
+  const maior = Math.max.apply(null, ORDEM.map(k => r.scores[k])) || 1;
+  $('#res-barras').innerHTML = r.ordenado.map(k => {
+    const p = PERFIS[k];
+    return '<div class="barra-linha"><div class="barra-nome"><i>' + p.icone + '</i>' + p.animal + '</div>' +
+      '<div class="barra-trilho"><div class="barra-fill" data-w="' + (r.scores[k]/maior*100) + '" style="background:' + p.cor + '"></div></div>' +
+      '<div class="barra-num">' + r.scores[k] + '</div></div>';
+  }).join('');
+  setTimeout(() => { $$('#res-barras .barra-fill').forEach(f => f.style.width = f.dataset.w + '%'); }, 120);
+
+  $('#res-fortes').innerHTML = b.fortes.map(x => '<li>' + esc(x) + '</li>').join('');
+  $('#res-atencao').innerHTML = b.atencao.map(x => '<li>' + esc(x) + '</li>').join('');
+  $('#cta-email').textContent = 'Ela vai para ' + lead.email + ' e traz a leitura completa da combinação entre os dois perfis, as orientações práticas de desenvolvimento e o caminho para aprofundar esse trabalho.';
+  $('#cta-guia').href = CONFIG.GUIA;
+  $('#cta-whats').href = 'https://wa.me/' + CONFIG.WHATSAPP + '?text=' +
+    encodeURIComponent('Oi! Fiz o Teste dos Temperamentos e deu ' + P.animal + ' predominante com ' + S.animal + ' secundário. Quero entender melhor o meu resultado.');
+}
+
+/* ======================= ENVIOS ======================= */
+function campos(mapa){
+  const o = {};
+  Object.keys(mapa).forEach(k => { if (CONFIG[k]) o[CONFIG[k]] = mapa[k]; });
+  return o;
+}
+function enviarRD(identificador, extra){
+  if (!CONFIG.RD_TOKEN || !lead.email) return;
+  const payload = {
+    event_type:'CONVERSION',
+    event_family:'CDP',
+    payload: Object.assign({
+      conversion_identifier: identificador,
+      name: lead.nome,
+      email: lead.email,
+      personal_phone: telefoneE164(lead.whatsapp),
+      mobile_phone: telefoneE164(lead.whatsapp),
+      company_name: lead.empresa
+    }, utms(), extra || {})
+  };
+  fetch('https://api.rd.services/platform/conversions?api_key=' + CONFIG.RD_TOKEN, {
+    method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
+  }).catch(e => console.warn('[RD] falha ao enviar conversão', e));
+}
+
+function enviarTudo(){
+  const r = resultado, b = compor(r);
+  const P = PERFIS[r.primary], S = PERFIS[r.secondary];
+  const html = montarEmail(r, b);
+
+  const faltas = validarTexto(html, r);
+  if (faltas.length) {
+    console.error('[Temperamentos] envio bloqueado pelo checklist:', faltas);
+    $('#enviando').style.display = 'block';
+    $('#enviando').textContent = 'A sua análise ficou separada para conferência da equipe e será enviada em seguida.';
+    registrar('blocked', faltas.join('; '), '');
+    return;
+  }
+
+  enviarRD(CONFIG.RD_IDENTIFICADOR_RESULTADO, campos({
+    RD_CAMPO_PREDOMINANTE: P.animal + ' · ' + P.nome,
+    RD_CAMPO_SECUNDARIO: S.animal + ' · ' + S.nome,
+    RD_CAMPO_COMBINACAO: P.animal + ' + ' + S.animal + ' · ' + r.classe
+  }));
+  enviarRD(CONFIG.RD_IDENTIFICADOR_PERFIL + P.animal.toLowerCase().replace(/\s+/g,'-'), {});
+  registrar('sent', '', html);
+
+  $('#enviando').style.display = 'block';
+  $('#enviando').textContent = CONFIG.SHEETS_WEBHOOK
+    ? 'Análise enviada para ' + lead.email + '. Se não chegar em alguns minutos, olhe a caixa de promoções ou o spam.'
+    : 'Resultado registrado. A análise completa será enviada pela equipe.';
+}
+
+function registrar(status, motivo, html){
+  if (!CONFIG.SHEETS_WEBHOOK) { console.warn('[Temperamentos] webhook da planilha não configurado'); return; }
+  const r = resultado;
+  const P = PERFIS[r.primary], S = PERFIS[r.secondary];
+  const dados = Object.assign({
+    sessao: SESSAO,
+    processed_at: new Date().toISOString(),
+    teste: 'Temperamentos',
+    test_version: TESTE_VERSAO,
+    rule_version: REGRAS_VERSAO,
+    content_version: CONTEUDO_VERSAO,
+    source_type: 'raw_answers',
+    nome: lead.nome,
+    primeiro_nome: (lead.nome||'').split(' ')[0],
+    email: lead.email,
+    whatsapp: lead.whatsapp,
+    empresa: lead.empresa,
+    enquadramento: lead.nivel,
+    geracao: lead.geracao,
+    como_aprende: aprender.join(' | '),
+    predominante: PERFIS[r.primary].nome,
+    predominante_animal: P.animal,
+    secundario: PERFIS[r.secondary].nome,
+    secundario_animal: S.animal,
+    combinacao: r.chave,
+    classe: r.classe,
+    confidence: r.confianca,
+    status: status,
+    review_reason: motivo || '',
+    score_S: r.scores.S, score_C: r.scores.C, score_M: r.scores.M, score_F: r.scores.F,
+    total_marcadas: r.total,
+    desempates: desempates.map(d => d.par + '>' + d.escolhido).join(' | '),
+    marcadas_S: marcadas.S.join(','),
+    marcadas_C: marcadas.C.join(','),
+    marcadas_M: marcadas.M.join(','),
+    marcadas_F: marcadas.F.join(','),
+    assunto: 'Sua análise de temperamentos — Metodologia MARES',
+    email_html: html,
+    whatsapp_url: 'https://wa.me/' + CONFIG.WHATSAPP,
+    origem: location.href
+  }, utms());
+
+  fetch(CONFIG.SHEETS_WEBHOOK, {
+    method:'POST', mode:'no-cors',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify(dados)
+  }).catch(e => console.warn('[Temperamentos] falha ao enviar para a planilha', e));
+}
+
+/* ======================= MENU E RODAPÉ ======================= */
+$('#ano').textContent = new Date().getFullYear();
+$('#hamb').addEventListener('click', () => {
+  $('#menu').classList.toggle('aberto');
+  $('#hamb').classList.toggle('x');
+});
+$$('#menu a').forEach(a => a.addEventListener('click', () => {
+  $('#menu').classList.remove('aberto'); $('#hamb').classList.remove('x');
+}));
+</script>
+</body>
+</html>
