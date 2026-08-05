@@ -729,6 +729,9 @@ fbq('init','673278761920486');fbq('track','PageView');
   <!-- ===================== DADOS ===================== -->
   <section class="tela" id="t-dados">
     <div class="cartao">
+      <div class="instrucao" id="aviso-turma" hidden>
+        <b>Você está respondendo dentro do diagnóstico de time da sua empresa.</b> A sua análise individual chega no seu e-mail e é sua. O que a empresa recebe é a leitura do conjunto, sem resultado individual de ninguém. Por isso pedimos algumas informações a mais sobre a sua área e a sua função.
+      </div>
       <h2>Antes de começar</h2>
       <p class="det">A análise completa chega no seu e-mail assim que você terminar. Por isso precisamos saber para onde enviar.</p>
 
@@ -792,6 +795,58 @@ fbq('init','673278761920486');fbq('track','PageView');
           <option>Acima de R$ 40.000</option>
         </select>
         <div class="msg-erro" id="e-salario">Escolha uma opção.</div>
+      </div>
+
+      <div id="campos-turma" hidden>
+        <div class="campo">
+          <label for="f-setor">Setor ou área</label>
+          <select id="f-setor">
+            <option value="" disabled selected>Selecione</option>
+            <option>Diretoria e sócios</option>
+            <option>Comercial e vendas</option>
+            <option>Marketing</option>
+            <option>Financeiro</option>
+            <option>Administrativo</option>
+            <option>Operações e produção</option>
+            <option>Logística e suprimentos</option>
+            <option>Atendimento e pós-venda</option>
+            <option>Recursos humanos</option>
+            <option>Tecnologia</option>
+            <option>Jurídico</option>
+            <option>Qualidade e processos</option>
+            <option>Projetos</option>
+            <option>Outra área</option>
+          </select>
+          <div class="msg-erro" id="e-setor">Escolha a sua área.</div>
+        </div>
+        <div class="campo">
+          <label for="f-cargo">Cargo ou função</label>
+          <input type="text" id="f-cargo" placeholder="Como o seu cargo se chama na empresa">
+          <div class="msg-erro" id="e-cargo">Escreva o seu cargo.</div>
+        </div>
+        <div class="campo">
+          <label for="f-lidera">Você lidera pessoas hoje?</label>
+          <select id="f-lidera">
+            <option value="" disabled selected>Selecione</option>
+            <option>Não lidero pessoas hoje</option>
+            <option>Lidero até 5 pessoas</option>
+            <option>Lidero de 6 a 15 pessoas</option>
+            <option>Lidero de 16 a 50 pessoas</option>
+            <option>Lidero mais de 50 pessoas</option>
+          </select>
+          <div class="msg-erro" id="e-lidera">Escolha uma opção.</div>
+        </div>
+        <div class="campo">
+          <label for="f-tempo">Tempo de casa</label>
+          <select id="f-tempo">
+            <option value="" disabled selected>Selecione</option>
+            <option>Menos de 1 ano</option>
+            <option>De 1 a 3 anos</option>
+            <option>De 3 a 10 anos</option>
+            <option>Mais de 10 anos</option>
+          </select>
+          <div class="msg-erro" id="e-tempo">Escolha uma opção.</div>
+        </div>
       </div>
 
       <button class="btn" id="ir-quiz" style="width:100%;margin-top:8px">Começar</button>
@@ -1246,6 +1301,24 @@ function montarEmail(r, b){
   ].join('');
 }
 
+/* ======================= MODO TURMA =======================
+   Ativado por um código na URL, /temperamentos/?time=codigo.
+   Sem código a página se comporta exatamente como o teste gratuito.
+   O modo turma não muda nada no cálculo nem no texto do resultado.
+   Ele só acrescenta o contexto organizacional que a leitura de time
+   exige e carimba cada resposta com o código da empresa.            */
+function lerTurma(){
+  const p = new URLSearchParams(location.search);
+  const bruto = p.get('time') || p.get('turma') || '';
+  return bruto.trim().toLowerCase().replace(/[^a-z0-9-]/g,'').slice(0,40);
+}
+const TURMA = lerTurma();
+if (TURMA) {
+  $('#aviso-turma').hidden = false;
+  $('#campos-turma').hidden = false;
+  document.querySelector('.selo').innerHTML = '<b></b> Diagnóstico de time · Metodologia MARES';
+}
+
 /* ======================= TELA: CAPA E DADOS ======================= */
 $('#ir-dados').addEventListener('click', () => mostrar('t-dados'));
 
@@ -1261,6 +1334,12 @@ function validarDados(){
     ['f-geracao','e-geracao', v => !!v],
     ['f-salario','e-salario', v => !!v]
   ];
+  if (TURMA) campos.push(
+    ['f-setor','e-setor', v => !!v],
+    ['f-cargo','e-cargo', v => v.trim().length >= 2],
+    ['f-lidera','e-lidera', v => !!v],
+    ['f-tempo','e-tempo', v => !!v]
+  );
   let ok = true;
   campos.forEach(([id, erro, teste]) => {
     const el = $('#'+id);
@@ -1282,7 +1361,12 @@ $('#ir-quiz').addEventListener('click', () => {
     empresa: $('#f-empresa').value.trim(),
     nivel: $('#f-nivel').value,
     geracao: $('#f-geracao').value,
-    salario: $('#f-salario').value
+    salario: $('#f-salario').value,
+    time: TURMA,
+    setor: TURMA ? $('#f-setor').value : '',
+    cargo: TURMA ? $('#f-cargo').value.trim() : '',
+    lidera: TURMA ? $('#f-lidera').value : '',
+    tempo_casa: TURMA ? $('#f-tempo').value : ''
   };
   enviarRD(CONFIG.RD_IDENTIFICADOR_LEAD, {});
   if (window.fbq) fbq('track','Lead',{content_name:'Teste dos Temperamentos MARES'});
@@ -1427,7 +1511,8 @@ function desenharResultado(){
 
   $('#res-fortes').innerHTML = b.fortes.map(x => '<li>' + esc(x) + '</li>').join('');
   $('#res-atencao').innerHTML = b.atencao.map(x => '<li>' + esc(x) + '</li>').join('');
-  $('#cta-email').textContent = 'Ela vai para ' + lead.email + ' e traz a leitura completa da combinação entre os dois perfis, as orientações práticas de desenvolvimento e o caminho para aprofundar esse trabalho.';
+  $('#cta-email').textContent = 'Ela vai para ' + lead.email + ' e traz a leitura completa da combinação entre os dois perfis, as orientações práticas de desenvolvimento e o caminho para aprofundar esse trabalho.'
+    + (TURMA ? ' A sua empresa recebe apenas a leitura do time como conjunto, sem o resultado individual de ninguém.' : '');
   $('#cta-guia').href = CONFIG.GUIA;
   $('#cta-whats').href = 'https://wa.me/' + CONFIG.WHATSAPP + '?text=' +
     encodeURIComponent('Oi! Fiz o Teste dos Temperamentos e deu ' + P.animal + ' predominante com ' + S.animal + ' secundário. Quero entender melhor o meu resultado.');
@@ -1479,6 +1564,7 @@ function enviarTudo(){
     RD_CAMPO_SALARIO: lead.salario || ''
   }));
   enviarRD(CONFIG.RD_IDENTIFICADOR_PERFIL + P.animal.toLowerCase().replace(/\s+/g,'-'), {});
+  if (TURMA) enviarRD('temperamentos-time-' + TURMA, {});
   registrar('sent', '', html);
 
   $('#enviando').style.display = 'block';
@@ -1507,6 +1593,11 @@ function registrar(status, motivo, html){
     enquadramento: lead.nivel,
     geracao: lead.geracao,
     salario: lead.salario,
+    time: lead.time || '',
+    setor: lead.setor || '',
+    cargo: lead.cargo || '',
+    lidera: lead.lidera || '',
+    tempo_casa: lead.tempo_casa || '',
     como_aprende: aprender.join(' | '),
     predominante: PERFIS[r.primary].nome,
     predominante_animal: P.animal,
