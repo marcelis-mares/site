@@ -1172,6 +1172,7 @@ function finalizar(){
   /* segunda conversão, só com o número do nível, para a automação separar os e-mails */
   enviarRD(CONFIG.RD_IDENTIFICADOR_NIVEL + numeroNivel, extraRD);
   enviarPlanilha();
+  registrarEvento(resultado);
   try{ fbq('track','CompleteRegistration',{content_name:'RaioX MARES', value:Number(resultado.media.toFixed(2)), currency:'BRL'}); }catch(e){}
 
   setTimeout(() => { pintarResultado(); tela('#tela-res'); }, 2200);
@@ -1294,6 +1295,44 @@ function enviarRD(identificador, extra){
     headers:{'Content-Type':'application/json'},
     body: JSON.stringify(payload)
   }).catch(e => console.warn('[RD] falha ao enviar conversão', e));
+}
+
+/* ======================= MODO TURMA =======================
+   Um código na URL, /raiox/?time=codigo, carimba a resposta com o nome da
+   turma, da empresa ou da palestra. Não muda nada no teste nem no cálculo:
+   serve só para o painel conseguir separar um grupo do resto.
+
+   O registro enxuto vai para a central dos testes, que é o Apps Script do
+   Teste dos Temperamentos. O envio normal para a planilha do RaioX continua
+   exatamente como era.                                                    */
+const CENTRAL = 'https://script.google.com/macros/s/AKfycbx4UBHQ5yh13Tx3IEX8SN4xEHMCZtYoSz_Vm53f2P7v44nQidwErRvq_uximUQdmU58/exec';
+function lerTurma(){
+  const p = new URLSearchParams(location.search);
+  const bruto = p.get('time') || p.get('turma') || '';
+  return bruto.trim().toLowerCase().replace(/[^a-z0-9-]/g,'').slice(0,40);
+}
+const TURMA = lerTurma();
+
+function registrarEvento(r){
+  if (!CENTRAL || !r) return;
+  const d = {
+    registro: 'evento',
+    teste: 'RaioX',
+    time: TURMA,
+    sessao: SESSAO,
+    time: TURMA,
+    processed_at: new Date().toISOString(),
+    media: r.media.toFixed(2),
+    nivel: r.nivel.nome,
+    dimensao_forte: r.forte.nome,
+    dimensao_fraca: r.fraco.nome,
+    escala: PERGUNTAS[0].o.length,
+    dimensoes: r.porPilar.map(p => ({chave:p.chave, nome:p.nome, nota:Number(p.media.toFixed(2))})),
+    origem: location.href
+  };
+  fetch(CENTRAL, {method:'POST', mode:'no-cors',
+    headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(d)})
+    .catch(e => console.warn('[RaioX] falha ao registrar o evento', e));
 }
 
 function enviarPlanilha(){
