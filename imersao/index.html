@@ -82,8 +82,12 @@
     box-shadow:0 10px 26px rgba(220,98,32,.28)}
   .btn:hover{background:#c4551a;transform:translateY(-2px)}
   .btn-sub{display:block;margin-top:12px;font-size:13.5px;color:var(--cinza)}
-  .fatos{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:36px}
-  @media(max-width:860px){.fatos{grid-template-columns:repeat(2,1fr)}}
+  .fatos{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:36px;grid-column:1 / -1}
+  @media(max-width:860px){
+    .fatos{grid-template-columns:repeat(2,1fr);margin-top:4px;order:2}
+    .hero-grid > div:first-child{order:1}
+    .hero-foto{order:3}
+  }
   .fato{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;
     padding:12px 17px;font-size:13.5px;color:var(--claro)}
   .fato b{color:#fff;display:block;font-family:var(--display);font-size:19px;font-weight:700}
@@ -380,12 +384,12 @@
         <img src="/imersao/img/i2.jpg" alt="Marcelis Pereira, estrategista de negócios e fundadora da MARES">
         <div class="tarja">Marcelis Pereira · Estatística</div>
       </div>
-    </div>
-    <div class="fatos">
-      <div class="fato"><b>3</b>noites, 25 a 27/08</div>
-      <div class="fato"><b>20h</b>com 1h30 de duração</div>
-      <div class="fato"><b>Ao vivo</b>com mentoria na tela</div>
-      <div class="fato"><b>+20 anos</b>de consultoria empresarial</div>
+      <div class="fatos">
+        <div class="fato"><b>3</b>noites, 25 a 27/08</div>
+        <div class="fato"><b>20h</b>com 1h30 de duração</div>
+        <div class="fato"><b>Ao vivo</b>com mentoria na tela</div>
+        <div class="fato"><b>+20 anos</b>de consultoria empresarial</div>
+      </div>
     </div>
   </div>
 </header>
