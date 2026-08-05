@@ -171,6 +171,8 @@
   .prova .sub{text-align:center;color:var(--texto3);font-size:var(--t-sub);margin-bottom:30px}
   .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;align-items:start}
   .pcard{background:var(--areia2);border-radius:14px;overflow:hidden}
+  .pcard .fallback{padding:14px 16px;font-size:14px;color:#b9c6d3;line-height:1.5}
+  .pcard .fallback a{color:#F0A04A}
   .pcard video{width:100%;aspect-ratio:9/16;object-fit:cover;display:block;background:#000}
   .pcard img.print{width:100%;aspect-ratio:9/16;object-fit:cover;object-position:top center;display:block}
   .pcard .txt{padding:20px 20px 22px}
@@ -538,18 +540,20 @@
       <div class="pcard">
         <video controls preload="metadata" poster="img/i4.jpg" playsinline>
           <source src="videos/depoimento-joao-rufino.mp4" type="video/mp4">
+          <p class="fallback">Seu navegador não conseguiu abrir este vídeo. <a href="videos/depoimento-joao-rufino.mp4" target="_blank" rel="noopener">Abrir em uma nova aba</a>.</p>
         </video>
         <div class="txt">
           <span class="aspas">&ldquo;</span>
           <p>Passei uns trinta minutos conversando com a Marcelis. Em poucos minutos ela abre os seus horizontes e te dá uma visão do seu próprio negócio que você não tinha.</p>
-          <b>[CONFIRMAR NOME]</b>
-          <span>Empresário, participante do Mapa da Escala</span>
+          <b>Empresário</b>
+          <span>Participante do Mapa da Escala</span>
         </div>
       </div>
 
       <div class="pcard">
         <video controls preload="metadata" poster="img/i5.jpg" playsinline>
           <source src="videos/depoimento-camila-arocha.mp4" type="video/mp4">
+          <p class="fallback">Seu navegador não conseguiu abrir este vídeo. <a href="videos/depoimento-camila-arocha.mp4" target="_blank" rel="noopener">Abrir em uma nova aba</a>.</p>
         </video>
         <div class="txt">
           <span class="aspas">&ldquo;</span>
