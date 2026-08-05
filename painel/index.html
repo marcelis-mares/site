@@ -311,10 +311,15 @@ function leitura(linhas, pred, total){
   const nat = chaves.filter(c => NATURAIS.indexOf(c) >= 0).length;
   const opo = chaves.filter(c => OPOSTAS.indexOf(c) >= 0).length;
   if (chaves.length) {
-    p.push('<p>Olhando a combinação entre predominante e secundário, ' + nat + ' pessoa' + (nat === 1 ? '' : 's') +
-      ' do time tem uma combinação natural, ' + opo + ' tem uma combinação oposta e ' + (chaves.length - nat - opo) +
-      ' tem uma combinação complementar. Quem carrega perfis opostos costuma alternar de postura conforme o contexto, ' +
-      'e é bom saber disso antes de interpretar como incoerência o que é adaptação.</p>');
+    const comp = chaves.length - nat - opo;
+    let t = '<p>Olhando a combinação entre predominante e secundário, ' + nat +
+      (nat === 1 ? ' pessoa do time tem' : ' pessoas do time têm') + ' uma combinação natural, ' +
+      opo + (opo === 1 ? ' tem' : ' têm') + ' uma combinação oposta e ' +
+      comp + (comp === 1 ? ' tem' : ' têm') + ' uma combinação complementar. ';
+    t += opo
+      ? 'Quem carrega perfis opostos costuma alternar de postura conforme o contexto, e é bom saber disso antes de interpretar como incoerência o que é adaptação.</p>'
+      : 'Ninguém aqui carrega perfis opostos, o que costuma significar um time com menos tensão interna de estilo e, em compensação, menos variedade de olhar sobre o mesmo problema.</p>';
+    p.push(t);
   }
 
   const lideres = linhas.filter(l => String(l.lidera || '').indexOf('Lidero') === 0);
