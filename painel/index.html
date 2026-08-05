@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Painel de Temperamentos do Time · MARES</title>
+<title>Painel dos testes · MARES</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#06182a">
 <style>
@@ -90,6 +90,42 @@ summary{cursor:pointer;font-size:13.5px;color:var(--azul)}
   .tile,.leitura{background:#fff}
   body{font-size:12px}
 }
+
+/* ============ MODO PROJEÇÃO ============
+   Para deixar na tela grande durante a palestra. Letra maior, menos texto
+   de apoio e um selo mostrando que a tela se atualiza sozinha. */
+body.projecao{font-size:20px}
+body.projecao .wrap{max-width:1500px}
+body.projecao h1{font-size:clamp(2.6rem,5vw,4rem)}
+body.projecao h2{font-size:1.9rem;margin-top:52px}
+body.projecao .tile b{font-size:3.4rem}
+body.projecao .tile small{font-size:16px}
+body.projecao .rot{font-size:20px}
+body.projecao .val{font-size:19px}
+body.projecao .trilho{height:22px}
+body.projecao .pilha{height:38px}
+body.projecao .leitura p{font-size:21px}
+body.projecao .nota{font-size:18px}
+body.projecao details,body.projecao .escopo,body.projecao footer{display:none}
+.aovivo{display:none;align-items:center;gap:9px;font-size:13px;color:var(--tinta-3)}
+body.projecao .aovivo{display:inline-flex;font-size:17px}
+.aovivo b{width:10px;height:10px;border-radius:50%;background:#0E8F7E;animation:pulso 2s ease-in-out infinite}
+@keyframes pulso{0%,100%{opacity:.3}50%{opacity:1}}
+
+/* ============ LISTA DE TURMAS ============ */
+.turmas{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.turma{
+  display:grid;grid-template-columns:1fr 130px 150px 210px;align-items:center;gap:14px;
+  border:1px solid var(--linha);border-radius:12px;padding:14px 18px;background:var(--fundo-2);
+}
+@media(max-width:820px){.turma{grid-template-columns:1fr;gap:6px}}
+.turma-cod{font-family:var(--display);font-weight:700;font-size:15px;word-break:break-all}
+.turma-cod small{display:block;font-family:var(--corpo);font-weight:400;font-size:12.5px;color:var(--tinta-3);margin-top:2px}
+.turma-num{font-family:var(--display);font-weight:700;font-size:15px}
+.turma-data{font-size:13px;color:var(--tinta-3)}
+.turma a{display:inline-block;font-size:13.5px;color:#fff;background:var(--azul);border-radius:100px;padding:8px 16px;text-decoration:none}
+.turma a:hover{background:var(--navy)}
+.turma a.vivo{background:var(--laranja);margin-left:8px}
 </style>
 </head>
 <body>
@@ -97,7 +133,8 @@ summary{cursor:pointer;font-size:13.5px;color:var(--azul)}
 <header class="topo">
   <div class="wrap topo-in">
     <a href="/"><img src="/assets/logo-mares.png" alt="MARES Consultoria Empresarial"></a>
-    <span>Painel de temperamentos do time</span>
+    <span id="rotulo-topo">Painel dos testes MARES</span>
+    <span class="aovivo"><b></b> atualiza sozinho a cada 30 segundos</span>
   </div>
 </header>
 <div class="faixa"></div>
@@ -187,18 +224,45 @@ async function buscar(url){
   }
 }
 
+const TESTE = (params.get('teste') || '').trim();
+const PROJECAO = params.get('projecao') === '1' || params.get('ao-vivo') === '1';
+const SEGUNDOS = 30;
+
+/* Um endereço só serve a tudo:
+   sem código de turma          lista tudo o que já foi usado
+   com código e sem teste       Teste dos Temperamentos daquela turma
+   com código e com teste       RaioX ou Sonda daquela turma          */
 async function iniciar(){
-  if (!TIME || !CHAVE) return erro('Este endereço está incompleto. O link do painel precisa do código do time e da chave de acesso.');
+  if (!CHAVE) return erro('Este endereço está incompleto. O link do painel precisa da chave de acesso.');
+  if (PROJECAO) document.body.classList.add('projecao');
   try {
+    if (!TIME) return await centralDeTurmas();
+    if (TESTE && TESTE !== 'Temperamentos') return await painelDeDimensoes();
     const d = await buscar(WEBHOOK + '?time=' + encodeURIComponent(TIME) + '&chave=' + encodeURIComponent(CHAVE));
-    if (d.erro) return erro(d.erro === 'chave invalida'
-      ? 'A chave de acesso deste link não confere. Peça o link atualizado para a equipe da MARES.'
-      : 'Não foi possível montar o painel: ' + d.erro);
-    if (!d.total) return erro('Ainda não há nenhuma resposta registrada para o time <b>' + esc(TIME) + '</b>. Assim que as pessoas responderem, o painel aparece aqui sozinho.');
+    if (d.erro) return erroChave(d.erro);
+    if (!d.total) return vazio();
     montar(d);
+    agendar();
   } catch (e) {
     erro('Não consegui buscar os dados agora. ' + esc(e.message) + '.');
   }
+}
+function erroChave(e){
+  return erro(e === 'chave invalida'
+    ? 'A chave de acesso deste link não confere. Peça o link atualizado para a equipe da MARES.'
+    : 'Não foi possível montar o painel: ' + esc(e));
+}
+function vazio(){
+  erro('Ainda não há nenhuma resposta registrada para <b>' + esc(TIME) + '</b>. Assim que as pessoas responderem, o painel aparece aqui sozinho.'
+    + (PROJECAO ? ' Esta tela se atualiza sozinha a cada ' + SEGUNDOS + ' segundos.' : ''));
+  agendar();
+}
+/* No modo projeção a tela se atualiza sozinha, para a sala se ver
+   se formando enquanto responde. */
+function agendar(){
+  if (!PROJECAO) return;
+  clearTimeout(window.__t);
+  window.__t = setTimeout(() => iniciar(), SEGUNDOS * 1000);
 }
 function erro(msg){
   $('#conteudo').innerHTML = '<div class="aviso">' + msg + '</div>';
@@ -343,8 +407,151 @@ function leitura(linhas, pred, total){
   return '<div class="leitura">' + p.join('') + '</div>';
 }
 
+/* ======================= PAINEL CENTRAL DE TURMAS =======================
+   Não depende de cadastro nenhum. Ele lê a aba de eventos e mostra tudo o
+   que já foi usado, inclusive código que alguém da equipe criou sem avisar. */
+async function centralDeTurmas(){
+  const d = await buscar(WEBHOOK + '?modo=turmas&chave=' + encodeURIComponent(CHAVE));
+  if (d.erro) return erroChave(d.erro);
+  const t = d.turmas || [];
+  document.title = 'Painel dos testes MARES';
+
+  const data = v => { if (!v) return '—'; const x = new Date(v); return isNaN(x) ? String(v).slice(0,10) : x.toLocaleDateString('pt-BR'); };
+  const total = t.reduce((a,x) => a + x.respostas, 0);
+  const testes = [...new Set(t.map(x => x.teste))].filter(Boolean);
+  const comCodigo = t.filter(x => x.time);
+
+  const h = [];
+  h.push('<div class="capa"><p class="eyebrow">Metodologia MARES</p>' +
+    '<h1>Tudo o que já foi aplicado</h1>' +
+    '<p class="sub">Esta lista se monta sozinha. Qualquer código de turma usado em qualquer teste aparece aqui, ' +
+    'mesmo os que a equipe criar sem avisar. Clique para abrir o painel daquela aplicação.</p></div>');
+
+  h.push('<div class="tiles">' +
+    '<div class="tile"><b>' + total + '</b><small>respostas no total</small></div>' +
+    '<div class="tile"><b>' + comCodigo.length + '</b><small>turmas ou eventos com código</small></div>' +
+    '<div class="tile"><b>' + testes.length + '</b><small>testes em uso</small></div>' +
+    '<div class="tile"><b>' + (t[0] ? data(t[0].ultima) : '—') + '</b><small>resposta mais recente</small></div></div>');
+
+  if (!t.length) {
+    h.push('<div class="aviso">Ainda não há nenhuma resposta registrada. Assim que alguém responder qualquer teste, ele aparece aqui.</div>');
+    $('#conteudo').innerHTML = h.join('');
+    return agendar();
+  }
+
+  h.push('<h2>Turmas, eventos e palestras</h2><p class="nota">Ordenado pela resposta mais recente. ' +
+    'Sem código são as pessoas que chegaram pelo site, fora de qualquer turma.</p><div class="turmas">' +
+    t.map(x => {
+      const cod = x.time || '';
+      const link = '/painel/?time=' + encodeURIComponent(cod) + (x.teste && x.teste !== 'Temperamentos' ? '&teste=' + encodeURIComponent(x.teste) : '') + '&chave=' + encodeURIComponent(CHAVE);
+      return '<div class="turma">' +
+        '<div class="turma-cod">' + (cod ? esc(cod) : 'sem código') + '<small>' + esc(x.teste || 'teste não identificado') + '</small></div>' +
+        '<div class="turma-num">' + x.respostas + ' resposta' + (x.respostas === 1 ? '' : 's') + '</div>' +
+        '<div class="turma-data">' + data(x.primeira) + (data(x.primeira) === data(x.ultima) ? '' : ' a ' + data(x.ultima)) + '</div>' +
+        '<div>' + (cod ? '<a href="' + link + '">Abrir painel</a><a class="vivo" href="' + link + '&projecao=1">Ao vivo</a>' : '') + '</div>' +
+        '</div>';
+    }).join('') + '</div>');
+
+  h.push('<div class="escopo">Esta tela mostra apenas contagens e códigos. Nenhum dado pessoal de quem respondeu passa por aqui. ' +
+    'Atualizado em ' + new Date(d.gerado_em).toLocaleString('pt-BR') + '.</div>');
+  $('#conteudo').innerHTML = h.join('');
+  agendar();
+}
+
+/* ======================= PAINEL DO RAIOX E DA SONDA =======================
+   Os dois medem nota por dimensão, então o mesmo painel serve para ambos.
+   A cor aqui não identifica série, ela mede grandeza: uma cor só, e a
+   dimensão mais frágil destacada com rótulo, nunca por cor sozinha.     */
+async function painelDeDimensoes(){
+  const d = await buscar(WEBHOOK + '?modo=evento&time=' + encodeURIComponent(TIME) +
+    '&teste=' + encodeURIComponent(TESTE) + '&chave=' + encodeURIComponent(CHAVE));
+  if (d.erro) return erroChave(d.erro);
+  if (!d.total) return vazio();
+  document.title = 'Painel do ' + TESTE + ' · MARES';
+
+  const linhas = d.linhas;
+  const soma = {}, cont = {}, nomes = {};
+  linhas.forEach(l => {
+    let dim = l.dimensoes;
+    if (typeof dim === 'string') { try { dim = JSON.parse(dim); } catch (e) { dim = []; } }
+    (dim || []).forEach(x => {
+      const k = x.chave || x.nome;
+      if (!k) return;
+      nomes[k] = x.nome || k;
+      soma[k] = (soma[k] || 0) + Number(x.nota || 0);
+      cont[k] = (cont[k] || 0) + 1;
+    });
+  });
+  const dims = Object.keys(soma).map(k => ({chave:k, nome:nomes[k], media: soma[k]/cont[k]}));
+  dims.sort((a,b) => b.media - a.media);
+
+  const medias = linhas.map(l => Number(l.media)).filter(n => !isNaN(n) && n > 0);
+  const geral = medias.length ? medias.reduce((a,b) => a+b, 0) / medias.length : 0;
+  const escala = Number((linhas.find(l => l.escala) || {}).escala) || 5;
+  const niveis = contarPor(linhas.filter(l => l.nivel), 'nivel');
+  const fraca = dims[dims.length-1], forte = dims[0];
+  const um = n => n.toFixed(1).replace('.', ',');
+
+  const h = [];
+  h.push('<div class="capa"><p class="eyebrow">Metodologia MARES · ' + esc(TESTE) + '</p>' +
+    '<h1>' + esc(TESTE) + '<br>' + esc(TIME) + '</h1>' +
+    '<p class="sub">Retrato do grupo que respondeu. Cada barra é a média da sala naquela dimensão, ' +
+    'numa escala de 1 a ' + escala + '. Nenhum resultado individual aparece aqui.</p></div>');
+
+  h.push('<div class="tiles">' +
+    '<div class="tile"><b>' + d.total + '</b><small>pessoas responderam</small></div>' +
+    '<div class="tile"><b>' + um(geral) + '</b><small>média geral da sala, de 1 a ' + escala + '</small></div>' +
+    (fraca ? '<div class="tile"><b style="color:var(--laranja);font-size:1.4rem">' + esc(fraca.nome) + '</b><small>dimensão mais frágil do grupo</small></div>' : '') +
+    (forte ? '<div class="tile"><b style="color:var(--F);font-size:1.4rem">' + esc(forte.nome) + '</b><small>dimensão mais forte do grupo</small></div>' : '') +
+    '</div>');
+
+  if (dims.length) {
+    h.push('<h2>Média da sala em cada dimensão</h2>' +
+      '<p class="nota">Da mais forte para a mais frágil. A barra em laranja é a que o grupo precisa olhar primeiro.</p>' +
+      '<div class="barras">' + dims.map((x,i) => {
+        const ultima = i === dims.length-1;
+        return '<div class="linha"><div class="rot">' + esc(x.nome) + (ultima ? ' <small style="color:var(--laranja);font-weight:400">mais frágil</small>' : '') + '</div>' +
+          '<div class="trilho"><div class="fill" style="width:' + (x.media/escala*100) + '%;background:' + (ultima ? 'var(--laranja)' : 'var(--azul)') + '" title="' + esc(x.nome) + ': ' + um(x.media) + '"></div></div>' +
+          '<div class="val">' + um(x.media) + '</div></div>';
+      }).join('') + '</div>');
+  }
+
+  if (niveis.length) {
+    const maior = niveis[0][1];
+    h.push('<h2>Como a sala se distribui por nível</h2>' +
+      '<p class="nota">Quantas pessoas caíram em cada nível de resultado do teste.</p>' +
+      '<div class="barras">' + niveis.map(([nome, n]) =>
+        '<div class="linha"><div class="rot">' + esc(nome) + '</div>' +
+        '<div class="trilho"><div class="fill" style="width:' + (n/maior*100) + '%;background:var(--azul)"></div></div>' +
+        '<div class="val">' + n + '</div></div>').join('') + '</div>');
+  }
+
+  const p = [];
+  p.push('<p>Responderam <b>' + d.total + ' pessoas</b>. A média geral da sala é <b>' + um(geral) + '</b> numa escala de 1 a ' + escala + '.</p>');
+  if (fraca && forte && dims.length > 1) {
+    p.push('<p>A dimensão mais frágil do grupo é <b>' + esc(fraca.nome) + '</b>, com ' + um(fraca.media) +
+      ', e a mais forte é <b>' + esc(forte.nome) + '</b>, com ' + um(forte.media) + '. ' +
+      'A distância entre as duas é de ' + um(forte.media - fraca.media) + ' ponto' + ((forte.media-fraca.media) >= 2 ? 's' : '') +
+      ((forte.media - fraca.media) >= 1.5
+        ? ', o que costuma indicar um grupo que evoluiu muito em uma frente e deixou outra para trás.'
+        : ', o que indica um grupo relativamente parelho entre as frentes.') + '</p>');
+  }
+  h.push('<h2>A leitura desta sala</h2><p class="nota">Descreve o que a média mostra. É ponto de partida para a conversa, não veredito.</p>' +
+    '<div class="leitura">' + p.join('') + '</div>');
+
+  h.push('<details><summary>Ver os números em tabela</summary><table><thead><tr><th>Dimensão</th><th class="num">Média</th></tr></thead><tbody>' +
+    dims.map(x => '<tr><td>' + esc(x.nome) + '</td><td class="num">' + um(x.media) + '</td></tr>').join('') + '</tbody></table></details>');
+
+  h.push('<div class="escopo">Este painel apresenta o resultado do grupo e não identifica nenhuma pessoa. ' +
+    'Atualizado em ' + new Date(d.gerado_em).toLocaleString('pt-BR') + '.</div>');
+  $('#conteudo').innerHTML = h.join('');
+  agendar();
+}
+
 /* ======================= MONTAGEM ======================= */
 function montar(d){
+  const r = document.getElementById('rotulo-topo');
+  if (r) r.textContent = 'Painel de temperamentos do time';
   const linhas = d.linhas, total = d.total;
   const pred = distribuicao(linhas, 'pred');
   const sec = distribuicao(linhas, 'sec');
