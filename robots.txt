@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /painel/
 
 Sitemap: https://www.maresconsultoria.com.br/sitemap.xml
-# atualizado em 28/07/2026
+# atualizado em 05/08/2026
