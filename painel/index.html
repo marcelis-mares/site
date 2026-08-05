@@ -156,7 +156,10 @@ document.getElementById('ano').textContent = new Date().getFullYear();
 
 /* ======================= BUSCA ======================= */
 const params = new URLSearchParams(location.search);
-const TIME = (params.get('time') || '').trim().toLowerCase();
+/* Mesma limpeza que o teste aplica no código do time, para o link do painel
+   achar a turma mesmo quando alguém escreve com maiúscula, acento, espaço
+   ou sublinhado. Sem isso, o painel procuraria um código que não existe. */
+const TIME = (params.get('time') || '').trim().toLowerCase().replace(/[^a-z0-9-]/g,'').slice(0,40);
 const CHAVE = params.get('chave') || '';
 
 /* O caminho principal é o fetch normal, que não manda cookie para o Google e
