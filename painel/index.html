@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel de Temperamentos do Time · MARES</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#06182a">
+<style>
+@font-face{font-family:'Aileron';src:url('/fonts/Aileron-Regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Aileron';src:url('/fonts/Aileron-SemiBold.woff2') format('woff2');font-weight:500 600;font-style:normal;font-display:swap}
+@font-face{font-family:'Aileron';src:url('/fonts/Aileron-Bold.woff2') format('woff2');font-weight:700 800;font-style:normal;font-display:swap}
+@font-face{font-family:'Bricolage Grotesque';src:url('/fonts/Bricolage-Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Bricolage Grotesque';src:url('/fonts/Bricolage-Bold.woff2') format('woff2');font-weight:600 700;font-style:normal;font-display:swap}
+@font-face{font-family:'Bricolage Grotesque';src:url('/fonts/Bricolage-ExtraBold.woff2') format('woff2');font-weight:800 900;font-style:normal;font-display:swap}
+
+:root{
+  /* Paleta categórica dos quatro perfis, validada para daltonismo e para
+     contraste sobre fundo branco. Ordem fixa S, C, M, F. Não trocar por
+     gosto: qualquer mudança precisa passar de novo pelo validador. */
+  --S:#BE8C10; --C:#A34418; --M:#215F98; --F:#0E8F7E;
+  --navy:#06182a; --azul:#1C6795; --turq:#15A5A8; --laranja:#E26220;
+  --tinta:#132430; --tinta-2:#4a5b68; --tinta-3:#7b8a95;
+  --linha:#e4e8ec; --fundo:#ffffff; --fundo-2:#f7f9fa;
+  --display:'Bricolage Grotesque',system-ui,sans-serif;
+  --corpo:'Aileron',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--corpo);background:var(--fundo);color:var(--tinta);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:0 22px}
+
+header.topo{background:var(--navy);padding:20px 0;color:#FEEAD4}
+.topo-in{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.topo img{height:30px;width:auto;display:block}
+.topo span{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(254,234,212,.65)}
+.faixa{height:4px;background:linear-gradient(90deg,var(--laranja) 0%,var(--turq) 55%,var(--azul) 100%)}
+
+.capa{padding:44px 0 10px}
+.eyebrow{font-size:11.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--tinta-3);margin-bottom:12px}
+h1{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-height:1.05;font-size:clamp(1.9rem,4.6vw,2.9rem);margin-bottom:14px}
+.sub{color:var(--tinta-2);font-size:16px;max-width:640px}
+
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:32px 0 8px}
+@media(max-width:760px){.tiles{grid-template-columns:repeat(2,1fr)}}
+.tile{border:1px solid var(--linha);border-radius:14px;padding:18px 18px 16px;background:var(--fundo-2)}
+.tile b{display:block;font-family:var(--display);font-weight:800;font-size:2rem;letter-spacing:-.03em;line-height:1}
+.tile small{display:block;font-size:12px;color:var(--tinta-3);margin-top:6px;line-height:1.4}
+
+h2{font-family:var(--display);font-weight:700;font-size:1.25rem;letter-spacing:-.01em;margin:46px 0 6px;padding-top:26px;border-top:1px solid var(--linha)}
+h2:first-of-type{border-top:0}
+.nota{color:var(--tinta-2);font-size:14.5px;margin-bottom:20px;max-width:680px}
+
+.legenda{display:flex;flex-wrap:wrap;gap:16px;margin:0 0 18px}
+.legenda i{display:inline-flex;align-items:center;gap:7px;font-style:normal;font-size:13px;color:var(--tinta-2)}
+.legenda i s{width:12px;height:12px;border-radius:3px;display:block;text-decoration:none}
+
+.barras{display:flex;flex-direction:column;gap:12px}
+.linha{display:grid;grid-template-columns:190px 1fr 74px;align-items:center;gap:14px}
+@media(max-width:640px){.linha{grid-template-columns:120px 1fr 60px;gap:10px}}
+.rot{font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:8px}
+.rot s{width:11px;height:11px;border-radius:3px;display:block;text-decoration:none;flex:0 0 11px}
+.trilho{height:14px;background:var(--fundo-2);border-radius:4px;overflow:hidden}
+.fill{height:100%;border-radius:0 4px 4px 0;transition:width .8s cubic-bezier(.2,.7,.3,1)}
+.val{font-size:13px;color:var(--tinta-2);text-align:right;font-variant-numeric:tabular-nums}
+
+.pilha{display:flex;height:26px;border-radius:4px;overflow:hidden;background:var(--fundo-2)}
+.pilha span{height:100%;box-shadow:inset -2px 0 0 var(--fundo);cursor:default}
+.pilha span:last-child{box-shadow:none}
+.grupo{display:grid;grid-template-columns:190px 1fr 74px;align-items:center;gap:14px;margin-bottom:10px}
+@media(max-width:640px){.grupo{grid-template-columns:120px 1fr 60px;gap:10px}}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:6px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--linha)}
+th{font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--tinta-3)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+td.cel{text-align:center;font-variant-numeric:tabular-nums;border-radius:4px}
+
+.leitura{border:1px solid var(--linha);border-radius:14px;padding:22px 22px 6px;background:var(--fundo-2);margin-top:8px}
+.leitura p{margin-bottom:16px;font-size:15px;line-height:1.7;color:var(--tinta)}
+.leitura p b{font-family:var(--display);font-weight:700}
+
+.escopo{margin:44px 0 0;border-top:1px solid var(--linha);padding-top:20px;font-size:12.5px;color:var(--tinta-3);line-height:1.65}
+footer{padding:26px 0 46px;font-size:12.5px;color:var(--tinta-3)}
+.aviso{border:1px solid #f0c9a8;background:#fdf4ec;border-radius:14px;padding:22px;margin:36px 0;font-size:15px;color:#7a4318}
+.carregando{padding:60px 0;text-align:center;color:var(--tinta-3)}
+details{margin-top:14px}
+summary{cursor:pointer;font-size:13.5px;color:var(--azul)}
+@media print{
+  header.topo{background:#fff;color:#132430}
+  .tile,.leitura{background:#fff}
+  body{font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<header class="topo">
+  <div class="wrap topo-in">
+    <a href="/"><img src="/assets/logo-mares.png" alt="MARES Consultoria Empresarial"></a>
+    <span>Painel de temperamentos do time</span>
+  </div>
+</header>
+<div class="faixa"></div>
+
+<main class="wrap" id="conteudo">
+  <div class="carregando" id="carregando">Carregando os dados do time…</div>
+</main>
+
+<footer class="wrap">
+  © <span id="ano"></span> MARES Consultoria Empresarial · Pessoas, Dados e Gestão
+</footer>
+
+<script>
+/* =======================================================================
+   PAINEL DE TEMPERAMENTOS DO TIME
+   Lê os dados de uma turma pelo Apps Script e monta a leitura coletiva.
+   Endereço: /painel/?time=codigo&chave=CHAVE
+
+   Regra que este painel nunca quebra: ele fala do conjunto. Nome, e-mail,
+   telefone e cargo não saem da planilha, e não existe nenhuma tela que
+   mostre o resultado individual de uma pessoa para a empresa.
+   ======================================================================= */
+
+const WEBHOOK = 'https://script.google.com/macros/s/AKfycbx4UBHQ5yh13Tx3IEX8SN4xEHMCZtYoSz_Vm53f2P7v44nQidwErRvq_uximUQdmU58/exec';
+
+const ORDEM = ['S','C','M','F'];
+const PERFIS = {
+  S:{animal:'Golfinho', nome:'Sanguíneo',  cor:'var(--S)', hex:'#BE8C10'},
+  C:{animal:'Tubarão',  nome:'Colérico',   cor:'var(--C)', hex:'#A34418'},
+  M:{animal:'Polvo',    nome:'Melancólico',cor:'var(--M)', hex:'#215F98'},
+  F:{animal:'Tartaruga',nome:'Fleumático', cor:'var(--F)', hex:'#0E8F7E'}
+};
+const PORANIMAL = {};
+Object.keys(PERFIS).forEach(k => { PORANIMAL[PERFIS[k].animal] = k; });
+const NATURAIS = ['CM','MC','SF','FS'];
+const OPOSTAS  = ['CF','FC','MS','SM'];
+
+const FORTE = {
+  S:'comunicação, mobilização e relação',
+  C:'decisão, ritmo e execução',
+  M:'análise, critério e qualidade',
+  F:'estabilidade, escuta e continuidade'
+};
+const FALTA = {
+  S:'a energia de mobilizar e comunicar por dentro',
+  C:'alguém que puxe a decisão quando ninguém quer decidir',
+  M:'o olhar crítico que enxerga o risco antes dele acontecer',
+  F:'a calma que sustenta o time quando o ambiente esquenta'
+};
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pct = (n, t) => t ? Math.round(n / t * 1000) / 10 : 0;
+
+document.getElementById('ano').textContent = new Date().getFullYear();
+
+/* ======================= BUSCA ======================= */
+const params = new URLSearchParams(location.search);
+const TIME = (params.get('time') || '').trim().toLowerCase();
+const CHAVE = params.get('chave') || '';
+
+function jsonp(url){
+  return new Promise((ok, falha) => {
+    const nome = 'mares_cb_' + Math.random().toString(36).slice(2,9);
+    const s = document.createElement('script');
+    const limpar = () => { delete window[nome]; s.remove(); };
+    window[nome] = d => { limpar(); ok(d); };
+    s.onerror = () => { limpar(); falha(new Error('falha ao buscar os dados')); };
+    s.src = url + '&callback=' + nome;
+    document.body.appendChild(s);
+    setTimeout(() => { if (window[nome]) { limpar(); falha(new Error('a resposta demorou demais')); } }, 25000);
+  });
+}
+
+async function iniciar(){
+  if (!TIME || !CHAVE) return erro('Este endereço está incompleto. O link do painel precisa do código do time e da chave de acesso.');
+  try {
+    const d = await jsonp(WEBHOOK + '?time=' + encodeURIComponent(TIME) + '&chave=' + encodeURIComponent(CHAVE));
+    if (d.erro) return erro(d.erro === 'chave invalida'
+      ? 'A chave de acesso deste link não confere. Peça o link atualizado para a equipe da MARES.'
+      : 'Não foi possível montar o painel: ' + d.erro);
+    if (!d.total) return erro('Ainda não há nenhuma resposta registrada para o time <b>' + esc(TIME) + '</b>. Assim que as pessoas responderem, o painel aparece aqui sozinho.');
+    montar(d);
+  } catch (e) {
+    erro('Não consegui buscar os dados agora. ' + esc(e.message) + '.');
+  }
+}
+function erro(msg){
+  $('#conteudo').innerHTML = '<div class="aviso">' + msg + '</div>';
+}
+
+/* ======================= AGRUPAMENTOS ======================= */
+function contarPor(linhas, campo){
+  const m = new Map();
+  linhas.forEach(l => {
+    const v = String(l[campo] || '').trim() || 'Não informado';
+    m.set(v, (m.get(v) || 0) + 1);
+  });
+  return [...m.entries()].sort((a,b) => b[1] - a[1]);
+}
+function perfilDe(l, qual){
+  const animal = String(l[qual === 'sec' ? 'secundario_animal' : 'predominante_animal'] || '').trim();
+  if (PORANIMAL[animal]) return PORANIMAL[animal];
+  const nome = String(l[qual === 'sec' ? 'secundario' : 'predominante'] || '').trim();
+  const achado = Object.keys(PERFIS).find(k => PERFIS[k].nome === nome);
+  return achado || null;
+}
+function distribuicao(linhas, qual){
+  const c = {S:0,C:0,M:0,F:0};
+  linhas.forEach(l => { const k = perfilDe(l, qual); if (k) c[k]++; });
+  return c;
+}
+function cruzar(linhas, campo, qual){
+  const grupos = new Map();
+  linhas.forEach(l => {
+    const g = String(l[campo] || '').trim() || 'Não informado';
+    if (!grupos.has(g)) grupos.set(g, {S:0,C:0,M:0,F:0,total:0});
+    const k = perfilDe(l, qual);
+    if (k) { grupos.get(g)[k]++; grupos.get(g).total++; }
+  });
+  return [...grupos.entries()].filter(([,v]) => v.total).sort((a,b) => b[1].total - a[1].total);
+}
+
+/* ======================= DESENHO ======================= */
+function legenda(){
+  return '<div class="legenda">' + ORDEM.map(k =>
+    '<i><s style="background:' + PERFIS[k].cor + '"></s>' + PERFIS[k].animal + ' · ' + PERFIS[k].nome + '</i>').join('') + '</div>';
+}
+function barras(cont, total){
+  const maior = Math.max.apply(null, ORDEM.map(k => cont[k])) || 1;
+  return '<div class="barras">' + ORDEM.slice().sort((a,b) => cont[b] - cont[a]).map(k =>
+    '<div class="linha"><div class="rot"><s style="background:' + PERFIS[k].cor + '"></s>' + PERFIS[k].animal + '</div>' +
+    '<div class="trilho"><div class="fill" style="width:' + (cont[k]/maior*100) + '%;background:' + PERFIS[k].cor + '" title="' + PERFIS[k].animal + ': ' + cont[k] + ' de ' + total + '"></div></div>' +
+    '<div class="val">' + cont[k] + ' · ' + pct(cont[k], total) + '%</div></div>').join('') + '</div>';
+}
+function pilhas(grupos){
+  return grupos.map(([nome, v]) =>
+    '<div class="grupo"><div class="rot" style="font-weight:600">' + esc(nome) + '</div>' +
+    '<div class="pilha">' + ORDEM.filter(k => v[k]).map(k =>
+      '<span style="width:' + (v[k]/v.total*100) + '%;background:' + PERFIS[k].cor + '" title="' + PERFIS[k].animal + ': ' + v[k] + ' de ' + v.total + '"></span>').join('') +
+    '</div><div class="val">' + v.total + '</div></div>').join('');
+}
+function tabelaCruzada(grupos, titulo){
+  return '<details><summary>Ver os números em tabela</summary><table><thead><tr><th>' + titulo + '</th>' +
+    ORDEM.map(k => '<th class="num">' + PERFIS[k].animal + '</th>').join('') + '<th class="num">Total</th></tr></thead><tbody>' +
+    grupos.map(([nome, v]) => '<tr><td>' + esc(nome) + '</td>' +
+      ORDEM.map(k => '<td class="num">' + v[k] + '</td>').join('') + '<td class="num">' + v.total + '</td></tr>').join('') +
+    '</tbody></table></details>';
+}
+function matriz(linhas){
+  const m = {}; let maior = 0;
+  ORDEM.forEach(a => { m[a] = {}; ORDEM.forEach(b => m[a][b] = 0); });
+  linhas.forEach(l => {
+    const p = perfilDe(l,'pred'), s = perfilDe(l,'sec');
+    if (p && s) { m[p][s]++; if (m[p][s] > maior) maior = m[p][s]; }
+  });
+  const cel = n => {
+    if (!n) return 'background:var(--fundo-2);color:var(--tinta-3)';
+    const t = n / (maior || 1);
+    return 'background:rgba(33,95,152,' + (0.10 + t * 0.75).toFixed(2) + ');color:' + (t > 0.55 ? '#fff' : 'var(--tinta)');
+  };
+  return '<table><thead><tr><th>Predominante ↓ · Secundário →</th>' +
+    ORDEM.map(k => '<th class="num">' + PERFIS[k].animal + '</th>').join('') + '</tr></thead><tbody>' +
+    ORDEM.map(a => '<tr><td><b>' + PERFIS[a].animal + '</b></td>' +
+      ORDEM.map(b => a === b ? '<td class="cel" style="background:var(--fundo-2);color:var(--tinta-3)">—</td>'
+        : '<td class="cel" style="' + cel(m[a][b]) + '">' + (m[a][b] || '') + '</td>').join('') + '</tr>').join('') +
+    '</tbody></table>';
+}
+
+/* ======================= LEITURA DO TIME =======================
+   Regras simples e declaradas. Nada aqui é diagnóstico. O texto descreve
+   o que a contagem mostra e o que costuma acontecer com essa composição. */
+function leitura(linhas, pred, total){
+  const ord = ORDEM.slice().sort((a,b) => pred[b] - pred[a]);
+  const topo = ord[0], base = ord[3];
+  const p = [];
+
+  p.push('<p>Foram <b>' + total + ' respostas</b> neste time. O perfil mais presente como predominante é o <b>' +
+    PERFIS[topo].animal + '</b>, com ' + pred[topo] + ' pessoas, ' + pct(pred[topo], total) + '% do grupo. ' +
+    'Na prática, é a marca de ' + FORTE[topo] + ' que tende a aparecer primeiro na forma como este time trabalha.</p>');
+
+  if (pct(pred[topo], total) >= 50) {
+    p.push('<p>Mais da metade do time tem o mesmo perfil predominante. Times assim costumam ser rápidos para se entender, ' +
+      'porque falam a mesma língua, e lentos para enxergar o que está fora do próprio jeito de olhar. ' +
+      'Vale trazer de propósito, nas decisões importantes, a leitura de quem tem perfil diferente.</p>');
+  }
+
+  if (!pred[base]) {
+    p.push('<p>Nenhuma pessoa deste time tem o <b>' + PERFIS[base].animal + '</b> como perfil predominante. ' +
+      'Isso significa que falta naturalmente ' + FALTA[base] + '. Não é um defeito do time, é um ponto cego: ' +
+      'esse papel precisa ser combinado com alguém, e não esperado de alguém.</p>');
+  } else if (pct(pred[base], total) <= 10) {
+    p.push('<p>O <b>' + PERFIS[base].animal + '</b> aparece pouco, em ' + pred[base] + ' pessoa' + (pred[base] > 1 ? 's' : '') +
+      '. É a voz mais rara da sala, justamente a que traz ' + FALTA[base] + '. Vale garantir que ela seja ouvida, ' +
+      'porque em grupo a minoria tende a se calar.</p>');
+  }
+
+  const chaves = linhas.map(l => { const a = perfilDe(l,'pred'), b = perfilDe(l,'sec'); return a && b ? a+b : null; }).filter(Boolean);
+  const nat = chaves.filter(c => NATURAIS.indexOf(c) >= 0).length;
+  const opo = chaves.filter(c => OPOSTAS.indexOf(c) >= 0).length;
+  if (chaves.length) {
+    p.push('<p>Olhando a combinação entre predominante e secundário, ' + nat + ' pessoa' + (nat === 1 ? '' : 's') +
+      ' do time tem uma combinação natural, ' + opo + ' tem uma combinação oposta e ' + (chaves.length - nat - opo) +
+      ' tem uma combinação complementar. Quem carrega perfis opostos costuma alternar de postura conforme o contexto, ' +
+      'e é bom saber disso antes de interpretar como incoerência o que é adaptação.</p>');
+  }
+
+  const lideres = linhas.filter(l => String(l.lidera || '').indexOf('Lidero') === 0);
+  if (lideres.length >= 3) {
+    const pl = distribuicao(lideres, 'pred');
+    const topoL = ORDEM.slice().sort((a,b) => pl[b] - pl[a])[0];
+    if (topoL !== topo) {
+      p.push('<p>Na camada de liderança, com ' + lideres.length + ' pessoas, o perfil mais presente é o <b>' +
+        PERFIS[topoL].animal + '</b>, diferente do time como um todo. Essa diferença costuma explicar ruído de ritmo: ' +
+        'a liderança pede uma coisa no tempo dela e a equipe responde no tempo do perfil dela.</p>');
+    } else {
+      p.push('<p>Na camada de liderança, com ' + lideres.length + ' pessoas, o perfil mais presente é o mesmo do time como um todo, ' +
+        'o <b>' + PERFIS[topoL].animal + '</b>. Isso dá coesão e, ao mesmo tempo, aumenta o ponto cego, porque quem decide ' +
+        'enxerga pela mesma lente de quem executa.</p>');
+    }
+  }
+
+  return '<div class="leitura">' + p.join('') + '</div>';
+}
+
+/* ======================= MONTAGEM ======================= */
+function montar(d){
+  const linhas = d.linhas, total = d.total;
+  const pred = distribuicao(linhas, 'pred');
+  const sec = distribuicao(linhas, 'sec');
+  const ord = ORDEM.slice().sort((a,b) => pred[b] - pred[a]);
+  const lideres = linhas.filter(l => String(l.lidera || '').indexOf('Lidero') === 0).length;
+  const setores = new Set(linhas.map(l => String(l.setor || '').trim()).filter(Boolean)).size;
+  const empresa = (linhas.find(l => l.empresa) || {}).empresa || d.time;
+
+  const h = [];
+  h.push('<div class="capa"><p class="eyebrow">Metodologia MARES · Liderança Oxigênio</p>' +
+    '<h1>Temperamentos do time<br>' + esc(empresa) + '</h1>' +
+    '<p class="sub">Leitura coletiva a partir das respostas individuais ao Teste dos Temperamentos. ' +
+    'O painel mostra o conjunto. Nenhum resultado individual é identificado aqui.</p></div>');
+
+  h.push('<div class="tiles">' +
+    '<div class="tile"><b>' + total + '</b><small>pessoas responderam</small></div>' +
+    '<div class="tile"><b style="color:' + PERFIS[ord[0]].cor + '">' + PERFIS[ord[0]].animal + '</b><small>perfil mais presente</small></div>' +
+    '<div class="tile"><b>' + lideres + '</b><small>pessoas que lideram equipe</small></div>' +
+    '<div class="tile"><b>' + (setores || '—') + '</b><small>áreas representadas</small></div></div>');
+
+  h.push('<h2>Como o time se distribui</h2>' +
+    '<p class="nota">Cada pessoa tem um perfil predominante, que é o que aparece no piloto automático e sob pressão, ' +
+    'e um secundário, que complementa. Abaixo, quantas pessoas do time estão em cada um.</p>');
+  h.push('<h2 style="border-top:0;padding-top:0;font-size:1rem;margin-top:6px">Perfil predominante</h2>' + barras(pred, total));
+  h.push('<h2 style="border-top:0;padding-top:0;font-size:1rem;margin-top:26px">Perfil secundário</h2>' + barras(sec, total));
+
+  h.push('<h2>A leitura deste time</h2>' +
+    '<p class="nota">O texto abaixo descreve o que a contagem mostra e o que costuma acontecer com uma composição assim. ' +
+    'É ponto de partida para a conversa, não veredito.</p>' + leitura(linhas, pred, total));
+
+  h.push('<h2>Combinações entre predominante e secundário</h2>' +
+    '<p class="nota">A linha é o perfil predominante e a coluna é o secundário. Quanto mais escura a célula, ' +
+    'mais pessoas naquela combinação.</p>' + matriz(linhas));
+
+  const porSetor = cruzar(linhas, 'setor', 'pred');
+  if (porSetor.length > 1) {
+    h.push('<h2>Composição por área</h2>' +
+      '<p class="nota">Cada barra é uma área do time, e as faixas mostram a proporção de cada perfil dentro dela. ' +
+      'Concentração de um só perfil numa área é o achado que mais costuma explicar atrito e gargalo.</p>' +
+      legenda() + pilhas(porSetor) + tabelaCruzada(porSetor, 'Área'));
+  }
+
+  const porLideranca = cruzar(linhas, 'lidera', 'pred');
+  if (porLideranca.length > 1) {
+    h.push('<h2>Liderança e operação</h2>' +
+      '<p class="nota">A mesma leitura separando quem conduz equipe de quem não conduz hoje.</p>' +
+      legenda() + pilhas(porLideranca) + tabelaCruzada(porLideranca, 'Faixa'));
+  }
+
+  const porTempo = cruzar(linhas, 'tempo_casa', 'pred');
+  if (porTempo.length > 1) {
+    h.push('<h2>Tempo de casa</h2>' +
+      '<p class="nota">Ajuda a ver se o perfil do time mudou com as contratações mais recentes.</p>' +
+      legenda() + pilhas(porTempo) + tabelaCruzada(porTempo, 'Tempo de casa'));
+  }
+
+  const porGeracao = cruzar(linhas, 'geracao', 'pred');
+  if (porGeracao.length > 1) {
+    h.push('<h2>Gerações</h2>' + legenda() + pilhas(porGeracao) + tabelaCruzada(porGeracao, 'Geração'));
+  }
+
+  const aprende = contarPor(linhas.filter(l => l.como_aprende), 'como_aprende');
+  if (aprende.length) {
+    const mapa = new Map();
+    linhas.forEach(l => String(l.como_aprende || '').split('|').map(s => s.trim()).filter(Boolean)
+      .forEach(v => mapa.set(v, (mapa.get(v) || 0) + 1)));
+    const lista = [...mapa.entries()].sort((a,b) => b[1] - a[1]);
+    if (lista.length) {
+      const maior = lista[0][1];
+      h.push('<h2>Como este time aprende</h2>' +
+        '<p class="nota">Cada pessoa podia marcar mais de uma forma. Serve para escolher o formato do próximo trabalho de desenvolvimento.</p>' +
+        '<div class="barras">' + lista.map(([nome, n]) =>
+          '<div class="linha"><div class="rot">' + esc(nome) + '</div>' +
+          '<div class="trilho"><div class="fill" style="width:' + (n/maior*100) + '%;background:var(--azul)"></div></div>' +
+          '<div class="val">' + n + '</div></div>').join('') + '</div>');
+    }
+  }
+
+  h.push('<div class="escopo"><b>Sobre o escopo desta análise.</b> Este painel apresenta tendências comportamentais do grupo ' +
+    'e não constitui diagnóstico psicológico. Temperamento indica tendência de comportamento e de preferência, e não determina ' +
+    'caráter, competência, inteligência, saúde mental nem destino profissional. Esta leitura não deve ser usada para decisão de ' +
+    'contratação, demissão, promoção ou exclusão. O resultado individual pertence a cada pessoa e foi enviado apenas para ela. ' +
+    'Dados atualizados em ' + new Date(d.gerado_em).toLocaleString('pt-BR') + '.</div>');
+
+  $('#conteudo').innerHTML = h.join('');
+}
+
+iniciar();
+</script>
+</body>
+</html>
