@@ -750,9 +750,9 @@ fbq('init','673278761920486');fbq('track','PageView');
         <div class="msg-erro" id="e-whats">Informe um número com DDD.</div>
       </div>
       <div class="campo">
-        <label for="f-empresa">Empresa ou setor</label>
-        <input type="text" id="f-empresa" autocomplete="organization" placeholder="Onde você atua">
-        <div class="msg-erro" id="e-empresa">Diga onde você atua.</div>
+        <label for="f-empresa">Empresa</label>
+        <input type="text" id="f-empresa" autocomplete="organization" placeholder="Onde você trabalha">
+        <div class="msg-erro" id="e-empresa">Diga onde você trabalha.</div>
       </div>
       <div class="campo">
         <label for="f-nivel">Enquadramento profissional</label>
@@ -778,6 +778,20 @@ fbq('init','673278761920486');fbq('track','PageView');
           <option>Geração Alpha (2013 em diante)</option>
         </select>
         <div class="msg-erro" id="e-geracao">Escolha uma opção.</div>
+      </div>
+
+      <div class="campo">
+        <label for="f-salario">Faixa salarial mensal</label>
+        <select id="f-salario" required>
+          <option value="" disabled selected>Selecione</option>
+          <option>Até R$ 3.000</option>
+          <option>De R$ 3.001 a R$ 6.000</option>
+          <option>De R$ 6.001 a R$ 10.000</option>
+          <option>De R$ 10.001 a R$ 20.000</option>
+          <option>De R$ 20.001 a R$ 40.000</option>
+          <option>Acima de R$ 40.000</option>
+        </select>
+        <div class="msg-erro" id="e-salario">Escolha uma opção.</div>
       </div>
 
       <button class="btn" id="ir-quiz" style="width:100%;margin-top:8px">Começar</button>
@@ -925,6 +939,7 @@ const CONFIG = {
   RD_CAMPO_SECUNDARIO: '',
   RD_CAMPO_COMBINACAO: '',
   RD_CAMPO_NIVEL: '',
+  RD_CAMPO_SALARIO: '',
 
   /* 4) WhatsApp de destino e link do Guia do Autoconhecimento. */
   WHATSAPP: '5541992488092',
@@ -1243,7 +1258,8 @@ function validarDados(){
     ['f-whats','e-whats', v => soDigitosBR(v).length >= 10],
     ['f-empresa','e-empresa', v => v.trim().length >= 2],
     ['f-nivel','e-nivel', v => !!v],
-    ['f-geracao','e-geracao', v => !!v]
+    ['f-geracao','e-geracao', v => !!v],
+    ['f-salario','e-salario', v => !!v]
   ];
   let ok = true;
   campos.forEach(([id, erro, teste]) => {
@@ -1265,7 +1281,8 @@ $('#ir-quiz').addEventListener('click', () => {
     whatsapp: $('#f-whats').value.trim(),
     empresa: $('#f-empresa').value.trim(),
     nivel: $('#f-nivel').value,
-    geracao: $('#f-geracao').value
+    geracao: $('#f-geracao').value,
+    salario: $('#f-salario').value
   };
   enviarRD(CONFIG.RD_IDENTIFICADOR_LEAD, {});
   if (window.fbq) fbq('track','Lead',{content_name:'Teste dos Temperamentos MARES'});
@@ -1458,7 +1475,8 @@ function enviarTudo(){
   enviarRD(CONFIG.RD_IDENTIFICADOR_RESULTADO, campos({
     RD_CAMPO_PREDOMINANTE: P.animal + ' · ' + P.nome,
     RD_CAMPO_SECUNDARIO: S.animal + ' · ' + S.nome,
-    RD_CAMPO_COMBINACAO: P.animal + ' + ' + S.animal + ' · ' + r.classe
+    RD_CAMPO_COMBINACAO: P.animal + ' + ' + S.animal + ' · ' + r.classe,
+    RD_CAMPO_SALARIO: lead.salario || ''
   }));
   enviarRD(CONFIG.RD_IDENTIFICADOR_PERFIL + P.animal.toLowerCase().replace(/\s+/g,'-'), {});
   registrar('sent', '', html);
@@ -1488,6 +1506,7 @@ function registrar(status, motivo, html){
     empresa: lead.empresa,
     enquadramento: lead.nivel,
     geracao: lead.geracao,
+    salario: lead.salario,
     como_aprende: aprender.join(' | '),
     predominante: PERFIS[r.primary].nome,
     predominante_animal: P.animal,
