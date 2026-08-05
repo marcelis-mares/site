@@ -159,6 +159,9 @@ const params = new URLSearchParams(location.search);
 const TIME = (params.get('time') || '').trim().toLowerCase();
 const CHAVE = params.get('chave') || '';
 
+/* O caminho principal é o fetch normal, que não manda cookie para o Google e
+   por isso funciona mesmo quando a pessoa está logada em mais de uma conta.
+   O JSONP fica como plano B, para o caso de o fetch ser bloqueado. */
 function jsonp(url){
   return new Promise((ok, falha) => {
     const nome = 'mares_cb_' + Math.random().toString(36).slice(2,9);
@@ -171,11 +174,20 @@ function jsonp(url){
     setTimeout(() => { if (window[nome]) { limpar(); falha(new Error('a resposta demorou demais')); } }, 25000);
   });
 }
+async function buscar(url){
+  try {
+    const r = await fetch(url, {cache:'no-store'});
+    if (!r.ok) throw new Error('resposta ' + r.status);
+    return await r.json();
+  } catch (e) {
+    return jsonp(url);
+  }
+}
 
 async function iniciar(){
   if (!TIME || !CHAVE) return erro('Este endereço está incompleto. O link do painel precisa do código do time e da chave de acesso.');
   try {
-    const d = await jsonp(WEBHOOK + '?time=' + encodeURIComponent(TIME) + '&chave=' + encodeURIComponent(CHAVE));
+    const d = await buscar(WEBHOOK + '?time=' + encodeURIComponent(TIME) + '&chave=' + encodeURIComponent(CHAVE));
     if (d.erro) return erro(d.erro === 'chave invalida'
       ? 'A chave de acesso deste link não confere. Peça o link atualizado para a equipe da MARES.'
       : 'Não foi possível montar o painel: ' + d.erro);
