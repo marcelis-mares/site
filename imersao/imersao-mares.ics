@@ -1,0 +1,67 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//MARES Consultoria Empresarial//Imersao Crescimento Previsivel//
+ PT-BR
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Imersao Crescimento Previsivel · MARES
+BEGIN:VEVENT
+UID:imersao-mares-ago2026-noite1@maresconsultoria.com.br
+DTSTAMP:20260807T120000Z
+DTSTART:20260825T230000Z
+DTEND:20260826T003000Z
+SUMMARY:Imersao Crescimento Previsivel · Noite 1 · Raio-X: o retrato do
+  seu negocio
+DESCRIPTION:Noite 1 da Imersao Crescimento Previsivel, com Marcelis Perei
+ ra. O retrato do seu negocio: onde esta o buraco que trava o crescimento.
+  Online e gratuito, 20h. O link da sala chega pelo grupo do WhatsApp.
+LOCATION:Online
+URL:https://www.maresconsultoria.com.br/imersao/
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:A imersao comeca em 30 minutos
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:imersao-mares-ago2026-noite2@maresconsultoria.com.br
+DTSTAMP:20260807T120000Z
+DTSTART:20260826T230000Z
+DTEND:20260827T003000Z
+SUMMARY:Imersao Crescimento Previsivel · Noite 2 · Onde o dinheiro entr
+ a
+DESCRIPTION:Noite 2 da Imersao Crescimento Previsivel, com Marcelis Perei
+ ra. Marketing e vendas: onde o dinheiro entra e por onde ele vaza. Online
+  e gratuito, 20h. O link da sala chega pelo grupo do WhatsApp.
+LOCATION:Online
+URL:https://www.maresconsultoria.com.br/imersao/
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:A imersao comeca em 30 minutos
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:imersao-mares-ago2026-noite3@maresconsultoria.com.br
+DTSTAMP:20260807T120000Z
+DTSTART:20260827T230000Z
+DTEND:20260828T003000Z
+SUMMARY:Imersao Crescimento Previsivel · Noite 3 · IA e hot seat
+DESCRIPTION:Noite 3 da Imersao Crescimento Previsivel, com Marcelis Perei
+ ra. IA e hot seat, a mentoria ao vivo. Online e gratuito, 20h. O link da 
+ sala chega pelo grupo do WhatsApp.
+LOCATION:Online
+URL:https://www.maresconsultoria.com.br/imersao/
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:A imersao comeca em 30 minutos
+END:VALARM
+END:VEVENT
+END:VCALENDAR
