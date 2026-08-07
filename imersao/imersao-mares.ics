@@ -5,16 +5,28 @@ PRODID:-//MARES Consultoria Empresarial//Imersao Crescimento Previsivel//
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 X-WR-CALNAME:Imersao Crescimento Previsivel · MARES
+X-WR-TIMEZONE:America/Sao_Paulo
+BEGIN:VTIMEZONE
+TZID:America/Sao_Paulo
+X-LIC-LOCATION:America/Sao_Paulo
+BEGIN:STANDARD
+DTSTART:19700101T000000
+TZOFFSETFROM:-0300
+TZOFFSETTO:-0300
+TZNAME:-03
+END:STANDARD
+END:VTIMEZONE
 BEGIN:VEVENT
 UID:imersao-mares-ago2026-noite1@maresconsultoria.com.br
 DTSTAMP:20260807T120000Z
-DTSTART:20260825T230000Z
-DTEND:20260826T003000Z
+DTSTART;TZID=America/Sao_Paulo:20260825T200000
+DTEND;TZID=America/Sao_Paulo:20260825T213000
 SUMMARY:Imersao Crescimento Previsivel · Noite 1 · Raio-X: o retrato do
   seu negocio
 DESCRIPTION:Noite 1 da Imersao Crescimento Previsivel, com Marcelis Perei
- ra. O retrato do seu negocio: onde esta o buraco que trava o crescimento.
-  Online e gratuito, 20h. O link da sala chega pelo grupo do WhatsApp.
+ ra. As 20h, horario de Brasilia. O retrato do seu negocio: onde esta o bu
+ raco que trava o crescimento. Online e gratuito. O link da sala chega pel
+ o grupo do WhatsApp.
 LOCATION:Online
 URL:https://www.maresconsultoria.com.br/imersao/
 STATUS:CONFIRMED
@@ -28,13 +40,14 @@ END:VEVENT
 BEGIN:VEVENT
 UID:imersao-mares-ago2026-noite2@maresconsultoria.com.br
 DTSTAMP:20260807T120000Z
-DTSTART:20260826T230000Z
-DTEND:20260827T003000Z
+DTSTART;TZID=America/Sao_Paulo:20260826T200000
+DTEND;TZID=America/Sao_Paulo:20260826T213000
 SUMMARY:Imersao Crescimento Previsivel · Noite 2 · Onde o dinheiro entr
  a
 DESCRIPTION:Noite 2 da Imersao Crescimento Previsivel, com Marcelis Perei
- ra. Marketing e vendas: onde o dinheiro entra e por onde ele vaza. Online
-  e gratuito, 20h. O link da sala chega pelo grupo do WhatsApp.
+ ra. As 20h, horario de Brasilia. Marketing e vendas: onde o dinheiro entr
+ a e por onde ele vaza. Online e gratuito. O link da sala chega pelo grupo
+  do WhatsApp.
 LOCATION:Online
 URL:https://www.maresconsultoria.com.br/imersao/
 STATUS:CONFIRMED
@@ -48,12 +61,12 @@ END:VEVENT
 BEGIN:VEVENT
 UID:imersao-mares-ago2026-noite3@maresconsultoria.com.br
 DTSTAMP:20260807T120000Z
-DTSTART:20260827T230000Z
-DTEND:20260828T003000Z
+DTSTART;TZID=America/Sao_Paulo:20260827T200000
+DTEND;TZID=America/Sao_Paulo:20260827T213000
 SUMMARY:Imersao Crescimento Previsivel · Noite 3 · IA e hot seat
 DESCRIPTION:Noite 3 da Imersao Crescimento Previsivel, com Marcelis Perei
- ra. IA e hot seat, a mentoria ao vivo. Online e gratuito, 20h. O link da 
- sala chega pelo grupo do WhatsApp.
+ ra. As 20h, horario de Brasilia. IA e hot seat, a mentoria ao vivo. Onlin
+ e e gratuito. O link da sala chega pelo grupo do WhatsApp.
 LOCATION:Online
 URL:https://www.maresconsultoria.com.br/imersao/
 STATUS:CONFIRMED
