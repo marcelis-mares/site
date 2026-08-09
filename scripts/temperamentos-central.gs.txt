@@ -1,0 +1,660 @@
+/**
+ * MARES · CENTRAL DOS TESTES
+ *
+ * Este script faz três coisas:
+ *
+ * 1. Recebe o resultado do Teste dos Temperamentos, grava na aba Respostas e
+ *    envia a análise completa por e-mail para quem respondeu.
+ * 2. Recebe um registro enxuto de qualquer teste do site, RaioX, Sonda,
+ *    Temperamentos e os que vierem depois, e grava na aba Eventos. É essa aba
+ *    que permite descobrir sozinho quais turmas existem, inclusive as que a
+ *    equipe criar sem avisar ninguém.
+ * 3. Serve os dados para os painéis, sempre sem nome e sem e-mail de ninguém.
+ *
+ * O script antigo do RaioX e da Sonda continua intocado, cuidando dos e-mails
+ * e da planilha deles. Aqui só chega a cópia enxuta usada pelos painéis.
+ */
+
+var COPIA_EQUIPE = 'atendimento@mareslideranca.com.br';
+var ABA = 'Respostas';
+var ABA_EVENTOS = 'Eventos';
+
+/* Chave dos painéis. Trocar aqui revoga todos os links antigos de uma vez. */
+var CHAVE_PAINEL = 'mares-painel-2026-9f3c1a';
+
+var COLUNAS = [
+  'processed_at','sessao','nome','email','whatsapp','empresa','salario','enquadramento','geracao',
+  'time','setor','cargo','lidera','tempo_casa',
+  'predominante','predominante_animal','secundario','secundario_animal','combinacao','classe',
+  'como_aprende',
+  'score_S','score_C','score_M','score_F','total_marcadas','desempates',
+  'confidence','status','review_reason','test_version','rule_version','content_version','itens_version',
+  'utm_source','utm_medium','utm_campaign','utm_content','utm_term','origem',
+  'marcadas_S','marcadas_C','marcadas_M','marcadas_F'
+];
+
+/* A aba Eventos é propositalmente enxuta e igual para todos os testes. */
+var COLUNAS_EVENTO = [
+  'processed_at','teste','time','sessao','media','nivel','forte','fraco',
+  'predominante','secundario','classe','escala','dimensoes','origem'
+];
+
+/* Campos que nunca saem da planilha pelo doGet. */
+var NUNCA_EXPOR = ['nome','email','whatsapp','sessao','cargo','origem',
+                   'marcadas_S','marcadas_C','marcadas_M','marcadas_F'];
+
+/* ============================================================================
+   LEGENDA DAS CARACTERÍSTICAS
+   As colunas marcadas_S, marcadas_C, marcadas_M e marcadas_F guardam o NÚMERO
+   de cada característica dentro do grupo, começando em zero. Esta lista é o que
+   traduz número em palavra, e ela precisa ser idêntica à do site.
+   Se a lista do site mudar, subir a versão aqui e lá ao mesmo tempo. As linhas
+   antigas continuam legíveis porque cada uma grava a versão que usou.
+   ============================================================================ */
+var ITENS_VERSAO = 'itens-1.0';
+
+var ITENS = {
+  S: [
+    "Confiante",
+    "Falta de disciplina",
+    "Começa e não termina o que planeja",
+    "Egocêntrico",
+    "Não teme o futuro",
+    "Arrepende-se pela mesma coisa várias vezes",
+    "Explode e em seguida esquece",
+    "Interage bem com as pessoas",
+    "Contagiante",
+    "Extrovertido",
+    "Natural / Espontâneo",
+    "Dependendo o ambiente negocia seus valores morais",
+    "Estimulante",
+    "Agitado",
+    "Sensível com as necessidades do próximo",
+    "A sua vontade o faz ceder a tentações",
+    "Baixo rendimento",
+    "Instável em suas emoções",
+    "Se relaciona profundamente",
+    "Tende a ser sensual",
+    "Coloca as pessoas para cima",
+    "Divertido",
+    "É entusiasmado quando participa de novos planos",
+    "Compromete-se sem pensar",
+    "Primeiro fala depois pensa",
+    "Curiosidade infantilizada",
+    "Gosta de crianças",
+    "Sensível / Emotivo",
+    "Tem dificuldade de se concentrar",
+    "Fala constantemente não deixando o outro falar",
+    "Desanima com facilidade",
+    "Vive para o momento presente",
+    "Espalhafatoso",
+    "Gentil",
+    "Bondoso",
+    "Animado",
+    "Impulsividade",
+    "Gosta de estar acompanhado",
+    "Horário ou compromisso tem dificuldade em cumprir",
+    "Faz amigos com facilidade",
+    "Verdadeiro",
+    "Pouco prático e desorganizado",
+    "Ingênuo",
+    "Barulhento",
+    "Infiel",
+    "Acorda de bom humor",
+    "Quando passa por momentos difíceis esquece fácil",
+    "Não conhece suas limitações",
+    "Ternura e Compaixão",
+    "Mais coração que razão com as pessoas"
+  ],
+  C: [
+    "Resistente a pedir desculpa",
+    "Firme",
+    "Mais razão que coração",
+    "Tende a ter úlcera",
+    "Insistente",
+    "Agressividade",
+    "Orgulhoso",
+    "Situação desconhecida o desafia",
+    "Profere declarações maldosas e irônicas",
+    "É pouco influenciado",
+    "Divertido",
+    "Falta de compaixão ao próximo",
+    "É influenciador",
+    "Às vezes a sua ousadia gera danos",
+    "Apresenta sugestões e ideias",
+    "Não vacila sob pressão",
+    "Não é dado a detalhes",
+    "Não gosta de artes",
+    "As críticas não abalam com facilidade",
+    "Arrogante",
+    "Intuitivo",
+    "Delicado",
+    "Cérebro esperto",
+    "Precipitado, age na fúria",
+    "Impulsivo",
+    "Decidido",
+    "Para atingir seus objetivos passa por cima do direito dos outros",
+    "As diversidades viram desafios",
+    "Rancoroso",
+    "Líder nato",
+    "Facilmente toma decisões",
+    "Tem dificuldade para se concentrar em leitura",
+    "É irônico com os sentimentos dos outros",
+    "Bravo",
+    "Competente",
+    "Interessa pelo aspecto prático da vida",
+    "Vingativo",
+    "Prático",
+    "Otimista",
+    "Direto",
+    "Atento",
+    "Vibra com muitas atividades",
+    "Frustra os outros por sua insatisfação",
+    "Determinado e persistente",
+    "Temperamento forte",
+    "Determinado",
+    "Autônomo",
+    "Prepotente",
+    "Disciplinado",
+    "Indiferente à vontade das outras pessoas"
+  ],
+  M: [
+    "Evita envolver-se em conflitos",
+    "Não decepciona os que dependem dele",
+    "Interesse excessivo em sua condição física",
+    "Dificuldade em fazer amizades",
+    "Dificuldade para perdoar",
+    "Cumpridor de suas responsabilidades",
+    "Reservado",
+    "Fala pouco, mas é muito preciso no que diz",
+    "Facilidade para diagnosticar problemas",
+    "Não se compromete a fazer mais do que pode",
+    "Gosta de ficar sozinho",
+    "Ofende-se muito facilmente",
+    "Egoísta",
+    "Sacrifica-se pessoalmente",
+    "Medroso",
+    "Mal-humorado",
+    "Apreciador de artes",
+    "Varia sua disposição de espírito conforme a situação",
+    "Profissionalmente correto",
+    "Pensa mais no outro",
+    "Sensibilidade e talento artístico",
+    "Detalhista",
+    "Crítico inflexível",
+    "Emocional",
+    "Dado a suposições desfavoráveis",
+    "Analisa a situação",
+    "Criativo",
+    "Não é desocupado",
+    "Para tomar decisão pensa sempre na parte negativa",
+    "Foge da realidade e gosta de fantasiar",
+    "Inseguro",
+    "Confiável",
+    "Não procura as pessoas, deixa que elas o procurem",
+    "Falta vigor, tende à preguiça",
+    "Confiança em sua capacidade",
+    "Reflexivo",
+    "Acha que sempre estão conspirando contra ele",
+    "Tudo o que o afeta é algo material",
+    "Revive acontecimentos e decisões passadas",
+    "Evita ficar em evidência",
+    "Sensível emocionalmente",
+    "Fica alimentando desejos de vingança",
+    "Tende ao desânimo profundo",
+    "Se compadece de si mesmo",
+    "Triste",
+    "Desconfia com frequência das coisas",
+    "Reservado quanto a expor suas ideias",
+    "Olha muito para dentro de si",
+    "Consegue prever os obstáculos",
+    "Gosta de agradar e servir pessoas"
+  ],
+  F: [
+    "Sensato",
+    "Tende a gostar de rotina",
+    "Raramente explode em raiva ou riso",
+    "Tranquilo",
+    "Bom conselheiro",
+    "Inclinado à autoanálise complacente",
+    "Pacificador nato",
+    "É de bom coração, mas não deixa transparecer",
+    "Vagaroso",
+    "Cérebro organizado",
+    "Desmotivado",
+    "Metódico, suas coisas estão sempre arrumadas",
+    "Gosta de convívio social",
+    "Fino gosto pelas coisas",
+    "Cumpridor de suas obrigações e horários",
+    "Sem compromisso",
+    "Quando pressionado fica mais lento",
+    "Senso de humor mordaz",
+    "Tem indecisões frequentes",
+    "Grosseiro",
+    "Ponderado",
+    "Resistente",
+    "Eficiente",
+    "Contemplativo",
+    "Prático e suficiente",
+    "Observa a vida sem se envolver",
+    "Racional",
+    "Disfarça sua obstinação com seu humor",
+    "Sente mais emoções do que demonstra",
+    "Protela com frequência as tarefas",
+    "Acomodado",
+    "Trabalha bem sob pressão",
+    "Frio",
+    "Prefere só observar",
+    "Demorado",
+    "Pouco se envolve com as atividades do próximo",
+    "Sabe ouvir com paciência e atenção",
+    "Gosta de mediar conflitos",
+    "Provoca gargalhada sem esboçar um sorriso",
+    "Conservador por comodismo",
+    "Quando mal-humorado usa isso contra os outros",
+    "Egocêntrico",
+    "Econômico ao extremo",
+    "Mantém as emoções sob controle",
+    "Mais espectador que modificador de circunstâncias",
+    "Despreocupado com as circunstâncias ao redor",
+    "Aprecia artes",
+    "Teimoso",
+    "Vida regrada",
+    "Vacila entre o desejo de fazer e de não fazer alguma coisa"
+  ]
+};
+
+var ANIMAIS = { S: 'Golfinho', C: 'Tubarao', M: 'Polvo', F: 'Tartaruga Marinha' };
+var NOMES   = { S: 'Sanguineo', C: 'Colerico', M: 'Melancolico', F: 'Fleumatico' };
+var ABA_LEGENDA = 'Legenda';
+
+/* Monta ou refaz a aba Legenda. Pode ser chamada à mão pelo editor a qualquer
+   momento: ela apaga e reescreve, então nunca duplica. */
+function montarLegenda() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var a = ss.getSheetByName(ABA_LEGENDA);
+  if (!a) a = ss.insertSheet(ABA_LEGENDA);
+  a.clear();
+
+  var linhas = [['codigo', 'grupo', 'animal', 'temperamento', 'numero', 'caracteristica', 'versao']];
+  ORDEM_GRUPOS.forEach(function (g) {
+    ITENS[g].forEach(function (texto, i) {
+      linhas.push([g + (i < 10 ? '0' : '') + i, g, ANIMAIS[g], NOMES[g], i, texto, ITENS_VERSAO]);
+    });
+  });
+
+  a.getRange(1, 1, linhas.length, linhas[0].length).setValues(linhas);
+  a.getRange(1, 1, 1, linhas[0].length).setFontWeight('bold');
+  a.setFrozenRows(1);
+  a.autoResizeColumn(6);
+  return linhas.length - 1;
+}
+
+var ORDEM_GRUPOS = ['S', 'C', 'M', 'F'];
+
+/* Quantos respondentes uma turma precisa ter para o painel mostrar as palavras.
+   Abaixo disso, um grupo pequeno viraria retrato de indivíduo. */
+var MINIMO_PALAVRAS = 4;
+
+/* Agrega as características marcadas de uma turma. Devolve apenas contagem por
+   palavra, nunca quem marcou o quê. Empate é resolvido por uma regra declarada:
+   primeiro a contagem, depois a ordem fixa dos grupos S, C, M, F, depois o
+   número da característica. Nunca por ordem alfabética. */
+function palavrasDaTurma(v, cab, alvo, iTime, iStatus) {
+  var idx = {};
+  ORDEM_GRUPOS.forEach(function (g) { idx[g] = cab.indexOf('marcadas_' + g); });
+
+  var contagem = {}, respondentes = 0;
+  ORDEM_GRUPOS.forEach(function (g) {
+    contagem[g] = [];
+    for (var i = 0; i < ITENS[g].length; i++) contagem[g].push(0);
+  });
+
+  for (var r = 1; r < v.length; r++) {
+    if (String(v[r][iTime]).toLowerCase() !== alvo) continue;
+    if (iStatus >= 0 && v[r][iStatus] === 'blocked') continue;
+    var contou = false;
+    ORDEM_GRUPOS.forEach(function (g) {
+      if (idx[g] < 0) return;
+      var bruto = String(v[r][idx[g]] || '').trim();
+      if (!bruto) return;
+      contou = true;
+      bruto.split(',').forEach(function (n) {
+        var k = parseInt(n, 10);
+        if (!isNaN(k) && k >= 0 && k < contagem[g].length) contagem[g][k]++;
+      });
+    });
+    if (contou) respondentes++;
+  }
+
+  if (respondentes < MINIMO_PALAVRAS) {
+    return { oculto: true, minimo: MINIMO_PALAVRAS, respondentes: respondentes };
+  }
+
+  var todas = [];
+  ORDEM_GRUPOS.forEach(function (g, og) {
+    contagem[g].forEach(function (n, i) {
+      todas.push({ t: ITENS[g][i], g: g, n: n, og: og, i: i });
+    });
+  });
+
+  var limpo = function (x) { return { t: x.t, g: x.g, n: x.n }; };
+
+  /* Dentro de um mesmo empate de contagem, revezar entre os quatro grupos em vez
+     de despejar todos de um grupo só. Sem isso, quando muita característica fica
+     empatada em zero, a lista sai inteira de um temperamento e engana a leitura.
+     A regra é declarada: primeiro a contagem, depois o rodízio S, C, M, F, depois
+     o número da característica. Nunca ordem alfabética. */
+  var selecionar = function (desc, quantas) {
+    var niveis = {}, chaves = [];
+    todas.forEach(function (x) {
+      if (!niveis[x.n]) { niveis[x.n] = { S: [], C: [], M: [], F: [] }; chaves.push(x.n); }
+      niveis[x.n][x.g].push(x);
+    });
+    chaves.sort(function (a, b) { return desc ? b - a : a - b; });
+
+    var saida = [];
+    for (var c = 0; c < chaves.length && saida.length < quantas; c++) {
+      var balde = niveis[chaves[c]];
+      ORDEM_GRUPOS.forEach(function (g) {
+        balde[g].sort(function (a, b) { return a.i - b.i; });
+      });
+      var restam = true;
+      for (var volta = 0; restam && saida.length < quantas; volta++) {
+        restam = false;
+        for (var g = 0; g < ORDEM_GRUPOS.length && saida.length < quantas; g++) {
+          var fila = balde[ORDEM_GRUPOS[g]];
+          if (volta < fila.length) { saida.push(limpo(fila[volta])); restam = true; }
+        }
+      }
+    }
+    return saida;
+  };
+
+  var zeradas = 0;
+  todas.forEach(function (x) { if (x.n === 0) zeradas++; });
+
+  var porPerfil = {};
+  ORDEM_GRUPOS.forEach(function (g) {
+    porPerfil[g] = todas.filter(function (x) { return x.g === g; })
+      .sort(function (a, b) { return (b.n - a.n) || (a.i - b.i); })
+      .slice(0, 5).map(limpo);
+  });
+
+  return {
+    respondentes: respondentes,
+    versao: ITENS_VERSAO,
+    mais: selecionar(true, 15),
+    menos: selecionar(false, 15),
+    nunca_marcadas: zeradas,
+    porPerfil: porPerfil
+  };
+}
+
+function doPost(e) {
+  var dados;
+  try {
+    dados = JSON.parse(e.postData.contents);
+  } catch (err) {
+    return ContentService.createTextOutput('json invalido');
+  }
+
+  /* Numa palestra dezenas de pessoas terminam quase ao mesmo tempo. Sem a
+     fila, duas chamadas simultâneas podem criar a aba e escrever o cabeçalho
+     as duas, e a planilha fica com linha repetida. */
+  var trava = LockService.getScriptLock();
+  try { trava.waitLock(25000); } catch (err) { /* segue mesmo assim */ }
+  try {
+    return processar(dados);
+  } finally {
+    try { trava.releaseLock(); } catch (err) {}
+  }
+}
+
+function processar(dados) {
+
+  // Registro enxuto de qualquer teste, só para os painéis.
+  if (dados.registro === 'evento') {
+    gravarEvento(dados);
+    return ContentService.createTextOutput('ok');
+  }
+
+  gravar(dados);
+  gravarEvento(dados);
+
+  // O envio automático só acontece quando o site marcou o registro como sent.
+  // Qualquer status diferente disso fica na planilha esperando revisão humana,
+  // como manda o manual técnico.
+  if (dados.status === 'sent' && dados.email && dados.email_html) {
+    enviar(dados);
+  }
+
+  return ContentService.createTextOutput('ok');
+}
+
+/**
+ * Painéis. Três modos:
+ *   ?chave=X&modo=turmas          lista tudo o que já foi usado
+ *   ?chave=X&time=codigo          dados do Teste dos Temperamentos daquela turma
+ *   ?chave=X&modo=evento&time=Y   dados de qualquer teste daquela turma
+ * Aceita callback para JSONP, que é o plano B do painel.
+ */
+function doGet(e) {
+  var p = (e && e.parameter) || {};
+  var saida;
+
+  if (p.chave !== CHAVE_PAINEL) {
+    saida = { erro: 'chave invalida' };
+  } else if (p.modo === 'turmas') {
+    saida = listaDeTurmas();
+  } else if (p.geral === '1') {
+    /* Respondentes gerais: quem chegou pelo site, fora de qualquer turma. */
+    saida = (p.teste && p.teste !== 'Temperamentos')
+      ? eventosDaTurma('', p.teste)
+      : dadosDaTurma('');
+  } else if (p.modo === 'evento') {
+    saida = eventosDaTurma(limpar(p.time), p.teste || '');
+  } else if (!p.time) {
+    saida = { erro: 'informe o codigo da turma' };
+  } else {
+    saida = dadosDaTurma(limpar(p.time));
+  }
+
+  var txt = JSON.stringify(saida);
+  if (p.callback) {
+    return ContentService.createTextOutput(p.callback + '(' + txt + ');')
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+  return ContentService.createTextOutput(txt)
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+/* Mesma limpeza que o site aplica no código do time. */
+function limpar(v) {
+  return String(v || '').trim().toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40);
+}
+
+function aba(nome, colunas) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var a = ss.getSheetByName(nome);
+  if (!a) a = ss.insertSheet(nome);
+  if (a.getLastRow() === 0) {
+    a.appendRow(colunas);
+    a.setFrozenRows(1);
+    a.getRange(1, 1, 1, colunas.length).setFontWeight('bold');
+  }
+  return a;
+}
+
+/**
+ * Grava sempre pelo nome da coluna, nunca pela posição. Se o site passar a
+ * enviar um campo novo, ele é acrescentado ao final do cabeçalho e as linhas
+ * antigas continuam alinhadas.
+ */
+function gravarEm(a, colunas, d) {
+  var cabecalho = a.getRange(1, 1, 1, a.getLastColumn()).getValues()[0];
+  var faltando = colunas.filter(function (c) { return cabecalho.indexOf(c) < 0; });
+  if (faltando.length) {
+    a.getRange(1, cabecalho.length + 1, 1, faltando.length)
+     .setValues([faltando]).setFontWeight('bold');
+    cabecalho = cabecalho.concat(faltando);
+  }
+  a.appendRow(cabecalho.map(function (c) { return d[c] === undefined ? '' : d[c]; }));
+}
+
+function gravar(d) {
+  gravarEm(aba(ABA, COLUNAS), COLUNAS, d);
+  /* A legenda nasce sozinha na primeira gravação e nunca mais é tocada, a não ser
+     que alguém chame montarLegenda() de propósito para refazer. */
+  if (!SpreadsheetApp.getActiveSpreadsheet().getSheetByName(ABA_LEGENDA)) {
+    try { montarLegenda(); } catch (err) {}
+  }
+}
+
+function gravarEvento(d) {
+  var dim = d.dimensoes;
+  var evento = {
+    processed_at: d.processed_at || d.data || new Date().toISOString(),
+    teste: d.teste || '',
+    time: limpar(d.time),
+    sessao: d.sessao || '',
+    media: d.media || '',
+    nivel: d.nivel || '',
+    forte: d.dimensao_forte || d.pilar_forte || '',
+    fraco: d.dimensao_fraca || d.pilar_fraco || '',
+    predominante: d.predominante_animal || d.predominante || '',
+    secundario: d.secundario_animal || d.secundario || '',
+    classe: d.classe || '',
+    escala: d.escala || '',
+    dimensoes: dim ? (typeof dim === 'string' ? dim : JSON.stringify(dim)) : '',
+    origem: d.origem || ''
+  };
+  gravarEm(aba(ABA_EVENTOS, COLUNAS_EVENTO), COLUNAS_EVENTO, evento);
+}
+
+/**
+ * Lista tudo o que já foi usado, por teste e por código de turma. É isso que
+ * permite descobrir uma turma que alguém da equipe criou sem avisar.
+ */
+function listaDeTurmas() {
+  var a = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(ABA_EVENTOS);
+  if (!a || a.getLastRow() < 2) return { turmas: [], gerado_em: new Date().toISOString() };
+
+  var v = a.getRange(1, 1, a.getLastRow(), a.getLastColumn()).getValues();
+  var cab = v[0];
+  var iT = cab.indexOf('teste'), iC = cab.indexOf('time'), iD = cab.indexOf('processed_at');
+
+  var mapa = {};
+  for (var i = 1; i < v.length; i++) {
+    if (String(v[i][iT]) === 'teste' && String(v[i][iC]) === 'time') continue; // cabeçalho repetido
+    var teste = String(v[i][iT] || 'Sem teste');
+    var codigo = String(v[i][iC] || '');
+    var quando = String(v[i][iD] || '');
+    var k = teste + '||' + codigo;
+    if (!mapa[k]) mapa[k] = { teste: teste, time: codigo, respostas: 0, primeira: quando, ultima: quando };
+    mapa[k].respostas++;
+    if (quando && quando < mapa[k].primeira) mapa[k].primeira = quando;
+    if (quando && quando > mapa[k].ultima) mapa[k].ultima = quando;
+  }
+
+  var lista = Object.keys(mapa).map(function (k) { return mapa[k]; });
+  lista.sort(function (a, b) { return a.ultima < b.ultima ? 1 : -1; });
+  return { turmas: lista, gerado_em: new Date().toISOString() };
+}
+
+function eventosDaTurma(codigo, teste) {
+  var a = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(ABA_EVENTOS);
+  if (!a || a.getLastRow() < 2) return { time: codigo, teste: teste, total: 0, linhas: [] };
+
+  var v = a.getRange(1, 1, a.getLastRow(), a.getLastColumn()).getValues();
+  var cab = v[0];
+  var iC = cab.indexOf('time'), iT = cab.indexOf('teste');
+  var expor = [];
+  for (var c = 0; c < cab.length; c++) {
+    if (cab[c] && NUNCA_EXPOR.indexOf(cab[c]) < 0) expor.push(c);
+  }
+
+  var linhas = [];
+  for (var i = 1; i < v.length; i++) {
+    if (String(v[i][iT]) === 'teste' && String(v[i][iC]) === 'time') continue; // cabeçalho repetido
+    if (String(v[i][iC]).toLowerCase() !== codigo) continue;
+    if (teste && String(v[i][iT]) !== teste) continue;
+    var o = {};
+    expor.forEach(function (c) { o[cab[c]] = v[i][c]; });
+    linhas.push(o);
+  }
+  return { time: codigo, teste: teste, total: linhas.length, gerado_em: new Date().toISOString(), linhas: linhas };
+}
+
+function dadosDaTurma(codigo) {
+  var a = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(ABA);
+  if (!a || a.getLastRow() < 2) return { time: codigo, total: 0, linhas: [] };
+
+  var v = a.getRange(1, 1, a.getLastRow(), a.getLastColumn()).getValues();
+  var cab = v[0];
+  var iTime = cab.indexOf('time');
+  var iStatus = cab.indexOf('status');
+  if (iTime < 0) return { time: codigo, total: 0, linhas: [] };
+
+  var expor = [];
+  for (var c = 0; c < cab.length; c++) {
+    if (cab[c] && NUNCA_EXPOR.indexOf(cab[c]) < 0) expor.push(c);
+  }
+
+  var linhas = [];
+  for (var i = 1; i < v.length; i++) {
+    if (String(v[i][iTime]).toLowerCase() !== codigo) continue;
+    if (iStatus >= 0 && v[i][iStatus] === 'blocked') continue;
+    var o = {};
+    expor.forEach(function (c) { o[cab[c]] = v[i][c]; });
+    linhas.push(o);
+  }
+
+  return {
+    time: codigo,
+    total: linhas.length,
+    gerado_em: new Date().toISOString(),
+    linhas: linhas,
+    palavras: palavrasDaTurma(v, cab, codigo, iTime, iStatus)
+  };
+}
+
+function enviar(d) {
+  var assunto = d.assunto || 'Sua análise de temperamentos — Metodologia MARES';
+  var opcoes = {
+    htmlBody: d.email_html,
+    name: 'MARES · Liderança Oxigênio',
+    replyTo: COPIA_EQUIPE
+  };
+  if (COPIA_EQUIPE) opcoes.bcc = COPIA_EQUIPE;
+
+  try {
+    MailApp.sendEmail(Object.assign({ to: d.email, subject: assunto }, opcoes));
+  } catch (err) {
+    marcarErro(d.sessao, String(err));
+  }
+}
+
+function marcarErro(sessao, msg) {
+  var a = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(ABA);
+  if (!a) return;
+  var cab = a.getRange(1, 1, 1, a.getLastColumn()).getValues()[0];
+  var col = cab.indexOf('review_reason') + 1;
+  var colSessao = cab.indexOf('sessao') + 1;
+  if (col < 1 || colSessao < 1) return;
+  var v = a.getRange(1, colSessao, a.getLastRow(), 1).getValues();
+  for (var i = v.length - 1; i >= 0; i--) {
+    if (v[i][0] === sessao) {
+      a.getRange(i + 1, col).setValue('falha no envio: ' + msg);
+      return;
+    }
+  }
+}
+
+function testarPermissaoDeEmail() {
+  MailApp.sendEmail({
+    to: COPIA_EQUIPE,
+    subject: 'MARES · permissão de e-mail confirmada',
+    htmlBody: '<p>Se você recebeu esta mensagem, o Apps Script já pode enviar as análises.</p>'
+  });
+}
