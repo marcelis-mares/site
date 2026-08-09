@@ -1107,6 +1107,9 @@ const TELAS = [[{"g": "M", "i": 20, "t": "Sensibilidade e talento artístico"}, 
 
 const REGRAS_VERSAO = 'calc-1.0';
 const CONTEUDO_VERSAO = 'responses-1.0';
+/* Versao da lista das 200 caracteristicas. Se a lista mudar de ordem ou de texto,
+   subir aqui e no Apps Script juntos, para a aba Legenda continuar batendo. */
+const ITENS_VERSAO = 'itens-1.0';
 const TESTE_VERSAO = 'MARES-TEMP-web-1.0';
 const SESSAO = 'TMP-' + Math.random().toString(36).slice(2,8).toUpperCase() + '-' + Date.now().toString(36).toUpperCase();
 
@@ -1270,6 +1273,29 @@ function montarEmail(r, b){
   const p = t => '<p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#20313d">' + esc(t) + '</p>';
   const h = t => '<h3 style="font-family:Georgia,serif;font-size:16px;color:#06182a;margin:28px 0 10px">' + esc(t) + '</h3>';
 
+  /* Quadro de pontuação. É a contagem de características marcadas em cada grupo,
+     nunca percentual e nunca apresentado como intensidade, porque não existe regra
+     de normalização validada. A ordem é a fixa da metodologia, S, C, M, F.
+     A barra é desenhada em pixels de propósito: o caractere de porcentagem faria o
+     checklist bloquear o envio. */
+  const maiorScore = Math.max.apply(null, ORDEM.map(k => r.scores[k])) || 1;
+  const quadro =
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:520px;max-width:520px;border-collapse:collapse;margin:0 0 8px">' +
+    ORDEM.map(function (k) {
+      const perfil = PERFIS[k];
+      const larg = Math.max(6, Math.round(Number(r.scores[k]) / maiorScore * 210));
+      const destaque = (k === r.primary || k === r.secondary);
+      return '<tr>' +
+        '<td style="padding:7px 10px 7px 0;font-size:14px;color:#20313d;white-space:nowrap' + (destaque ? ';font-weight:bold' : '') + '">' +
+          esc(perfil.animal) + ' <span style="color:#66788a;font-weight:normal">' + esc(perfil.nome) + '</span></td>' +
+        '<td style="padding:7px 10px 7px 0;width:220px">' +
+          '<div style="height:10px;width:' + larg + 'px;background:' + perfil.cor + ';border-radius:5px"></div></td>' +
+        '<td style="padding:7px 0;font-size:14px;color:#20313d;text-align:right;white-space:nowrap' + (destaque ? ';font-weight:bold' : '') + '">' +
+          esc(r.scores[k]) + ' de 50</td>' +
+      '</tr>';
+    }).join('') +
+    '</table>';
+
   return [
     '<div style="font-family:Helvetica,Arial,sans-serif;max-width:620px;margin:0 auto;padding:28px 24px;background:#ffffff">',
     '<p style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#15A5A8;margin:0 0 18px">MARES · Liderança Oxigênio</p>',
@@ -1280,6 +1306,10 @@ function montarEmail(r, b){
     '</div>',
     b.reforcoNatural ? p(b.reforcoNatural) : '',
     b.alerta ? '<div style="background:#fdf3ec;border-radius:10px;padding:16px 18px;margin:0 0 22px">' + p(b.alerta) + '</div>' : '',
+    h('Como ficou a sua pontuação'),
+    p('Você marcou ' + r.total + ' características entre as 200 apresentadas. Veja como elas se distribuíram pelos quatro temperamentos.'),
+    quadro,
+    p('Esses números dizem quantas características de cada grupo você reconheceu em si, e não a intensidade de cada temperamento. Todo mundo tem os quatro, em proporções diferentes.'),
     h('O seu predominante: ' + P.animal),
     p(b.descricaoPredominante),
     h('O seu secundário: ' + S.animal),
@@ -1584,6 +1614,7 @@ function registrar(status, motivo, html){
     test_version: TESTE_VERSAO,
     rule_version: REGRAS_VERSAO,
     content_version: CONTEUDO_VERSAO,
+    itens_version: ITENS_VERSAO,
     source_type: 'raw_answers',
     nome: lead.nome,
     primeiro_nome: (lead.nome||'').split(' ')[0],
