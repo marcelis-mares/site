@@ -55,6 +55,26 @@ h2:first-of-type{border-top:0}
 .legenda i s{width:12px;height:12px;border-radius:3px;display:block;text-decoration:none}
 
 .barras{display:flex;flex-direction:column;gap:12px}
+
+/* Vocabulário do time */
+.vocab{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-bottom:8px}
+@media(max-width:760px){.vocab{grid-template-columns:1fr;gap:20px}}
+.vocab h3{font-size:.95rem;margin:0 0 4px;color:var(--tinta)}
+.vocab .cabecinho{font-size:13.5px;color:var(--tinta-2);margin:0 0 12px}
+.palavras{list-style:none;padding:0;margin:0}
+.palavras li{display:flex;align-items:baseline;gap:9px;padding:6px 0;border-bottom:1px solid var(--linha);font-size:14.5px}
+.palavras li:last-child{border-bottom:0}
+.palavras .ponto{width:9px;height:9px;border-radius:50%;flex:0 0 9px;transform:translateY(-1px)}
+.palavras .txt{flex:1}
+.palavras .qtd{color:var(--tinta-2);font-size:13px;white-space:nowrap}
+.topos{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px}
+@media(max-width:860px){.topos{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.topos{grid-template-columns:1fr}}
+.topo-perfil{border:1px solid var(--linha);border-radius:12px;padding:14px 15px}
+.topo-perfil b{display:block;font-size:14px;margin-bottom:8px}
+.topo-perfil ol{margin:0;padding-left:17px;font-size:13.5px;color:var(--tinta-2);line-height:1.55}
+body.projecao .palavras li{font-size:19px;padding:9px 0}
+body.projecao .topo-perfil ol{font-size:17px}
 .linha{display:grid;grid-template-columns:190px 1fr 74px;align-items:center;gap:14px}
 @media(max-width:640px){.linha{grid-template-columns:120px 1fr 60px;gap:10px}}
 .rot{font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:8px}
@@ -555,6 +575,54 @@ async function painelDeDimensoes(){
 }
 
 /* ======================= MONTAGEM ======================= */
+/* ================== O VOCABULÁRIO DO TIME ==================
+   Mostra as características que mais e que menos gente reconheceu em si. Vem
+   pronto do Apps Script, já em contagem, então nenhuma marcação individual
+   trafega até aqui. Turma pequena não recebe o bloco: com pouca gente, a lista
+   de palavras deixa de ser retrato do grupo e vira retrato de pessoa. */
+function vocabulario(pal, total){
+  if (!pal) return '';
+
+  if (pal.oculto) {
+    return '<h2>O vocabulário do time</h2>' +
+      '<p class="nota">Este bloco aparece a partir de ' + pal.minimo + ' respostas. ' +
+      'Hoje esta turma tem ' + pal.respondentes + '. Com pouca gente, a lista de palavras deixaria de ' +
+      'ser o retrato do grupo e passaria a apontar para uma pessoa.</p>';
+  }
+
+  const n = pal.respondentes;
+  const lista = arr => '<ul class="palavras">' + arr.map(x =>
+    '<li><span class="ponto" style="background:' + (PERFIS[x.g] ? PERFIS[x.g].cor : '#999') + '"></span>' +
+    '<span class="txt">' + esc(x.t) + '</span>' +
+    '<span class="qtd">' + x.n + ' de ' + n + '</span></li>').join('') + '</ul>';
+
+  const topos = ORDEM.map(g => '<div class="topo-perfil" style="border-left:3px solid ' + PERFIS[g].cor + '">' +
+    '<b style="color:' + PERFIS[g].cor + '">' + esc(PERFIS[g].animal) + '</b>' +
+    '<ol>' + (pal.porPerfil[g] || []).map(x => '<li>' + esc(x.t) + '</li>').join('') + '</ol></div>').join('');
+
+  return '<h2>O vocabulário do time</h2>' +
+    '<p class="nota">Aqui não é o cálculo, são as palavras. Cada pessoa marcou, entre 200 características, ' +
+    'as que reconheceu em si. Somando as marcações de todo mundo aparece o vocabulário do grupo: o que este time ' +
+    'assume sobre si com facilidade e o que quase ninguém se vê fazendo. A bolinha diz de qual temperamento é cada palavra.</p>' +
+    '<div class="vocab">' +
+      '<div><h3>O que este time mais reconhece em si</h3>' +
+      '<p class="cabecinho">As 15 características marcadas por mais gente. É o terreno confortável do grupo, ' +
+      'o que já vem pronto e não precisa ser construído.</p>' + lista(pal.mais) + '</div>' +
+      '<div><h3>O que quase ninguém se vê fazendo</h3>' +
+      '<p class="cabecinho">As 15 menos marcadas. É onde costuma morar o ponto cego coletivo, e também o tipo de ' +
+      'comportamento que este time vai precisar contratar, combinar ou desenvolver de propósito.' +
+      (pal.nunca_marcadas > 15
+        ? ' Aqui há um empate grande: ' + pal.nunca_marcadas + ' das 200 características não foram marcadas por ninguém, ' +
+          'então esta lista é uma amostra equilibrada entre os quatro temperamentos, e não um ranking.'
+        : '') + '</p>' +
+      lista(pal.menos) + '</div>' +
+    '</div>' +
+    '<div class="topos">' + topos + '</div>' +
+    '<p class="nota" style="margin-top:18px">Empate na contagem é resolvido por regra fixa, primeiro a ordem dos ' +
+    'temperamentos e depois a ordem da característica na lista oficial, nunca por ordem alfabética. ' +
+    'Lista de características na versão ' + esc(pal.versao || '') + '.</p>';
+}
+
 function montar(d){
   const r = document.getElementById('rotulo-topo');
   if (r) r.textContent = 'Painel de temperamentos do time';
@@ -587,6 +655,8 @@ function montar(d){
   h.push('<h2>A leitura deste time</h2>' +
     '<p class="nota">O texto abaixo descreve o que a contagem mostra e o que costuma acontecer com uma composição assim. ' +
     'É ponto de partida para a conversa, não veredito.</p>' + leitura(linhas, pred, total));
+
+  h.push(vocabulario(d.palavras, total));
 
   h.push('<h2>Combinações entre predominante e secundário</h2>' +
     '<p class="nota">A linha é o perfil predominante e a coluna é o secundário. Quanto mais escura a célula, ' +
