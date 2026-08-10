@@ -391,6 +391,195 @@ function palavrasDaTurma(v, cab, alvo, iTime, iStatus) {
   };
 }
 
+/* ============================================================================
+   IMERSÃO CRESCIMENTO PREVISÍVEL
+   A landing page manda a inscrição para cá com registro: 'imersao'. A gravação é
+   por nome de coluna, então campo novo na página nunca desalinha a planilha, e
+   nenhum dado se perde caladamente.
+   Todo inscrito recebe na hora o e-mail de boas-vindas, com o grupo do WhatsApp
+   em primeiro lugar. Quem já está na aba e ainda não recebeu pode ser alcançado
+   depois rodando reenviarBoasVindas() à mão.
+   ============================================================================ */
+var ABA_IMERSAO = 'Imersao';
+
+var COLUNAS_IMERSAO = ['processed_at','nome','email','telefone','empresa','cargo',
+  'faturamento','problema','email_enviado',
+  'utm_source','utm_medium','utm_campaign','utm_content','utm_term','origem','pagina'];
+
+var IMERSAO = {
+  grupo   : 'https://chat.whatsapp.com/Hvt7UJRieblFudebVFTSBF',
+  agenda  : 'https://www.maresconsultoria.com.br/imersao/imersao-mares.ics',
+  raiox   : 'https://www.maresconsultoria.com.br/raiox/?time=imersao-ago-2026',
+  obrigado: 'https://www.maresconsultoria.com.br/imersao/obrigado/',
+  assunto : 'Sua vaga está garantida. Agora entre no grupo do WhatsApp'
+};
+
+function gravarImersao(d) {
+  var linha = {};
+  COLUNAS_IMERSAO.forEach(function (c) { linha[c] = d[c] === undefined ? '' : d[c]; });
+  linha.processed_at = new Date().toISOString();
+  linha.email_enviado = '';
+  gravarEm(aba(ABA_IMERSAO, COLUNAS_IMERSAO), COLUNAS_IMERSAO, linha);
+}
+
+/* Já recebeu o e-mail alguma vez? Evita mandar duas vezes para quem se inscreve
+   de novo, o que é comum quando a pessoa não acha o link do grupo. */
+function jaRecebeu(email) {
+  var a = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(ABA_IMERSAO);
+  if (!a || a.getLastRow() < 2) return false;
+  var v = a.getRange(1, 1, a.getLastRow(), a.getLastColumn()).getValues();
+  var cab = v[0], iEmail = cab.indexOf('email'), iEnv = cab.indexOf('email_enviado');
+  if (iEmail < 0 || iEnv < 0) return false;
+  var alvo = String(email || '').trim().toLowerCase();
+  for (var i = 1; i < v.length; i++) {
+    if (String(v[i][iEmail]).trim().toLowerCase() === alvo && String(v[i][iEnv]).trim()) return true;
+  }
+  return false;
+}
+
+function marcarEnviado(email) {
+  var a = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(ABA_IMERSAO);
+  if (!a || a.getLastRow() < 2) return;
+  var cab = a.getRange(1, 1, 1, a.getLastColumn()).getValues()[0];
+  var iEmail = cab.indexOf('email'), iEnv = cab.indexOf('email_enviado');
+  if (iEmail < 0 || iEnv < 0) return;
+  var col = a.getRange(2, iEmail + 1, a.getLastRow() - 1, 1).getValues();
+  var alvo = String(email || '').trim().toLowerCase();
+  var agora = new Date().toISOString();
+  for (var i = 0; i < col.length; i++) {
+    if (String(col[i][0]).trim().toLowerCase() === alvo) {
+      a.getRange(i + 2, iEnv + 1).setValue(agora);
+    }
+  }
+}
+
+function enviarBoasVindas(d) {
+  var email = String(d.email || '').trim();
+  if (!email) return;
+  if (jaRecebeu(email)) return;
+  try {
+    MailApp.sendEmail({
+      to: email,
+      subject: IMERSAO.assunto,
+      htmlBody: emailImersao(d.nome),
+      name: 'Marcelis Pereira · MARES',
+      replyTo: COPIA_EQUIPE,
+      bcc: COPIA_EQUIPE
+    });
+    marcarEnviado(email);
+  } catch (err) {}
+}
+
+/* Roda à mão no editor. Manda o e-mail para todo mundo que está na aba Imersao
+   e ainda não recebeu. Serve para alcançar quem se inscreveu antes disso existir:
+   basta colar os inscritos na aba, com pelo menos nome e email preenchidos. */
+function reenviarBoasVindas() {
+  var a = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(ABA_IMERSAO);
+  if (!a || a.getLastRow() < 2) return 'aba vazia';
+  var v = a.getRange(1, 1, a.getLastRow(), a.getLastColumn()).getValues();
+  var cab = v[0], iNome = cab.indexOf('nome'), iEmail = cab.indexOf('email'), iEnv = cab.indexOf('email_enviado');
+  if (iEmail < 0 || iEnv < 0) return 'faltam colunas';
+
+  var enviados = 0, jaFeitos = {};
+  for (var i = 1; i < v.length; i++) {
+    var email = String(v[i][iEmail] || '').trim();
+    if (!email || String(v[i][iEnv]).trim()) continue;
+    if (jaFeitos[email.toLowerCase()]) continue;
+    try {
+      MailApp.sendEmail({
+        to: email,
+        subject: IMERSAO.assunto,
+        htmlBody: emailImersao(v[i][iNome]),
+        name: 'Marcelis Pereira · MARES',
+        replyTo: COPIA_EQUIPE,
+        bcc: COPIA_EQUIPE
+      });
+      a.getRange(i + 1, iEnv + 1).setValue(new Date().toISOString());
+      jaFeitos[email.toLowerCase()] = true;
+      enviados++;
+    } catch (err) {}
+  }
+  return 'enviados: ' + enviados;
+}
+
+function emailImersao(nome) {
+  var primeiro = String(nome || '').trim().split(' ')[0] || 'olá';
+  var esc = function (s) {
+    return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  };
+  var p = function (t) {
+    return '<p style="margin:0 0 16px;font-size:15.5px;line-height:1.7;color:#20313d">' + t + '</p>';
+  };
+  var botao = function (url, texto, cor, corTexto) {
+    return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 6px">' +
+      '<tr><td style="background:' + cor + ';border-radius:10px">' +
+      '<a href="' + url + '" style="display:inline-block;padding:14px 26px;font-family:Helvetica,Arial,sans-serif;' +
+      'font-size:15px;font-weight:bold;color:' + corTexto + ';text-decoration:none">' + texto + '</a>' +
+      '</td></tr></table>';
+  };
+  var passo = function (n, titulo, corpo, extra) {
+    return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 0 22px">' +
+      '<tr><td style="width:34px;vertical-align:top;padding-top:2px">' +
+        '<div style="width:28px;height:28px;line-height:28px;text-align:center;border-radius:14px;' +
+        'background:#06182a;color:#ffffff;font-family:Helvetica,Arial,sans-serif;font-size:14px;font-weight:bold">' + n + '</div></td>' +
+      '<td style="vertical-align:top">' +
+        '<p style="margin:0 0 6px;font-size:17px;font-weight:bold;color:#06182a">' + titulo + '</p>' +
+        p(corpo) + extra +
+      '</td></tr></table>';
+  };
+
+  return '<div style="font-family:Helvetica,Arial,sans-serif;max-width:620px;margin:0 auto;padding:28px 24px;background:#ffffff">' +
+    '<p style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#15A5A8;margin:0 0 18px">' +
+      'IMERSÃO CRESCIMENTO PREVISÍVEL · 25, 26 E 27 DE AGOSTO · 20H DE BRASÍLIA</p>' +
+
+    p('Olá, ' + esc(primeiro) + ',') +
+    p('Sua vaga na Imersão Crescimento Previsível está confirmada. São três noites, ' +
+      'de 25 a 27 de agosto, sempre às 20h no horário de Brasília, online e sem custo.') +
+    p('Agora faltam três passos, e o primeiro é o que realmente importa.') +
+
+    '<div style="height:1px;background:#e3ebf2;margin:26px 0"></div>' +
+
+    passo(1, 'Entre no grupo do WhatsApp',
+      '<b>É por ali que acontece toda a nossa comunicação.</b> O link da sala de cada noite chega no grupo, ' +
+      'os materiais e as planilhas são enviados no grupo, os avisos de horário e qualquer mudança de agenda ' +
+      'saem no grupo. Quem não entra corre risco real de perder a noite 1, porque não vai receber o link para entrar.',
+      botao(IMERSAO.grupo, 'ENTRAR NO GRUPO AGORA', '#25d366', '#062b16') +
+      '<p style="margin:10px 0 0;font-size:13.5px;color:#778794;line-height:1.55">' +
+      'O grupo é só para avisos da imersão. Ninguém consegue mandar mensagem para todo mundo lá dentro, ' +
+      'então o seu telefone não vira lista de spam.</p>') +
+
+    passo(2, 'Coloque as três noites na sua agenda',
+      'Um clique adiciona as três de uma vez, já com lembrete meia hora antes de cada uma. ' +
+      'Assim nenhuma reunião cai por cima do seu horário.',
+      botao(IMERSAO.agenda, 'ADICIONAR AS 3 NOITES NA AGENDA', '#dc6220', '#ffffff')) +
+
+    passo(3, 'Faça o seu Raio-X antes da noite 1',
+      'São 21 perguntas, cinco minutos, e o resultado é o retrato da sua empresa hoje. ' +
+      'É com ele na mão que a noite 1 faz sentido de verdade: quem chega com o Raio-X preenchido ' +
+      'sai da primeira noite já sabendo onde está o buraco que trava o crescimento.',
+      botao(IMERSAO.raiox, 'FAZER O MEU RAIO-X', '#1c6795', '#ffffff')) +
+
+    '<div style="background:#06182a;border-radius:12px;padding:22px;margin:6px 0 22px">' +
+      '<p style="margin:0 0 10px;font-size:12px;letter-spacing:.12em;color:#8fa6ba">AS TRÊS NOITES</p>' +
+      '<p style="margin:0 0 8px;font-size:15px;color:#FEEAD4;line-height:1.6">' +
+        '<b style="color:#f0a04a">25 de agosto</b> · Raio-X: o retrato do seu negócio</p>' +
+      '<p style="margin:0 0 8px;font-size:15px;color:#FEEAD4;line-height:1.6">' +
+        '<b style="color:#f0a04a">26 de agosto</b> · Onde o dinheiro entra: marketing e vendas</p>' +
+      '<p style="margin:0;font-size:15px;color:#FEEAD4;line-height:1.6">' +
+        '<b style="color:#f0a04a">27 de agosto</b> · IA e hot seat, a mentoria ao vivo</p>' +
+    '</div>' +
+
+    p('Se qualquer um dos botões não funcionar no seu e-mail, os três passos também estão em ' +
+      '<a href="' + IMERSAO.obrigado + '" style="color:#1c6795">' + IMERSAO.obrigado + '</a>.') +
+
+    '<p style="font-size:14.5px;color:#20313d;line-height:1.7;margin:26px 0 0">Nos vemos no dia 25.<br>' +
+      '<b>Marcelis Pereira</b><br>' +
+      '<span style="color:#778794;font-size:13.5px">MARES Consultoria Empresarial · Pessoas, Dados e Gestão</span></p>' +
+    '</div>';
+}
+
 function doPost(e) {
   var dados;
   try {
@@ -416,6 +605,13 @@ function processar(dados) {
   // Registro enxuto de qualquer teste, só para os painéis.
   if (dados.registro === 'evento') {
     gravarEvento(dados);
+    return ContentService.createTextOutput('ok');
+  }
+
+  // Inscrição na Imersão. Grava na aba própria e manda o e-mail de boas-vindas.
+  if (dados.registro === 'imersao') {
+    gravarImersao(dados);
+    enviarBoasVindas(dados);
     return ContentService.createTextOutput('ok');
   }
 
