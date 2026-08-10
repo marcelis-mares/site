@@ -301,6 +301,7 @@ var MINIMO_PALAVRAS = 4;
    primeiro a contagem, depois a ordem fixa dos grupos S, C, M, F, depois o
    número da característica. Nunca por ordem alfabética. */
 function palavrasDaTurma(v, cab, alvo, iTime, iStatus) {
+  var codigos = (alvo instanceof Array) ? alvo : limparLista(alvo);
   var idx = {};
   ORDEM_GRUPOS.forEach(function (g) { idx[g] = cab.indexOf('marcadas_' + g); });
 
@@ -311,7 +312,7 @@ function palavrasDaTurma(v, cab, alvo, iTime, iStatus) {
   });
 
   for (var r = 1; r < v.length; r++) {
-    if (String(v[r][iTime]).toLowerCase() !== alvo) continue;
+    if (!pertence(v[r][iTime], codigos)) continue;
     if (iStatus >= 0 && v[r][iStatus] === 'blocked') continue;
     var contou = false;
     ORDEM_GRUPOS.forEach(function (g) {
@@ -646,14 +647,14 @@ function doGet(e) {
   } else if (p.geral === '1') {
     /* Respondentes gerais: quem chegou pelo site, fora de qualquer turma. */
     saida = (p.teste && p.teste !== 'Temperamentos')
-      ? eventosDaTurma('', p.teste)
-      : dadosDaTurma('');
+      ? eventosDaTurma([], p.teste)
+      : dadosDaTurma([]);
   } else if (p.modo === 'evento') {
-    saida = eventosDaTurma(limpar(p.time), p.teste || '');
+    saida = eventosDaTurma(limparLista(p.time), p.teste || '');
   } else if (!p.time) {
     saida = { erro: 'informe o codigo da turma' };
   } else {
-    saida = dadosDaTurma(limpar(p.time));
+    saida = dadosDaTurma(limparLista(p.time));
   }
 
   var txt = JSON.stringify(saida);
@@ -668,6 +669,28 @@ function doGet(e) {
 /* Mesma limpeza que o site aplica no código do time. */
 function limpar(v) {
   return String(v || '').trim().toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40);
+}
+
+/* Aceita um código só ou vários separados por vírgula, para reunir turmas
+   diferentes num painel único. Devolve sempre uma lista, mesmo com um item só.
+   O sinal de mais também vale como separador, porque o navegador às vezes
+   transforma vírgula nele quando o link é colado de um lugar para outro. */
+function limparLista(v) {
+  var brutos = String(v || '').split(/[,+]/);
+  var saida = [], vistos = {};
+  for (var i = 0; i < brutos.length; i++) {
+    var c = limpar(brutos[i]);
+    if (c && !vistos[c]) { vistos[c] = true; saida.push(c); }
+  }
+  return saida;
+}
+
+/* Confere se a linha pertence a alguma das turmas pedidas. Lista vazia
+   significa "sem turma nenhuma", que é o recorte dos respondentes gerais. */
+function pertence(valor, codigos) {
+  var c = String(valor || '').toLowerCase().trim();
+  if (!codigos.length) return c === '';
+  return codigos.indexOf(c) >= 0;
 }
 
 function aba(nome, colunas) {
@@ -759,8 +782,10 @@ function listaDeTurmas() {
 }
 
 function eventosDaTurma(codigo, teste) {
+  var codigos = (codigo instanceof Array) ? codigo : limparLista(codigo);
+  var rotulo = codigos.join(',');
   var a = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(ABA_EVENTOS);
-  if (!a || a.getLastRow() < 2) return { time: codigo, teste: teste, total: 0, linhas: [] };
+  if (!a || a.getLastRow() < 2) return { time: rotulo, times: codigos, teste: teste, total: 0, linhas: [] };
 
   var v = a.getRange(1, 1, a.getLastRow(), a.getLastColumn()).getValues();
   var cab = v[0];
@@ -773,24 +798,26 @@ function eventosDaTurma(codigo, teste) {
   var linhas = [];
   for (var i = 1; i < v.length; i++) {
     if (String(v[i][iT]) === 'teste' && String(v[i][iC]) === 'time') continue; // cabeçalho repetido
-    if (String(v[i][iC]).toLowerCase() !== codigo) continue;
+    if (!pertence(v[i][iC], codigos)) continue;
     if (teste && String(v[i][iT]) !== teste) continue;
     var o = {};
     expor.forEach(function (c) { o[cab[c]] = v[i][c]; });
     linhas.push(o);
   }
-  return { time: codigo, teste: teste, total: linhas.length, gerado_em: new Date().toISOString(), linhas: linhas };
+  return { time: rotulo, times: codigos, teste: teste, total: linhas.length, gerado_em: new Date().toISOString(), linhas: linhas };
 }
 
 function dadosDaTurma(codigo) {
+  var codigos = (codigo instanceof Array) ? codigo : limparLista(codigo);
+  var rotulo = codigos.join(',');
   var a = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(ABA);
-  if (!a || a.getLastRow() < 2) return { time: codigo, total: 0, linhas: [] };
+  if (!a || a.getLastRow() < 2) return { time: rotulo, times: codigos, total: 0, linhas: [] };
 
   var v = a.getRange(1, 1, a.getLastRow(), a.getLastColumn()).getValues();
   var cab = v[0];
   var iTime = cab.indexOf('time');
   var iStatus = cab.indexOf('status');
-  if (iTime < 0) return { time: codigo, total: 0, linhas: [] };
+  if (iTime < 0) return { time: rotulo, times: codigos, total: 0, linhas: [] };
 
   var expor = [];
   for (var c = 0; c < cab.length; c++) {
@@ -799,7 +826,7 @@ function dadosDaTurma(codigo) {
 
   var linhas = [];
   for (var i = 1; i < v.length; i++) {
-    if (String(v[i][iTime]).toLowerCase() !== codigo) continue;
+    if (!pertence(v[i][iTime], codigos)) continue;
     if (iStatus >= 0 && v[i][iStatus] === 'blocked') continue;
     var o = {};
     expor.forEach(function (c) { o[cab[c]] = v[i][c]; });
@@ -807,11 +834,12 @@ function dadosDaTurma(codigo) {
   }
 
   return {
-    time: codigo,
+    time: rotulo,
+    times: codigos,
     total: linhas.length,
     gerado_em: new Date().toISOString(),
     linhas: linhas,
-    palavras: palavrasDaTurma(v, cab, codigo, iTime, iStatus)
+    palavras: palavrasDaTurma(v, cab, codigos, iTime, iStatus)
   };
 }
 
