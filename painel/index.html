@@ -146,6 +146,27 @@ body.projecao .aovivo{display:inline-flex;font-size:17px}
 .turma a{display:inline-block;font-size:13.5px;color:#fff;background:var(--azul);border-radius:100px;padding:8px 16px;text-decoration:none}
 .turma a:hover{background:var(--navy)}
 .turma a.vivo{background:var(--laranja);margin-left:8px}
+
+/* Reunir turmas num painel só */
+.turma-cod .marca{display:inline-flex;align-items:center;vertical-align:middle;margin-right:9px;cursor:pointer}
+.turma-cod .marca input{position:absolute;opacity:0;width:0;height:0}
+.turma-cod .marca span{width:18px;height:18px;border:1.5px solid #b9c9d6;border-radius:5px;display:block;background:#fff;transition:.15s}
+.turma-cod .marca input:checked + span{background:var(--azul);border-color:var(--azul);
+  box-shadow:inset 0 0 0 3px #fff}
+.turma-cod .marca input:focus-visible + span{outline:2px solid var(--laranja);outline-offset:2px}
+/* O display:flex abaixo venceria o atributo hidden, então a regra vem antes. */
+.junta[hidden]{display:none}
+.junta{position:sticky;bottom:14px;z-index:5;display:flex;align-items:center;justify-content:space-between;
+  gap:16px;flex-wrap:wrap;margin-top:16px;padding:14px 18px;border-radius:12px;
+  background:var(--navy);color:#fff;box-shadow:0 12px 30px rgba(6,24,42,.25)}
+.junta b{font-family:var(--display);font-size:15px;display:block}
+.junta small{display:block;font-size:12.5px;color:#b9c9d6;margin-top:2px;word-break:break-all}
+.junta-acoes{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.junta a{display:inline-block;font-size:13.5px;color:#fff;background:var(--azul);border-radius:100px;
+  padding:8px 16px;text-decoration:none}
+.junta a.vivo{background:var(--laranja)}
+.junta button{font:inherit;font-size:13.5px;color:#b9c9d6;background:none;border:0;cursor:pointer;
+  text-decoration:underline;padding:8px 4px}
 </style>
 </head>
 <body>
@@ -216,7 +237,13 @@ const params = new URLSearchParams(location.search);
 /* Mesma limpeza que o teste aplica no código do time, para o link do painel
    achar a turma mesmo quando alguém escreve com maiúscula, acento, espaço
    ou sublinhado. Sem isso, o painel procuraria um código que não existe. */
-const TIME = (params.get('time') || '').trim().toLowerCase().replace(/[^a-z0-9-]/g,'').slice(0,40);
+/* Aceita um código só ou vários separados por vírgula, para reunir turmas
+   diferentes num painel único. A limpeza é a mesma do teste e do Apps Script,
+   aplicada em cada código separadamente. */
+const TIMES = (params.get('time') || '').split(/[,+]/)
+  .map(c => c.trim().toLowerCase().replace(/[^a-z0-9-]/g,'').slice(0,40))
+  .filter((c,i,a) => c && a.indexOf(c) === i);
+const TIME = TIMES.join(',');
 const CHAVE = params.get('chave') || '';
 
 /* O caminho principal é o fetch normal, que não manda cookie para o Google e
@@ -463,25 +490,68 @@ async function centralDeTurmas(){
   }
 
   h.push('<h2>Turmas, eventos e palestras</h2><p class="nota">Ordenado pela resposta mais recente. ' +
-    'Sem código são as pessoas que chegaram pelo site, fora de qualquer turma.</p><div class="turmas">' +
+    'Sem código são as pessoas que chegaram pelo site, fora de qualquer turma. ' +
+    'Marque duas ou mais turmas de Temperamentos para abrir um painel único com todas somadas.</p><div class="turmas">' +
     t.map(x => {
       const cod = x.time || '';
       const doTeste = (x.teste && x.teste !== 'Temperamentos') ? '&teste=' + encodeURIComponent(x.teste) : '';
       const link = cod
         ? '/painel/?time=' + encodeURIComponent(cod) + doTeste + '&chave=' + encodeURIComponent(CHAVE)
         : '/painel/?geral=1' + doTeste + '&chave=' + encodeURIComponent(CHAVE);
+      const marcavel = cod && x.teste === 'Temperamentos';
       return '<div class="turma">' +
-        '<div class="turma-cod">' + (cod ? esc(cod) : 'Respondentes gerais') + '<small>' + esc(x.teste || 'teste não identificado') + (cod ? '' : ' · quem chegou pelo site') + '</small></div>' +
+        '<div class="turma-cod">' +
+        (marcavel ? '<label class="marca"><input type="checkbox" class="jun" value="' + esc(cod) + '"><span></span></label>' : '') +
+        (cod ? esc(cod) : 'Respondentes gerais') + '<small>' + esc(x.teste || 'teste não identificado') + (cod ? '' : ' · quem chegou pelo site') + '</small></div>' +
         '<div class="turma-num">' + x.respostas + ' resposta' + (x.respostas === 1 ? '' : 's') + '</div>' +
         '<div class="turma-data">' + data(x.primeira) + (data(x.primeira) === data(x.ultima) ? '' : ' a ' + data(x.ultima)) + '</div>' +
         '<div><a href="' + link + '">Abrir painel</a>' + (cod ? '<a class="vivo" href="' + link + '&projecao=1">Ao vivo</a>' : '') + '</div>' +
         '</div>';
     }).join('') + '</div>');
 
+  h.push('<div id="junta" class="junta" hidden>' +
+    '<div><b id="junta-n">0 turmas marcadas</b>' +
+    '<small id="junta-lista">Marque as turmas que você quer reunir num painel só.</small></div>' +
+    '<div class="junta-acoes"><a id="junta-abrir" href="#">Abrir painel unificado</a>' +
+    '<a id="junta-vivo" class="vivo" href="#">Ao vivo</a>' +
+    '<button type="button" id="junta-limpa">Limpar</button></div></div>');
+
   h.push('<div class="escopo">Esta tela mostra apenas contagens e códigos. Nenhum dado pessoal de quem respondeu passa por aqui. ' +
     'Atualizado em ' + new Date(d.gerado_em).toLocaleString('pt-BR') + '.</div>');
   $('#conteudo').innerHTML = h.join('');
+  ligarJuncao();
   agendar();
+}
+
+/* Barra de reunir turmas. Aparece na primeira marcação e monta o link sozinha. */
+function ligarJuncao(){
+  const caixas = [...document.querySelectorAll('.jun')];
+  if (!caixas.length) return;
+  const barra = document.getElementById('junta');
+  const conta = document.getElementById('junta-n');
+  const lista = document.getElementById('junta-lista');
+  const abrir = document.getElementById('junta-abrir');
+  const vivo  = document.getElementById('junta-vivo');
+
+  function atualizar(){
+    const sel = caixas.filter(c => c.checked).map(c => c.value);
+    barra.hidden = sel.length === 0;
+    if (!sel.length) return;
+    conta.textContent = sel.length === 1
+      ? '1 turma marcada' : sel.length + ' turmas marcadas';
+    lista.textContent = sel.length === 1
+      ? 'Marque mais uma para reunir. Com uma só, o painel é o normal daquela turma.'
+      : sel.join(' + ');
+    const url = '/painel/?time=' + sel.map(encodeURIComponent).join(',') +
+      '&chave=' + encodeURIComponent(CHAVE);
+    abrir.href = url;
+    vivo.href = url + '&projecao=1';
+  }
+  caixas.forEach(c => c.addEventListener('change', atualizar));
+  document.getElementById('junta-limpa').addEventListener('click', () => {
+    caixas.forEach(c => { c.checked = false; }); atualizar();
+  });
+  atualizar();
 }
 
 /* ======================= PAINEL DO RAIOX E DA SONDA =======================
@@ -634,11 +704,18 @@ function montar(d){
   const setores = new Set(linhas.map(l => String(l.setor || '').trim()).filter(Boolean)).size;
   const empresa = (linhas.find(l => l.empresa) || {}).empresa || d.time;
 
+  /* Quando o painel reúne mais de um código, o título deixa isso explícito e a
+     lista das turmas somadas fica visível, para ninguém confundir o recorte. */
+  const varias = (d.times || TIMES).length > 1;
+  const reunidas = (d.times || TIMES);
+
   const h = [];
   h.push('<div class="capa"><p class="eyebrow">Metodologia MARES · Liderança Oxigênio</p>' +
-    '<h1>Temperamentos do time<br>' + esc(empresa) + '</h1>' +
+    '<h1>Temperamentos ' + (varias ? 'reunidos<br>' + reunidas.length + ' turmas' : 'do time<br>' + esc(empresa)) + '</h1>' +
     '<p class="sub">Leitura coletiva a partir das respostas individuais ao Teste dos Temperamentos. ' +
-    'O painel mostra o conjunto. Nenhum resultado individual é identificado aqui.</p></div>');
+    'O painel mostra o conjunto. Nenhum resultado individual é identificado aqui.' +
+    (varias ? ' Este painel soma as turmas ' + reunidas.map(c => '<b>' + esc(c) + '</b>').join(', ') + '.' : '') +
+    '</p></div>');
 
   h.push('<div class="tiles">' +
     '<div class="tile"><b>' + total + '</b><small>pessoas responderam</small></div>' +
@@ -661,6 +738,19 @@ function montar(d){
   h.push('<h2>Combinações entre predominante e secundário</h2>' +
     '<p class="nota">A linha é o perfil predominante e a coluna é o secundário. Quanto mais escura a célula, ' +
     'mais pessoas naquela combinação.</p>' + matriz(linhas));
+
+  /* Só faz sentido quando o painel reúne turmas: mostra como cada uma se compõe,
+     lado a lado. É o motivo principal de reunir, comparar sem perder o todo. */
+  if (varias) {
+    const porTurma = cruzar(linhas, 'time', 'pred');
+    if (porTurma.length > 1) {
+      h.push('<h2>Cada turma dentro do conjunto</h2>' +
+        '<p class="nota">A mesma leitura separando as turmas reunidas. Serve para ver se elas se parecem ou se ' +
+        'uma delas puxa o conjunto para um lado. Diferença grande entre turmas da mesma empresa costuma dizer ' +
+        'mais sobre quem foi contratado em cada momento do que sobre as pessoas.</p>' +
+        legenda() + pilhas(porTurma) + tabelaCruzada(porTurma, 'Turma'));
+    }
+  }
 
   const porSetor = cruzar(linhas, 'setor', 'pred');
   if (porSetor.length > 1) {
