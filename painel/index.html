@@ -156,6 +156,23 @@ body.projecao .aovivo{display:inline-flex;font-size:17px}
 .turma-cod .marca input:focus-visible + span{outline:2px solid var(--laranja);outline-offset:2px}
 .turma-cod .marca input:disabled + span{background:#eef2f5;border-color:#dde5ea;cursor:not-allowed}
 .turma.fora{opacity:.42}
+
+/* Atalhos para as planilhas */
+.planilhas{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px}
+@media(max-width:860px){.planilhas{grid-template-columns:1fr}}
+.pl{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
+  border:1px solid var(--linha);border-radius:12px;padding:16px 18px;background:var(--fundo-2)}
+.pl b{font-family:var(--display);font-size:15px;display:block;margin-bottom:5px}
+.pl small{display:block;font-size:13.5px;color:var(--tinta-2);line-height:1.55}
+.pl .abas{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:9px}
+.pl .abas i{font-style:normal;font-size:11.5px;color:var(--tinta-2);background:#eef2f5;
+  border-radius:4px;padding:2px 7px}
+.pl .abas em{font-style:normal;font-size:11.5px;color:var(--tinta-3)}
+.pl a{flex:0 0 auto;font-size:13.5px;color:#fff;background:var(--azul);border-radius:100px;
+  padding:8px 16px;text-decoration:none;white-space:nowrap}
+.pl a:hover{background:var(--navy)}
+.atalho-pl{margin-top:26px;font-size:14px;color:var(--tinta-2)}
+.atalho-pl a{color:var(--azul)}
 /* O display:flex abaixo venceria o atributo hidden, então a regra vem antes. */
 .junta[hidden]{display:none}
 .junta{position:sticky;bottom:14px;z-index:5;display:flex;align-items:center;justify-content:space-between;
@@ -202,6 +219,50 @@ body.projecao .aovivo{display:inline-flex;font-size:17px}
    ======================================================================= */
 
 const WEBHOOK = 'https://script.google.com/macros/s/AKfycbx4UBHQ5yh13Tx3IEX8SN4xEHMCZtYoSz_Vm53f2P7v44nQidwErRvq_uximUQdmU58/exec';
+
+/* ================== AS PLANILHAS ==================
+   Atalho para as bases, para não precisar caçar no Drive. Só aparece para quem
+   já tem a chave do painel, e abrir o link não basta: o Google ainda vai pedir
+   login e conferir a permissão de cada planilha.
+   Planilha nova entra aqui, e a `chave` é o que liga cada painel à sua base. */
+const PLANILHAS = [
+  {
+    chave: 'central',
+    nome: 'Teste dos Temperamentos · site',
+    id: '1tQzT-SC3QsxvJlAHXvQyz5OONGmlX8Q5IjrRloSHc9s',
+    conta: 'atendimento@mareslideranca.com.br',
+    o_que: 'A base central. Respostas do Teste dos Temperamentos, a aba Eventos que alimenta todos os painéis, a Legenda das 200 características e as inscrições da Imersão.',
+    abas: ['Respostas', 'Eventos', 'Legenda', 'Imersao']
+  },
+  {
+    chave: 'resultados',
+    nome: 'MARES Resultados',
+    id: '1Zj0XEtRNaOOZYhOoCu8jTjMEdaOpBR1TpMZ8gEpG6Hk',
+    conta: 'atendimento@mareslideranca.com.br',
+    o_que: 'Respostas completas do RaioX e da Sonda, com nome, e-mail e telefone de quem respondeu. É daqui que saem os e-mails dos dois diagnósticos.',
+    abas: ['RaioX', 'Sonda']
+  },
+  {
+    chave: 'cadastros',
+    nome: 'MARES · Cadastros do Site',
+    id: '1LhMrNfIPPL24h5nAo18uI64SmpZDCb5bTBl_KTgXVSI',
+    conta: 'marcelis@mareslideranca.com.br',
+    o_que: 'Quem preencheu os formulários de Contato e do Diagnóstico. A inscrição da Imersão saía errada aqui até 9 de agosto e hoje vai para a base central.',
+    abas: ['Cadastros']
+  },
+  {
+    chave: 'forms-antigo',
+    nome: 'Teste dos Temperamentos · Google Forms',
+    id: '11T9u9o3-h-8IB8nUBBG2rE67ofyif0k-FXsJmKeqCB4',
+    conta: 'marcelis@mareslideranca.com.br',
+    o_que: 'Histórico do formulário antigo, de antes do teste viver dentro do site. Não recebe resposta nova, serve para consulta.',
+    abas: ['Respostas do formulário']
+  }
+];
+const planilhaUrl = c => {
+  const p = PLANILHAS.find(x => x.chave === c);
+  return p ? 'https://docs.google.com/spreadsheets/d/' + p.id + '/edit' : '';
+};
 
 const ORDEM = ['S','C','M','F'];
 const PERFIS = {
@@ -514,6 +575,19 @@ async function centralDeTurmas(){
         '</div>';
     }).join('') + '</div>');
 
+  h.push('<h2>As planilhas</h2>' +
+    '<p class="nota">Atalho direto para as bases, para não precisar procurar no Drive. ' +
+    'O Google ainda vai pedir login e conferir a sua permissão em cada uma.</p>' +
+    '<div class="planilhas">' + PLANILHAS.map(p =>
+      '<div class="pl"><div>' +
+        '<b>' + esc(p.nome) + '</b>' +
+        '<small>' + esc(p.o_que) + '</small>' +
+        '<span class="abas">' + p.abas.map(a => '<i>' + esc(a) + '</i>').join('') +
+          '<em>' + esc(p.conta) + '</em></span>' +
+      '</div>' +
+      '<a href="https://docs.google.com/spreadsheets/d/' + p.id + '/edit" target="_blank" rel="noopener">Abrir planilha</a>' +
+      '</div>').join('') + '</div>');
+
   h.push('<div id="junta" class="junta" hidden>' +
     '<div><b id="junta-n">0 turmas marcadas</b>' +
     '<small id="junta-lista">Marque as turmas que você quer reunir num painel só.</small></div>' +
@@ -684,6 +758,8 @@ async function painelDeDimensoes(){
   h.push('<details><summary>Ver os números em tabela</summary><table><thead><tr><th>Dimensão</th><th class="num">Média</th></tr></thead><tbody>' +
     dims.map(x => '<tr><td>' + esc(x.nome) + '</td><td class="num">' + um(x.media) + '</td></tr>').join('') + '</tbody></table></details>');
 
+  h.push(atalhoPlanilha('central', 'aba Eventos', 'onde ficam os registros que montam este painel'));
+
   h.push('<div class="escopo">Este painel apresenta o resultado do grupo e não identifica nenhuma pessoa. ' +
     'Atualizado em ' + new Date(d.gerado_em).toLocaleString('pt-BR') + '.</div>');
   $('#conteudo').innerHTML = h.join('');
@@ -691,6 +767,17 @@ async function painelDeDimensoes(){
 }
 
 /* ======================= MONTAGEM ======================= */
+/* Atalho para a base que alimenta o painel aberto. Fica fora do modo projetado,
+   porque numa palestra ninguém precisa ver link de planilha na tela. */
+function atalhoPlanilha(chave, aba, porque){
+  if (PROJECAO) return '';
+  const p = PLANILHAS.find(x => x.chave === chave);
+  if (!p) return '';
+  return '<p class="atalho-pl">Precisa dos dados por trás deste painel? ' +
+    '<a href="' + planilhaUrl(chave) + '" target="_blank" rel="noopener">Abrir a planilha ' +
+    esc(p.nome) + '</a>, na ' + esc(aba) + ', ' + esc(porque) + '.</p>';
+}
+
 /* ================== O VOCABULÁRIO DO TIME ==================
    Mostra as características que mais e que menos gente reconheceu em si. Vem
    pronto do Apps Script, já em contagem, então nenhuma marcação individual
@@ -841,6 +928,8 @@ function montar(d){
           '<div class="val">' + n + '</div></div>').join('') + '</div>');
     }
   }
+
+  h.push(atalhoPlanilha('central', 'aba Respostas', 'com o resultado individual de cada pessoa, que não aparece aqui'));
 
   h.push('<div class="escopo"><b>Sobre o escopo desta análise.</b> Este painel apresenta tendências comportamentais do grupo ' +
     'e não constitui diagnóstico psicológico. Temperamento indica tendência de comportamento e de preferência, e não determina ' +
