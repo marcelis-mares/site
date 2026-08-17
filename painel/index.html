@@ -154,6 +154,8 @@ body.projecao .aovivo{display:inline-flex;font-size:17px}
 .turma-cod .marca input:checked + span{background:var(--azul);border-color:var(--azul);
   box-shadow:inset 0 0 0 3px #fff}
 .turma-cod .marca input:focus-visible + span{outline:2px solid var(--laranja);outline-offset:2px}
+.turma-cod .marca input:disabled + span{background:#eef2f5;border-color:#dde5ea;cursor:not-allowed}
+.turma.fora{opacity:.42}
 /* O display:flex abaixo venceria o atributo hidden, então a regra vem antes. */
 .junta[hidden]{display:none}
 .junta{position:sticky;bottom:14px;z-index:5;display:flex;align-items:center;justify-content:space-between;
@@ -491,17 +493,20 @@ async function centralDeTurmas(){
 
   h.push('<h2>Turmas, eventos e palestras</h2><p class="nota">Ordenado pela resposta mais recente. ' +
     'Sem código são as pessoas que chegaram pelo site, fora de qualquer turma. ' +
-    'Marque duas ou mais turmas de Temperamentos para abrir um painel único com todas somadas.</p><div class="turmas">' +
+    'Marque duas ou mais turmas do mesmo teste para abrir um painel único com todas somadas.</p><div class="turmas">' +
     t.map(x => {
       const cod = x.time || '';
       const doTeste = (x.teste && x.teste !== 'Temperamentos') ? '&teste=' + encodeURIComponent(x.teste) : '';
       const link = cod
         ? '/painel/?time=' + encodeURIComponent(cod) + doTeste + '&chave=' + encodeURIComponent(CHAVE)
         : '/painel/?geral=1' + doTeste + '&chave=' + encodeURIComponent(CHAVE);
-      const marcavel = cod && x.teste === 'Temperamentos';
+      /* Qualquer turma com código pode ser reunida, em qualquer teste. O que não
+         dá é misturar testes diferentes, porque Temperamentos e RaioX medem
+         coisas diferentes e cada um tem o seu painel. */
+      const marcavel = !!cod;
       return '<div class="turma">' +
         '<div class="turma-cod">' +
-        (marcavel ? '<label class="marca"><input type="checkbox" class="jun" value="' + esc(cod) + '"><span></span></label>' : '') +
+        (marcavel ? '<label class="marca"><input type="checkbox" class="jun" value="' + esc(cod) + '" data-teste="' + esc(x.teste || '') + '"><span></span></label>' : '') +
         (cod ? esc(cod) : 'Respondentes gerais') + '<small>' + esc(x.teste || 'teste não identificado') + (cod ? '' : ' · quem chegou pelo site') + '</small></div>' +
         '<div class="turma-num">' + x.respostas + ' resposta' + (x.respostas === 1 ? '' : 's') + '</div>' +
         '<div class="turma-data">' + data(x.primeira) + (data(x.primeira) === data(x.ultima) ? '' : ' a ' + data(x.ultima)) + '</div>' +
@@ -534,15 +539,28 @@ function ligarJuncao(){
   const vivo  = document.getElementById('junta-vivo');
 
   function atualizar(){
-    const sel = caixas.filter(c => c.checked).map(c => c.value);
+    const marcadas = caixas.filter(c => c.checked);
+    const sel = marcadas.map(c => c.value);
+    const teste = marcadas.length ? marcadas[0].dataset.teste : '';
+
+    /* Turma de outro teste sai de cena enquanto houver alguma marcada, para não
+       existir a possibilidade de montar um link que mistura RaioX com
+       Temperamentos e devolve um painel sem sentido. */
+    caixas.forEach(c => {
+      const bloquear = marcadas.length > 0 && c.dataset.teste !== teste;
+      c.disabled = bloquear;
+      c.closest('.turma').classList.toggle('fora', bloquear);
+    });
+
     barra.hidden = sel.length === 0;
     if (!sel.length) return;
-    conta.textContent = sel.length === 1
-      ? '1 turma marcada' : sel.length + ' turmas marcadas';
+    conta.textContent = (sel.length === 1 ? '1 turma marcada' : sel.length + ' turmas marcadas') +
+      (teste ? ' · ' + teste : '');
     lista.textContent = sel.length === 1
-      ? 'Marque mais uma para reunir. Com uma só, o painel é o normal daquela turma.'
+      ? 'Marque mais uma do mesmo teste para reunir. Com uma só, o painel é o normal daquela turma.'
       : sel.join(' + ');
-    const url = '/painel/?time=' + sel.map(encodeURIComponent).join(',') +
+    const doTeste = (teste && teste !== 'Temperamentos') ? '&teste=' + encodeURIComponent(teste) : '';
+    const url = '/painel/?time=' + sel.map(encodeURIComponent).join(',') + doTeste +
       '&chave=' + encodeURIComponent(CHAVE);
     abrir.href = url;
     vivo.href = url + '&projecao=1';
@@ -588,11 +606,16 @@ async function painelDeDimensoes(){
   const fraca = dims[dims.length-1], forte = dims[0];
   const um = n => n.toFixed(1).replace('.', ',');
 
+  const reunidas = (d.times || TIMES);
+  const varias = reunidas.length > 1;
+
   const h = [];
   h.push('<div class="capa"><p class="eyebrow">Metodologia MARES · ' + esc(TESTE) + '</p>' +
-    '<h1>' + esc(TESTE) + '<br>' + (GERAL ? 'Respondentes gerais' : esc(TIME)) + '</h1>' +
+    '<h1>' + esc(TESTE) + '<br>' + (GERAL ? 'Respondentes gerais' : (varias ? reunidas.length + ' turmas reunidas' : esc(TIME))) + '</h1>' +
     '<p class="sub">' + (GERAL ? 'Todo mundo que respondeu pelo site por conta própria, fora de qualquer turma. ' : '') + 'Retrato do grupo que respondeu. Cada barra é a média da sala naquela dimensão, ' +
-    'numa escala de 1 a ' + escala + '. Nenhum resultado individual aparece aqui.</p></div>');
+    'numa escala de 1 a ' + escala + '. Nenhum resultado individual aparece aqui.' +
+    (varias ? ' Este painel soma as turmas ' + reunidas.map(c => '<b>' + esc(c) + '</b>').join(', ') + '.' : '') +
+    '</p></div>');
 
   h.push('<div class="tiles">' +
     '<div class="tile"><b>' + d.total + '</b><small>pessoas responderam</small></div>' +
@@ -610,6 +633,29 @@ async function painelDeDimensoes(){
           '<div class="trilho"><div class="fill" style="width:' + (x.media/escala*100) + '%;background:' + (ultima ? 'var(--laranja)' : 'var(--azul)') + '" title="' + esc(x.nome) + ': ' + um(x.media) + '"></div></div>' +
           '<div class="val">' + um(x.media) + '</div></div>';
       }).join('') + '</div>');
+  }
+
+  /* Só quando o painel reúne turmas: a média de cada uma, para comparar. */
+  if (varias) {
+    const porTurma = new Map();
+    linhas.forEach(l => {
+      const t = String(l.time || '').trim() || 'sem código';
+      const n = Number(l.media);
+      if (isNaN(n) || !n) return;
+      if (!porTurma.has(t)) porTurma.set(t, {soma:0, qtd:0});
+      const o = porTurma.get(t); o.soma += n; o.qtd++;
+    });
+    const lista = [...porTurma.entries()].map(([t,o]) => ({t, media:o.soma/o.qtd, qtd:o.qtd}))
+      .sort((a,b) => b.media - a.media);
+    if (lista.length > 1) {
+      h.push('<h2>Cada turma dentro do conjunto</h2>' +
+        '<p class="nota">A média de cada turma reunida, da maior para a menor, com quantas pessoas responderam em cada uma. ' +
+        'Serve para ver se o conjunto é parelho ou se uma turma está puxando a média.</p>' +
+        '<div class="barras">' + lista.map(x =>
+          '<div class="linha"><div class="rot">' + esc(x.t) + ' <small style="font-weight:400;color:var(--tinta-3)">' + x.qtd + ' resposta' + (x.qtd === 1 ? '' : 's') + '</small></div>' +
+          '<div class="trilho"><div class="fill" style="width:' + (x.media/escala*100) + '%;background:var(--azul)"></div></div>' +
+          '<div class="val">' + um(x.media) + '</div></div>').join('') + '</div>');
+    }
   }
 
   if (niveis.length) {
