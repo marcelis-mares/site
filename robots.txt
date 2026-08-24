@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /painel/
+Disallow: /bussola-ia/
 
 Sitemap: https://www.maresconsultoria.com.br/sitemap.xml
-# atualizado em 05/08/2026
+# atualizado em 24/08/2026
