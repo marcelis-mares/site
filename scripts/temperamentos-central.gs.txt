@@ -10,8 +10,8 @@
  *    que permite descobrir sozinho quais turmas existem, inclusive as que a
  *    equipe criar sem avisar ninguém.
  * 3. Serve os dados para os painéis, sempre sem nome e sem e-mail de ninguém.
- * 4. Recebe as inscrições da Imersão e as respostas da Bússola de IA, cada uma
- *    na sua aba, e avisa a equipe por e-mail.
+ * 4. Recebe as inscrições da Imersão, as respostas da Bússola de IA e os mapas
+ *    de indicadores da imersão, cada um na sua aba, e manda os e-mails.
  *
  * O script antigo do RaioX e da Sonda continua intocado, cuidando dos e-mails
  * e da planilha deles. Aqui só chega a cópia enxuta usada pelos painéis.
@@ -711,16 +711,27 @@ function avisarEquipeBussola(d, querFalar) {
    Ajudantes de linha, usados pela Bússola e disponíveis para o que vier depois.
 -------------------------------------------------------------------------- */
 
-function linhaDaSessao(a, sessao) {
-  if (!sessao || a.getLastRow() < 2) return 0;
+function linhaPorColuna(a, nome, valor) {
+  if (!valor || a.getLastRow() < 2) return 0;
   var cab = a.getRange(1, 1, 1, a.getLastColumn()).getValues()[0];
-  var col = cab.indexOf('sessao') + 1;
+  var col = cab.indexOf(nome) + 1;
   if (col < 1) return 0;
+  var alvo = String(valor).trim().toLowerCase();
   var v = a.getRange(2, col, a.getLastRow() - 1, 1).getValues();
   for (var i = v.length - 1; i >= 0; i--) {
-    if (String(v[i][0]) === String(sessao)) return i + 2;
+    if (String(v[i][0]).trim().toLowerCase() === alvo) return i + 2;
   }
   return 0;
+}
+
+function linhaDaSessao(a, sessao) {
+  return linhaPorColuna(a, 'sessao', sessao);
+}
+
+function marcarColuna(a, linha, nome, valor) {
+  var cab = a.getRange(1, 1, 1, a.getLastColumn()).getValues()[0];
+  var col = cab.indexOf(nome) + 1;
+  if (col > 0) a.getRange(linha, col).setValue(valor);
 }
 
 function valorDaColuna(a, linha, nome) {
@@ -731,9 +742,7 @@ function valorDaColuna(a, linha, nome) {
 }
 
 function marcarAvisado(a, linha) {
-  var cab = a.getRange(1, 1, 1, a.getLastColumn()).getValues()[0];
-  var col = cab.indexOf('avisado') + 1;
-  if (col > 0) a.getRange(linha, col).setValue(new Date());
+  marcarColuna(a, linha, 'avisado', new Date());
 }
 
 /* Atualiza a linha inteira sem apagar o que já estava lá: campo que chega
@@ -757,6 +766,98 @@ function atualizarEm(a, colunas, d, linha) {
 function escapar(s) {
   return String(s === undefined || s === null ? '' : s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/* ============================================================================
+   MAPA DE INDICADORES
+   ----------------------------------------------------------------------------
+   Página da imersão, em /imersao/mapa/. A pessoa faz um cadastro rápido para
+   abrir o material, preenche três fichas de indicador direto no navegador, e
+   pode pedir uma cópia por e-mail.
+
+   Chegam dois pacotes, os dois com o campo registro começando em "mapa":
+
+   1. registro: 'mapa-imersao-...'    → o cadastro, na hora em que ela abre.
+   2. registro: 'mapa-preenchido-...' → o mapa escrito, quando ela pede a cópia.
+      Esse é o que dispara o e-mail para ela, com cópia para a equipe.
+
+   A gravação é por e-mail: o segundo pacote atualiza a linha do primeiro, em
+   vez de criar linha nova. O sufixo do registro carrega a turma, então basta
+   criar um registro novo para uma turma nova, sem mexer neste código.
+============================================================================ */
+
+var ABA_MAPA = 'Mapa';
+
+var COLUNAS_MAPA = [
+  'processed_at','registro','nome','email','telefone','origem','pagina',
+  'mapa','enviado_em',
+  'utm_source','utm_medium','utm_campaign','utm_content','utm_term'
+];
+
+function ehMapa(registro) {
+  return String(registro || '').indexOf('mapa') === 0;
+}
+
+function gravarMapa(d) {
+  var a = aba(ABA_MAPA, COLUNAS_MAPA);
+  var texto = String(d.mapa || d.problema || '').trim();
+  var vazio = !texto || texto === '(fichas ainda em branco)';
+
+  var linha = {
+    processed_at: new Date(),
+    registro:     d.registro || '',
+    nome:         d.nome || '',
+    email:        String(d.email || '').trim(),
+    telefone:     d.telefone || '',
+    origem:       d.origem || '',
+    pagina:       d.pagina || '',
+    mapa:         vazio ? '' : texto,
+    utm_source:   d.utm_source || '', utm_medium: d.utm_medium || '',
+    utm_campaign: d.utm_campaign || '', utm_content: d.utm_content || '',
+    utm_term:     d.utm_term || ''
+  };
+
+  var existente = linha.email ? linhaPorColuna(a, 'email', linha.email) : 0;
+  if (existente) {
+    atualizarEm(a, COLUNAS_MAPA, linha, existente);
+  } else {
+    gravarEm(a, COLUNAS_MAPA, linha);
+    existente = a.getLastRow();
+  }
+
+  /* O e-mail só sai quando existe mapa escrito. O cadastro de entrada não
+     dispara nada: a pessoa está ao vivo na sala e não quer e-mail agora. */
+  if (!vazio && linha.email) {
+    enviarMapaPorEmail(linha);
+    marcarColuna(a, existente, 'enviado_em', new Date());
+  }
+}
+
+function enviarMapaPorEmail(d) {
+  var primeiro = String(d.nome || '').split(' ')[0];
+  var corpo = '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;color:#06182a;line-height:1.55">'
+    + '<p>' + (primeiro ? escapar(primeiro) + ',' : 'Olá,') + '</p>'
+    + '<p>Aqui está o mapa de indicadores que você montou na imersão. '
+    + 'Guarde este e-mail: ele é o seu ponto de partida, o T zero da sua medição.</p>'
+    + '<pre style="white-space:pre-wrap;font-family:Consolas,Menlo,monospace;font-size:13.5px;'
+    + 'background:#f3f6f8;border:1px solid #dbe6ef;border-radius:10px;padding:16px;color:#06182a">'
+    + escapar(d.mapa) + '</pre>'
+    + '<p>Quinze minutos por semana, no mesmo dia e no mesmo horário, com a mesma força de uma '
+    + 'reunião com cliente. Se em quatro leituras seguidas a coluna da decisão ficar vazia, o '
+    + 'indicador não tem decisão do outro lado e precisa ser trocado.</p>'
+    + '<p style="margin-top:22px">Marcelis Pereira<br>'
+    + '<span style="color:#5b6b78">MARES Consultoria Empresarial · Pessoas, Dados e Gestão.</span></p></div>';
+
+  try {
+    MailApp.sendEmail({
+      to: d.email,
+      bcc: COPIA_EQUIPE || undefined,
+      subject: 'O seu mapa de indicadores',
+      htmlBody: corpo,
+      name: 'MARES · Marcelis Pereira',
+      replyTo: COPIA_EQUIPE
+    });
+  } catch (err) { /* cota estourada não pode derrubar a gravação */ }
 }
 
 function doPost(e) {
@@ -784,6 +885,12 @@ function processar(dados) {
   // Registro enxuto de qualquer teste, só para os painéis.
   if (dados.registro === 'evento') {
     gravarEvento(dados);
+    return ContentService.createTextOutput('ok');
+  }
+
+  // Mapa de Indicadores da imersão. Aba própria, e cópia por e-mail para a pessoa.
+  if (ehMapa(dados.registro)) {
+    gravarMapa(dados);
     return ContentService.createTextOutput('ok');
   }
 
