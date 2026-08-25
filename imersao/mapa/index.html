@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<link rel="canonical" href="https://www.maresconsultoria.com.br/imersao/mapa/">
+<title>Mapa de Indicadores · Imersão Crescimento Previsível · MARES</title>
+<meta name="description" content="Monte o seu painel: três indicadores com fórmula, fonte, meta e limite de alarme.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mapa de Indicadores · Imersão Crescimento Previsível">
+<meta property="og:description" content="Três indicadores, com fórmula, fonte, meta e limite de alarme. O número que não tem uma decisão do outro lado não entra no painel.">
+<meta property="og:url" content="https://www.maresconsultoria.com.br/imersao/mapa/">
+<meta property="og:image" content="https://www.maresconsultoria.com.br/og-image.jpg">
+<meta property="og:locale" content="pt_BR">
+<meta name="theme-color" content="#06182a">
+
+
+<style>
+@font-face{font-family:'Bricolage Grotesque';src:url('/fonts/Bricolage-Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Bricolage Grotesque';src:url('/fonts/Bricolage-Bold.woff2') format('woff2');font-weight:600 700;font-style:normal;font-display:swap}
+@font-face{font-family:'Bricolage Grotesque';src:url('/fonts/Bricolage-ExtraBold.woff2') format('woff2');font-weight:800 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Aileron';src:url('/fonts/Aileron-Regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Aileron';src:url('/fonts/Aileron-SemiBold.woff2') format('woff2');font-weight:500 600;font-style:normal;font-display:swap}
+@font-face{font-family:'Aileron';src:url('/fonts/Aileron-Bold.woff2') format('woff2');font-weight:700 800;font-style:normal;font-display:swap}
+
+:root{
+  --navy:#06182a; --navy2:#0d2a3d; --navy3:#103448;
+  --azul:#1C6795; --turq:#15A5A8; --laranja:#E26220; --laranja-c:#f0a04a;
+  --areia:#FEEAD4; --claro:#dbe6ef; --cinza:#8fa8bc;
+  --branco:#fff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--navy);
+  color:var(--branco);
+  font-family:'Aileron',system-ui,sans-serif;
+  font-size:16px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.disp{font-family:'Bricolage Grotesque','Aileron',system-ui,sans-serif;margin:0}
+a{color:var(--laranja-c)}
+
+.fundo{
+  position:fixed; inset:0; z-index:-1;
+  background:
+    radial-gradient(90rem 60rem at 92% 96%, rgba(226,98,32,.42), transparent 60%),
+    radial-gradient(70rem 50rem at 6% 4%, rgba(21,165,168,.22), transparent 60%),
+    linear-gradient(105deg,#06182a 0%, #0d2a3d 45%, #10465f 78%, #12707c 100%);
+}
+
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px 80px}
+
+header{padding:34px 0 0}
+.logo{height:42px;width:auto;display:block}
+.eyebrow{
+  font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--areia);margin:44px 0 14px
+}
+h1{font-size:clamp(32px,5.6vw,54px);font-weight:800;line-height:1.05;letter-spacing:-.02em;max-width:16ch}
+.lede{font-size:18px;color:var(--claro);max-width:56ch;margin:18px 0 0}
+
+/* cartão */
+.cartao{
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:18px;
+  padding:30px;
+  margin-top:34px;
+  backdrop-filter:blur(2px);
+}
+.cartao h2{font-size:26px;font-weight:700;margin-bottom:6px}
+.cartao .sub{color:var(--claro);font-size:15px;margin:0 0 22px}
+
+/* formulário */
+.campos{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+label{display:block;font-size:13px;font-weight:600;color:var(--areia);margin-bottom:6px}
+input[type=text],input[type=email],input[type=tel]{
+  width:100%;padding:13px 14px;border-radius:10px;
+  border:1px solid rgba(255,255,255,.2);
+  background:rgba(6,24,42,.5);color:var(--branco);
+  font-family:'Aileron',sans-serif;font-size:16px
+}
+input:focus{outline:2px solid var(--turq);outline-offset:1px;border-color:transparent}
+input::placeholder{color:#6d8598}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  background:var(--laranja);color:#fff;border:0;border-radius:12px;
+  padding:15px 30px;font-family:'Bricolage Grotesque',sans-serif;
+  font-size:17px;font-weight:700;cursor:pointer;text-decoration:none;
+  transition:transform .12s, filter .12s
+}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn:disabled{opacity:.55;cursor:progress;transform:none}
+.btn.sec{background:transparent;border:1px solid rgba(255,255,255,.28);color:var(--branco);font-size:15px;padding:13px 22px}
+.btn.sec:hover{border-color:var(--turq)}
+
+.acoes{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:24px}
+.nota{font-size:12.5px;color:var(--cinza);margin-top:14px;max-width:60ch}
+.erro{color:#ffb4a0;font-size:14px;margin-top:12px;display:none}
+
+/* fichas */
+.ficha{
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:14px; padding:18px 18px 6px; margin-top:16px;
+  background:rgba(6,24,42,.28)
+}
+.ficha h3{
+  font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--laranja-c);margin-bottom:14px
+}
+.ficha.exemplo h3{color:var(--turq)}
+.linha{
+  display:grid;grid-template-columns:210px 1fr;gap:14px;align-items:start;
+  padding:9px 0;border-top:1px solid rgba(255,255,255,.07)
+}
+.linha:first-of-type{border-top:0}
+.linha .rot{padding-top:11px}
+.linha .rot b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:14.5px}
+.linha .rot span{font-size:11.5px;color:var(--cinza);line-height:1.35;display:block;margin-top:2px}
+.linha input{
+  width:100%;padding:11px 12px;border-radius:8px;font-size:14.5px;
+  border:1px solid rgba(255,255,255,.12);background:rgba(6,24,42,.5);
+  color:var(--branco);font-family:'Aileron',sans-serif
+}
+.exemplo .val{
+  padding:11px 12px;font-size:14px;color:var(--claro);
+  border:1px dashed rgba(255,255,255,.16);border-radius:8px;font-style:italic
+}
+
+/* registro */
+.tabela-rolagem{overflow-x:auto;margin-top:10px;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;min-width:720px}
+th{
+  font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.06em;color:var(--areia);
+  text-align:left;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.18);white-space:nowrap
+}
+td{padding:5px 6px;border-bottom:1px solid rgba(255,255,255,.07)}
+td input{
+  width:100%;padding:10px 11px;border-radius:8px;font-size:14px;
+  border:1px solid rgba(255,255,255,.12);background:rgba(6,24,42,.42);
+  color:var(--branco);font-family:'Aileron',sans-serif
+}
+.col-data{width:130px}.col-valor{width:120px}
+
+.passos{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:26px}
+.passo{display:flex;gap:13px;align-items:flex-start}
+.passo .n{
+  flex:0 0 auto;width:30px;height:30px;border-radius:9px;background:var(--turq);
+  display:grid;place-items:center;font-family:'Bricolage Grotesque',sans-serif;
+  font-weight:700;color:var(--navy);font-size:15px
+}
+.passo b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:15.5px;margin-bottom:2px}
+.passo span{font-size:13.5px;color:var(--claro)}
+
+.ok{
+  display:none;margin-top:18px;padding:14px 16px;border-radius:10px;
+  background:rgba(21,165,168,.16);border:1px solid rgba(21,165,168,.4);
+  color:var(--areia);font-size:14.5px
+}
+
+footer{margin-top:52px;padding-top:24px;border-top:1px solid rgba(255,255,255,.12);
+  color:var(--cinza);font-size:13.5px;display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
+
+#mapa{display:none}
+
+@media print{
+  .fundo,header,#portao,.acoes,.nota,footer{display:none!important}
+  .ficha{border:1px solid #999;page-break-inside:avoid}
+  .linha input{border:1px solid #ccc;background:#fff;color:#000}
+  .linha .rot span,.exemplo .val{color:#444}
+  .cartao h2{color:#000}
+  body{background:#fff;color:#000}
+  td input{border:1px solid #ccc;background:#fff;color:#000}
+  th{color:#000;border-bottom:1px solid #000}
+  .cartao{border:0;padding:0;background:none}
+}
+@media (max-width:760px){
+  .linha{grid-template-columns:1fr;gap:6px}
+  .linha .rot{padding-top:0}
+}
+@media (max-width:640px){
+  .cartao{padding:22px 18px}
+  h1{font-size:34px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="fundo"></div>
+
+<div class="wrap">
+
+<header>
+  <img class="logo" src="/imersao/img/i1.png" alt="MARES Consultoria Empresarial"
+       onerror="this.style.display='none'">
+</header>
+
+<p class="eyebrow">Imersão Crescimento Previsível · Noite 2</p>
+<h1>O seu mapa de indicadores</h1>
+<p class="lede">Três indicadores, com fórmula, fonte, meta e limite de alarme. O número que não tem uma decisão do outro lado não entra no painel.</p>
+
+<!-- PORTÃO -->
+<section class="cartao" id="portao">
+  <h2>Antes de abrir</h2>
+  <p class="sub">Um cadastro rápido. É assim que eu confirmo quem esteve na sala e quem entra no sorteio das três noites.</p>
+
+  <form id="form" novalidate>
+    <div class="campos">
+      <div>
+        <label for="nome">Nome completo</label>
+        <input type="text" id="nome" name="nome" autocomplete="name" placeholder="Como você quer ser chamado" required>
+      </div>
+      <div>
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" autocomplete="email" placeholder="voce@suaempresa.com.br" required>
+      </div>
+      <div>
+        <label for="telefone">WhatsApp com DDD</label>
+        <input type="tel" id="telefone" name="telefone" autocomplete="tel" placeholder="(27) 99999-9999" required>
+      </div>
+    </div>
+    <div class="acoes">
+      <button class="btn" type="submit" id="enviar">Abrir o meu mapa</button>
+    </div>
+    <p class="erro" id="erro"></p>
+    <p class="nota">Os seus dados ficam com a MARES e servem para te mandar o material da imersão. Você pode pedir a remoção a qualquer momento.</p>
+  </form>
+</section>
+
+<!-- MAPA -->
+<section id="mapa">
+
+  <div class="cartao">
+    <h2>As três marcas de um indicador</h2>
+    <p class="sub">Escolher o indicador é o começo. Ele só decide alguma coisa quando tem faixa.</p>
+    <div class="passos">
+      <div class="passo"><div class="n">1</div><div><b>T zero</b><span>Onde você está hoje, com a data em que mediu. É o que permite provar evolução depois.</span></div></div>
+      <div class="passo"><div class="n">2</div><div><b>Meta</b><span>Onde você quer chegar, e em quanto tempo. Sem prazo, meta é desejo.</span></div></div>
+      <div class="passo"><div class="n">3</div><div><b>Limite de alarme</b><span>O ponto a partir do qual você para e age, sem esperar a reunião do mês.</span></div></div>
+    </div>
+  </div>
+
+  <div class="cartao">
+    <h2>Preencha as três fichas</h2>
+    <p class="sub">O que você escreve fica salvo neste navegador. Dá para fechar e voltar depois. Se não tiver histórico para definir meta, deixe em branco e escreva a data em que vai revisar: isso é honesto e continua sendo entrega.</p>
+    <div id="fichas"></div>
+
+    <div class="acoes">
+      <a class="btn" href="/imersao/MARES-Mapa-de-Indicadores.xlsx" download>Baixar a planilha</a>
+      <button class="btn sec" type="button" id="enviarMapa">Enviar para o meu e-mail</button>
+      <button class="btn sec" type="button" onclick="window.print()">Imprimir ou salvar em PDF</button>
+    </div>
+    <div class="ok" id="okMapa">Enviado. A cópia chega no e-mail que você cadastrou.</div>
+    <p class="nota">A planilha tem as mesmas fichas, o registro das leituras e as regras de como definir a meta sem chutar.</p>
+  </div>
+
+  <div class="cartao">
+    <h2>Registro das leituras</h2>
+    <p class="sub">Quinze minutos por semana, no mesmo dia e no mesmo horário, com a mesma força de uma reunião com cliente.</p>
+    <div class="tabela-rolagem">
+      <table>
+        <thead><tr>
+          <th class="col-data">Data</th><th>Indicador</th>
+          <th class="col-valor">Valor</th><th>O que eu decidi fazer</th>
+        </tr></thead>
+        <tbody id="registro"></tbody>
+      </table>
+    </div>
+    <p class="nota">Se, em quatro leituras seguidas, a última coluna ficar vazia, o indicador não está errado por acaso. Ele não tem decisão do outro lado, e precisa ser trocado.</p>
+  </div>
+
+</section>
+
+<footer>
+  <span>MARES Consultoria Empresarial · Marcelis Pereira</span>
+  <span>@mares_lideranca · Pessoas, Dados e Gestão.</span>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var CENTRAL = "https://script.google.com/macros/s/AKfycbx4UBHQ5yh13Tx3IEX8SN4xEHMCZtYoSz_Vm53f2P7v44nQidwErRvq_uximUQdmU58/exec";
+  var CHAVE   = "mares-mapa-noite2";
+  var CAMPOS = [
+    ["nome","Nome do indicador","o número, não o adjetivo"],
+    ["formula","Fórmula","o que dividido por o quê, e em que período"],
+    ["fonte","Fonte","de onde sai o número, em que sistema, e quem gera"],
+    ["tzero","T zero e data","o valor de hoje, com a data em que você mediu"],
+    ["meta","Meta e prazo","ou \"medindo até __/__\" se ainda não houver histórico"],
+    ["alarme","Limite de alarme","a partir de quanto eu paro e ajo"],
+    ["dono","Dono","uma pessoa, não uma área"],
+    ["decisao","Se bater o alarme, eu","a decisão, escrita"]
+  ];
+  var EXEMPLO = {
+    nome:"Taxa de resposta à proposta em até 7 dias",
+    formula:"Propostas respondidas em até 7 dias dividido por propostas enviadas no mesmo período, vezes 100",
+    fonte:"CRM, relatório de propostas. Gerado pelo coordenador comercial toda sexta.",
+    tzero:"34% em 24/08/2026",
+    meta:"45% até 30/11/2026",
+    alarme:"abaixo de 28% em qualquer semana",
+    dono:"o coordenador comercial",
+    decisao:"entro na próxima reunião de proposta antes de mexer no preço"
+  };
+  var FICHAS = 3;
+  var LEITURAS = 8;
+
+  var $ = function(id){ return document.getElementById(id); };
+
+  /* ---------- máscara de telefone ---------- */
+  function soDigitos(v){ return (v||"").replace(/\D/g,""); }
+  function limpaBR(v){
+    var d = soDigitos(v);
+    if (d.length > 11 && d.indexOf("55") === 0) d = d.slice(2);
+    return d.slice(0,11);
+  }
+  function formata(v){
+    var d = limpaBR(v);
+    if (!d) return "";
+    if (d.length <= 2)  return "(" + d;
+    if (d.length <= 6)  return "(" + d.slice(0,2) + ") " + d.slice(2);
+    if (d.length <= 10) return "(" + d.slice(0,2) + ") " + d.slice(2,6) + "-" + d.slice(6);
+    return "(" + d.slice(0,2) + ") " + d.slice(2,7) + "-" + d.slice(7);
+  }
+  $("telefone").addEventListener("input", function(e){ e.target.value = formata(e.target.value); });
+
+  /* ---------- utm e contexto ---------- */
+  function params(){
+    var p = new URLSearchParams(location.search), o = {};
+    ["utm_source","utm_medium","utm_campaign","utm_content","utm_term"].forEach(function(k){
+      o[k] = p.get(k) || "";
+    });
+    return o;
+  }
+
+  /* mode no-cors é o mesmo padrão do resto do site. O Apps Script não devolve
+     cabeçalho de CORS depois do redirecionamento, então sem isso a promessa
+     falha mesmo quando a gravação deu certo, e a pessoa vê erro à toa. */
+  function enviar(dados){
+    return fetch(CENTRAL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(dados)
+    });
+  }
+
+  /* ---------- estado ---------- */
+  function ler(){
+    try { return JSON.parse(localStorage.getItem(CHAVE) || "{}"); }
+    catch(e){ return {}; }
+  }
+  function gravar(o){
+    try { localStorage.setItem(CHAVE, JSON.stringify(o)); } catch(e){}
+  }
+  function esc(t){
+    return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+                    .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+  /* ---------- fichas ---------- */
+  function montarFichas(){
+    var estado = ler(), alvo = $("fichas"), html = "";
+
+    html += '<div class="ficha exemplo"><h3>Exemplo preenchido</h3>';
+    CAMPOS.forEach(function(c){
+      html += '<div class="linha"><div class="rot"><b>' + esc(c[1]) + '</b></div>' +
+              '<div class="val">' + esc(EXEMPLO[c[0]]) + '</div></div>';
+    });
+    html += '</div>';
+
+    for (var i = 1; i <= FICHAS; i++){
+      html += '<div class="ficha"><h3>Indicador ' + i + '</h3>';
+      CAMPOS.forEach(function(c){
+        html += '<div class="linha"><div class="rot"><b>' + esc(c[1]) + '</b>' +
+                '<span>' + esc(c[2]) + '</span></div>' +
+                '<input type="text" data-f="' + i + '" data-c="' + c[0] + '" value=""></div>';
+      });
+      html += '</div>';
+    }
+    alvo.innerHTML = html;
+
+    Array.prototype.forEach.call(alvo.querySelectorAll("input"), function(inp){
+      var chave = "f" + inp.dataset.f + ":" + inp.dataset.c;
+      if (estado.mapa && estado.mapa[chave]) inp.value = estado.mapa[chave];
+      inp.addEventListener("input", function(){
+        var e = ler(); e.mapa = e.mapa || {}; e.mapa[chave] = inp.value; gravar(e);
+      });
+    });
+  }
+
+  /* ---------- registro das leituras ---------- */
+  function montarRegistro(){
+    var estado = ler(), corpo = $("registro"), html = "";
+    for (var i = 0; i < LEITURAS; i++){
+      html += '<tr>' +
+        '<td class="col-data"><input type="text" data-r="' + i + '" data-c="data" placeholder="__/__"></td>' +
+        '<td><input type="text" data-r="' + i + '" data-c="ind"></td>' +
+        '<td class="col-valor"><input type="text" data-r="' + i + '" data-c="valor"></td>' +
+        '<td><input type="text" data-r="' + i + '" data-c="decidi"></td></tr>';
+    }
+    corpo.innerHTML = html;
+    Array.prototype.forEach.call(corpo.querySelectorAll("input"), function(inp){
+      var chave = "r" + inp.dataset.r + ":" + inp.dataset.c;
+      if (estado.mapa && estado.mapa[chave]) inp.value = estado.mapa[chave];
+      inp.addEventListener("input", function(){
+        var e = ler(); e.mapa = e.mapa || {}; e.mapa[chave] = inp.value; gravar(e);
+      });
+    });
+  }
+
+  function mapaEmTexto(){
+    var e = ler(), m = e.mapa || {}, out = [];
+    for (var i = 1; i <= FICHAS; i++){
+      var linhas = CAMPOS.map(function(c){
+        return c[1] + ": " + ((m["f" + i + ":" + c[0]] || "").trim() || "(em branco)");
+      });
+      var preenchida = CAMPOS.some(function(c){ return (m["f" + i + ":" + c[0]] || "").trim(); });
+      if (preenchida) out.push("INDICADOR " + i + "\n" + linhas.join("\n"));
+    }
+    var reg = [];
+    for (var j = 0; j < LEITURAS; j++){
+      var l = ["data","ind","valor","decidi"].map(function(c){ return (m["r" + j + ":" + c] || "").trim(); });
+      if (l.join("")) reg.push(l[0] + " | " + l[1] + " | " + l[2] + " | " + l[3]);
+    }
+    if (reg.length) out.push("REGISTRO DAS LEITURAS\n" + reg.join("\n"));
+    return out.length ? out.join("\n\n") : "(fichas ainda em branco)";
+  }
+
+  function abrirMapa(){
+    $("portao").style.display = "none";
+    $("mapa").style.display = "block";
+    montarFichas();
+    montarRegistro();
+  }
+
+  /* ---------- cadastro ---------- */
+  $("form").addEventListener("submit", function(ev){
+    ev.preventDefault();
+    var erro = $("erro"), botao = $("enviar");
+    erro.style.display = "none";
+
+    var nome = $("nome").value.trim();
+    var email = $("email").value.trim();
+    var tel = limpaBR($("telefone").value);
+
+    if (nome.length < 3)                    { erro.textContent = "Escreva o seu nome completo."; erro.style.display = "block"; return; }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { erro.textContent = "Confira o e-mail: parece que falta alguma coisa."; erro.style.display = "block"; return; }
+    if (tel.length < 10)                    { erro.textContent = "O WhatsApp precisa do DDD e do número completo."; erro.style.display = "block"; return; }
+
+    botao.disabled = true;
+    botao.textContent = "Abrindo...";
+
+    var p = params();
+    var dados = {
+      nome: nome,
+      email: email,
+      telefone: "+55" + tel,
+      registro: "mapa-imersao-ago-2026",
+      origem: "imersao-mapa-noite-2",
+      pagina: location.pathname,
+      utm_source: p.utm_source, utm_medium: p.utm_medium,
+      utm_campaign: p.utm_campaign, utm_content: p.utm_content, utm_term: p.utm_term
+    };
+
+    var estado = ler();
+    estado.nome = nome; estado.email = email; estado.telefone = "+55" + tel; estado.liberado = true;
+    gravar(estado);
+
+    var abriu = false;
+    var abrirUmaVez = function(){ if (!abriu){ abriu = true; abrirMapa(); } };
+
+    // o mapa abre mesmo se a gravação demorar: ninguém fica esperando ao vivo
+    setTimeout(abrirUmaVez, 2500);
+    enviar(dados).then(abrirUmaVez).catch(abrirUmaVez);
+  });
+
+  /* ---------- enviar o mapa preenchido ---------- */
+  $("enviarMapa").addEventListener("click", function(){
+    var e = ler(), botao = $("enviarMapa");
+    if (!e.email) return;
+    botao.disabled = true;
+    botao.textContent = "Enviando...";
+    enviar({
+      nome: e.nome, email: e.email, telefone: e.telefone,
+      registro: "mapa-preenchido-ago-2026",
+      origem: "imersao-mapa-noite-2",
+      pagina: location.pathname,
+      problema: mapaEmTexto()
+    }).then(function(){
+      $("okMapa").style.display = "block";
+      botao.textContent = "Enviado";
+    }).catch(function(){
+      $("okMapa").textContent = "Não consegui enviar agora. Use o botão de imprimir ou baixe a planilha.";
+      $("okMapa").style.display = "block";
+      botao.disabled = false;
+      botao.textContent = "Tentar de novo";
+    });
+  });
+
+  /* quem já se cadastrou não precisa fazer de novo */
+  if (ler().liberado) abrirMapa();
+})();
+</script>
+</body>
+</html>
