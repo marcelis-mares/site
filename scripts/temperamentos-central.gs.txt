@@ -10,8 +10,9 @@
  *    que permite descobrir sozinho quais turmas existem, inclusive as que a
  *    equipe criar sem avisar ninguém.
  * 3. Serve os dados para os painéis, sempre sem nome e sem e-mail de ninguém.
- * 4. Recebe as inscrições da Imersão, as respostas da Bússola de IA e os mapas
- *    de indicadores da imersão, cada um na sua aba, e manda os e-mails.
+ * 4. Recebe as inscrições da Imersão, as respostas da Bússola de IA, os mapas de
+ *    indicadores e as inscrições da Imersão Mares.IA, cada um na sua aba, e
+ *    manda os e-mails que cabem a cada um.
  *
  * O script antigo do RaioX e da Sonda continua intocado, cuidando dos e-mails
  * e da planilha deles. Aqui só chega a cópia enxuta usada pelos painéis.
@@ -860,6 +861,63 @@ function enviarMapaPorEmail(d) {
   } catch (err) { /* cota estourada não pode derrubar a gravação */ }
 }
 
+/* ============================================================================
+   IMERSÃO MARES.IA
+   ----------------------------------------------------------------------------
+   A landing em /mares-ia/ faz uma triagem antes de vender: pergunta o papel da
+   pessoa, o porte e o momento da empresa, e só manda para o checkout quem passa.
+   Quem não passa vê uma tela de "não é o seu momento", e mesmo assim o registro
+   chega aqui, porque saber quem foi barrado e por quê vale tanto quanto saber
+   quem comprou.
+
+   O campo que separa os dois é o `resultado`: vem como `qualificado` ou como
+   `nao-qualificado: <motivo>`.
+
+   O e-mail para a equipe já sai pelo Web3Forms, direto da página, então aqui a
+   gravação é silenciosa de propósito, para ninguém receber o mesmo aviso duas
+   vezes.
+============================================================================ */
+
+var ABA_MARESIA = 'MaresIA';
+
+var COLUNAS_MARESIA = [
+  'processed_at','resultado','nome','empresa','whats','email',
+  'papel','dono','segmento','faturamento','ia','gargalo','data','investimento','lider',
+  'origem','pagina'
+];
+
+function gravarMaresIa(d) {
+  var a = aba(ABA_MARESIA, COLUNAS_MARESIA);
+  var linha = {
+    processed_at: new Date(),
+    resultado:    d.resultado || '',
+    nome:         d.nome || '',
+    empresa:      d.empresa || '',
+    whats:        d.whats || d.whatsapp || '',
+    email:        String(d.email || '').trim(),
+    papel:        d.papel || '',
+    dono:         d.dono || '',
+    segmento:     d.segmento || '',
+    faturamento:  d.faturamento || '',
+    ia:           d.ia || '',
+    gargalo:      d.gargalo || '',
+    data:         d.data || '',
+    investimento: d.investimento || '',
+    lider:        d.lider || '',
+    origem:       d.origem || '',
+    pagina:       d.pagina || ''
+  };
+
+  /* A pessoa pode voltar, corrigir uma resposta e enviar de novo. Nesse caso a
+     linha dela é atualizada, e não duplicada. */
+  var existente = linha.email ? linhaPorColuna(a, 'email', linha.email) : 0;
+  if (existente) {
+    atualizarEm(a, COLUNAS_MARESIA, linha, existente);
+  } else {
+    gravarEm(a, COLUNAS_MARESIA, linha);
+  }
+}
+
 function doPost(e) {
   var dados;
   try {
@@ -885,6 +943,12 @@ function processar(dados) {
   // Registro enxuto de qualquer teste, só para os painéis.
   if (dados.registro === 'evento') {
     gravarEvento(dados);
+    return ContentService.createTextOutput('ok');
+  }
+
+  // Imersão Mares.IA. Aba própria, com quem foi qualificado e quem foi barrado.
+  if (dados.registro === 'mares-ia') {
+    gravarMaresIa(dados);
     return ContentService.createTextOutput('ok');
   }
 
