@@ -162,6 +162,32 @@ td input{
   color:var(--areia);font-size:14.5px
 }
 
+/* famílias de indicadores */
+.familias{display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:16px;margin-top:8px}
+.familia{
+  border:1px solid rgba(255,255,255,.13); border-radius:14px;
+  padding:20px 20px 22px; background:rgba(6,24,42,.28)
+}
+.familia .tag{
+  display:inline-block; font-family:'Bricolage Grotesque',sans-serif; font-weight:700;
+  font-size:14px; letter-spacing:.01em; padding:8px 20px; border-radius:10px; margin-bottom:16px
+}
+.familia.mkt .tag{background:var(--turq);color:#06182a}
+.familia.vnd .tag{background:var(--azul);color:#fff}
+.familia.gst .tag{background:var(--laranja-c);color:#06182a}
+.familia ul{list-style:none;margin:0;padding:0}
+.familia li{position:relative;padding-left:19px;margin:12px 0;font-size:14.5px;color:var(--claro);line-height:1.42}
+.familia li::before{content:"";position:absolute;left:0;top:.5em;width:7px;height:7px;border-radius:50%}
+.familia.mkt li::before{background:var(--turq)}
+.familia.vnd li::before{background:#5a9ec9}
+.familia.gst li::before{background:var(--laranja-c)}
+.regra-tres{
+  margin-top:22px;padding:16px 18px;border-radius:12px;
+  background:rgba(226,98,32,.12);border:1px solid rgba(226,98,32,.32);
+  color:var(--areia);font-size:15px
+}
+.regra-tres b{font-family:'Bricolage Grotesque',sans-serif}
+
 footer{margin-top:52px;padding-top:24px;border-top:1px solid rgba(255,255,255,.12);
   color:var(--cinza);font-size:13.5px;display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
 
@@ -177,6 +203,10 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid rgba(255,255,255,.1
   td input{border:1px solid #ccc;background:#fff;color:#000}
   th{color:#000;border-bottom:1px solid #000}
   .cartao{border:0;padding:0;background:none}
+  .familia{border:1px solid #999;background:none;page-break-inside:avoid}
+  .familia li{color:#222}
+  .familia .tag{border:1px solid #999}
+  .regra-tres{background:none;border:1px solid #999;color:#222}
 }
 @media (max-width:760px){
   .linha{grid-template-columns:1fr;gap:6px}
@@ -271,6 +301,51 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid rgba(255,255,255,.1
       </table>
     </div>
     <p class="nota">Se, em quatro leituras seguidas, a última coluna ficar vazia, o indicador não está errado por acaso. Ele não tem decisão do outro lado, e precisa ser trocado.</p>
+  </div>
+
+  <div class="cartao">
+    <h2>Os indicadores que realmente importam</h2>
+    <p class="sub">Não é sobre ter painel bonito. É sobre olhar o número certo, no momento certo. Esta lista não é para você acompanhar os dezoito. É para escolher os três que vão para as fichas lá em cima.</p>
+
+    <div class="familias">
+      <div class="familia mkt">
+        <span class="tag">Marketing</span>
+        <ul>
+          <li>CAC, custo de aquisição por cliente</li>
+          <li>LTV, quanto o cliente vale no tempo</li>
+          <li>Conversão por canal, não a média</li>
+          <li>ROAS, retorno sobre anúncio</li>
+          <li>Engajamento qualificado, não vaidade</li>
+          <li>Origem real do lead que virou venda</li>
+        </ul>
+      </div>
+
+      <div class="familia vnd">
+        <span class="tag">Vendas</span>
+        <ul>
+          <li>Ticket médio e por segmento</li>
+          <li>Fechamento por origem</li>
+          <li>Ciclo de venda, em dias</li>
+          <li>Margem real por produto</li>
+          <li>Churn, quem sai e por quê</li>
+          <li>Previsibilidade de receita</li>
+        </ul>
+      </div>
+
+      <div class="familia gst">
+        <span class="tag">Gestão</span>
+        <ul>
+          <li>Ponto de equilíbrio operacional</li>
+          <li>Capacidade x demanda</li>
+          <li>Produtividade por colaborador</li>
+          <li>Custo fixo x variável, em %</li>
+          <li>Geração de caixa mensal</li>
+          <li>Cenários: otimista, real, pessimista</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="regra-tres"><b>Escolha três, não dezoito.</b> Enquanto os seus três primeiros não estiverem com fórmula, fonte, meta e limite de alarme, o resto é ruído. Indicador que ninguém lê toda semana não é indicador, é enfeite.</p>
   </div>
 
 </section>
