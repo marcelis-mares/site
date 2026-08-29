@@ -32,6 +32,8 @@ header{position:sticky;top:0;z-index:50;background:rgba(6,24,42,.92);backdrop-fi
 .menu{display:flex;gap:26px;align-items:center}
 .menu a{color:var(--muted);font-weight:500;font-size:15px;cursor:pointer;transition:color .2s}
 .menu a:hover,.menu a.active{color:#fff}
+/* o botao dentro do menu e laranja: o texto tem que ser branco, e nao a cor de link do menu */
+.menu a.btn{color:#fff}
 .btn{display:inline-block;background:var(--orange);color:#fff;padding:12px 22px;border-radius:10px;font-weight:600;font-size:15px;cursor:pointer;border:none;transition:.2s;font-family:var(--body)}
 .btn:hover{background:var(--orange-l);transform:translateY(-2px)}
 /* Mesma logica do .lead: o contorno nasce navy e clareia dentro de .dark */
@@ -76,6 +78,9 @@ p.body{font-size:18px;line-height:1.72;max-width:700px;margin-bottom:16px}
 .dark .card h3{color:var(--orange-l)}
 .card p{font-size:16px;line-height:1.65;color:#54606b}
 .dark .card p{color:var(--muted)}
+/* etiqueta em azul, usada nos cartoes do blog, onde o laranja nao tem contraste */
+.tag-azul{color:var(--blue)!important;border-color:var(--blue)!important}
+a.card:hover .tag-azul,a.card:focus-visible .tag-azul{color:#fff!important;border-color:var(--turq)!important}
 .card .tag{display:inline-block;margin-top:14px;font-size:12px;font-weight:600;color:var(--turq);border:1px solid var(--turq);padding:3px 10px;border-radius:20px}
 /* Cartao que e um link inteiro, usado nos servicos que tem pagina propria */
 a.card{display:block;text-decoration:none;cursor:pointer}
