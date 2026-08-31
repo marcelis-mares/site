@@ -350,6 +350,7 @@ async function iniciar(){
   if (PROJECAO) document.body.classList.add('projecao');
   try {
     if (!TIME && !GERAL) return await centralDeTurmas();
+    if (/buss/i.test(TESTE)) return await painelDaBussola();
     if (TESTE && TESTE !== 'Temperamentos') return await painelDeDimensoes();
     const d = await buscar(WEBHOOK + (GERAL ? '?geral=1' : '?time=' + encodeURIComponent(TIME)) + '&chave=' + encodeURIComponent(CHAVE));
     if (d.erro) return erroChave(d.erro);
@@ -662,7 +663,9 @@ async function painelDeDimensoes(){
   linhas.forEach(l => {
     let dim = l.dimensoes;
     if (typeof dim === 'string') { try { dim = JSON.parse(dim); } catch (e) { dim = []; } }
-    (dim || []).forEach(x => {
+    /* A Bussola grava dimensoes como objeto, e nao como lista. Sem esta guarda
+       o painel quebrava inteiro com "forEach is not a function". */
+    (Array.isArray(dim) ? dim : []).forEach(x => {
       const k = x.chave || x.nome;
       if (!k) return;
       nomes[k] = x.nome || k;
@@ -759,6 +762,136 @@ async function painelDeDimensoes(){
     dims.map(x => '<tr><td>' + esc(x.nome) + '</td><td class="num">' + um(x.media) + '</td></tr>').join('') + '</tbody></table></details>');
 
   h.push(atalhoPlanilha('central', 'aba Eventos', 'onde ficam os registros que montam este painel'));
+
+  h.push('<div class="escopo">Este painel apresenta o resultado do grupo e não identifica nenhuma pessoa. ' +
+    'Atualizado em ' + new Date(d.gerado_em).toLocaleString('pt-BR') + '.</div>');
+  $('#conteudo').innerHTML = h.join('');
+  agendar();
+}
+
+/* ======================= PAINEL DA BUSSOLA DE IA =======================
+   A Bussola nao tem nota nem dimensao com media, entao o painel de dimensoes
+   nao serve. O que ela tem e escolha: quais ferramentas a sala usa, onde a IA
+   ja entrou, com que frequencia, e o quanto cada um acha que isso vai mexer
+   nos proximos dois anos. Tudo em contagem de pessoas, nunca por pessoa.   */
+async function painelDaBussola(){
+  const d = await buscar(WEBHOOK + (GERAL ? '?geral=1' : '?modo=evento&time=' + encodeURIComponent(TIME)) +
+    '&teste=' + encodeURIComponent(TESTE) + '&chave=' + encodeURIComponent(CHAVE));
+  if (d.erro) return erroChave(d.erro);
+  if (!d.total) return vazio();
+  document.title = 'Painel da Bússola de IA · MARES';
+
+  const linhas = d.linhas;
+  const total = linhas.length || d.total;
+  const NENHUMA = /^nenhuma ainda$/i;
+
+  const contar = (mapa, lista) => (Array.isArray(lista) ? lista : []).forEach(v => {
+    const k = String(v || '').trim(); if (!k) return;
+    mapa.set(k, (mapa.get(k) || 0) + 1);
+  });
+  const ordenar = m => [...m.entries()].sort((a,b) => b[1] - a[1]);
+
+  const mF = new Map(), mA = new Map(), mFreq = new Map();
+  let semFerramenta = 0, semArea = 0;
+  linhas.forEach(l => {
+    let dim = l.dimensoes;
+    if (typeof dim === 'string') { try { dim = JSON.parse(dim); } catch (e) { dim = null; } }
+    dim = (dim && typeof dim === 'object' && !Array.isArray(dim)) ? dim : {};
+    const fs = (Array.isArray(dim.ferramentas) ? dim.ferramentas : []).filter(Boolean);
+    const as = (Array.isArray(dim.areas) ? dim.areas : []).filter(Boolean);
+    contar(mF, fs); contar(mA, as);
+    if (!fs.length || fs.every(x => NENHUMA.test(String(x).trim()))) semFerramenta++;
+    if (!as.length || as.every(x => NENHUMA.test(String(x).trim()))) semArea++;
+    const fq = String(dim.frequencia || '').trim();
+    if (fq) mFreq.set(fq, (mFreq.get(fq) || 0) + 1);
+  });
+
+  const ferramentas = ordenar(mF).filter(([k]) => !NENHUMA.test(k));
+  const areas = ordenar(mA).filter(([k]) => !NENHUMA.test(k));
+  const freq = ordenar(mFreq);
+  const impactos = contarPor(linhas.filter(l => l.nivel), 'nivel');
+
+  const notas = linhas.map(l => Number(l.media)).filter(n => !isNaN(n) && n > 0);
+  const impactoMedio = notas.length ? notas.reduce((a,b) => a+b, 0) / notas.length : 0;
+  const um = n => n.toFixed(1).replace('.', ',');
+  const pct = n => Math.round(n / total * 100) + '%';
+
+  const reunidas = (d.times || TIMES);
+  const varias = reunidas.length > 1;
+  const usam = total - semFerramenta;
+
+  const barras = (lista, base, cor) => '<div class="barras">' + lista.map(([nome, n]) =>
+    '<div class="linha"><div class="rot">' + esc(nome) + '</div>' +
+    '<div class="trilho"><div class="fill" style="width:' + (n / base * 100) + '%;background:' + (cor || 'var(--azul)') + '" title="' + esc(nome) + ': ' + n + '"></div></div>' +
+    '<div class="val">' + n + '</div></div>').join('') + '</div>';
+
+  const h = [];
+  h.push('<div class="capa"><p class="eyebrow">Metodologia MARES · Bússola de IA</p>' +
+    '<h1>Bússola de IA<br>' + (GERAL ? 'Respondentes gerais' : (varias ? reunidas.length + ' turmas reunidas' : esc(TIME))) + '</h1>' +
+    '<p class="sub">' + (GERAL ? 'Todo mundo que respondeu pelo site por conta própria, fora de qualquer turma. ' : '') +
+    'Retrato do grupo que respondeu. Aqui não existe nota nem ranking: o que aparece é quantas pessoas ' +
+    'marcaram cada coisa. Nenhuma resposta individual aparece nesta tela.' +
+    (varias ? ' Este painel soma as turmas ' + reunidas.map(c => '<b>' + esc(c) + '</b>').join(', ') + '.' : '') +
+    '</p></div>');
+
+  h.push('<div class="tiles">' +
+    '<div class="tile"><b>' + total + '</b><small>pessoas responderam</small></div>' +
+    '<div class="tile"><b>' + pct(usam) + '</b><small>já usam alguma ferramenta de IA</small></div>' +
+    (impactoMedio ? '<div class="tile"><b>' + um(impactoMedio) + '</b><small>impacto esperado nos próximos dois anos, de 1 a 4</small></div>' : '') +
+    (ferramentas[0] ? '<div class="tile"><b style="color:var(--F);font-size:1.4rem">' + esc(ferramentas[0][0]) + '</b><small>a ferramenta mais usada da sala</small></div>' : '') +
+    '</div>');
+
+  if (ferramentas.length) {
+    h.push('<h2>As ferramentas que a sala já usa</h2>' +
+      '<p class="nota">Quantas pessoas marcaram cada uma, nos últimos trinta dias. Cada pessoa pode ter marcado mais de uma.' +
+      (semFerramenta ? ' ' + semFerramenta + ' ' + (semFerramenta === 1 ? 'pessoa não usa' : 'pessoas não usam') + ' nenhuma ainda.' : '') + '</p>' +
+      barras(ferramentas, total));
+  }
+
+  if (areas.length) {
+    h.push('<h2>Onde a IA já entrou no negócio</h2>' +
+      '<p class="nota">As áreas em que a ferramenta já é usada de verdade. É aqui que se vê se a IA virou rotina ou se parou na criação de conteúdo.' +
+      (semArea ? ' Em ' + semArea + ' ' + (semArea === 1 ? 'resposta' : 'respostas') + ' a IA ainda não entrou em área nenhuma.' : '') + '</p>' +
+      barras(areas, total));
+  }
+
+  if (freq.length) {
+    h.push('<h2>Com que frequência a sala usa</h2>' +
+      '<p class="nota">Uma resposta por pessoa. Frequência baixa com impacto alto é o desenho clássico de quem sabe que precisa e ainda não começou.</p>' +
+      barras(freq, freq[0][1]));
+  }
+
+  if (impactos.length) {
+    h.push('<h2>O quanto a sala acha que a IA vai mexer</h2>' +
+      '<p class="nota">O que cada pessoa espera dos próximos dois anos no próprio negócio.</p>' +
+      barras(impactos, impactos[0][1], 'var(--laranja)'));
+  }
+
+  const p = [];
+  p.push('<p>Responderam <b>' + total + ' pessoa' + (total === 1 ? '' : 's') + '</b>. ' +
+    '<b>' + pct(usam) + '</b> já usam alguma ferramenta de IA, e ' +
+    (semFerramenta ? '<b>' + semFerramenta + '</b> ainda não usam nenhuma.' : 'não há ninguém que não use nenhuma.') + '</p>');
+  if (ferramentas[0]) {
+    p.push('<p>A ferramenta mais marcada é <b>' + esc(ferramentas[0][0]) + '</b>, com ' + ferramentas[0][1] +
+      ' de ' + total + '. ' + (areas[0] ? 'A área em que a IA mais entrou é <b>' + esc(areas[0][0]) + '</b>, com ' + areas[0][1] + '.' : '') + '</p>');
+  }
+  if (impactoMedio) {
+    p.push('<p>O impacto esperado para os próximos dois anos está em <b>' + um(impactoMedio) + '</b> numa escala de 1 a 4. ' +
+      (impactoMedio >= 3
+        ? 'A sala já entende que a mudança é estrutural, e não uma questão de ferramenta. O trabalho aqui é sair do reconhecimento e ir para a decisão.'
+        : 'A sala ainda lê a IA como um ganho de tarefa, e não como mudança de modelo. Vale mostrar caso concreto antes de falar de ferramenta.') + '</p>');
+  }
+  h.push('<h2>A leitura desta sala</h2><p class="nota">Descreve o que as escolhas mostram. É ponto de partida para a conversa, não veredito.</p>' +
+    '<div class="leitura">' + p.join('') + '</div>');
+
+  if (ferramentas.length || areas.length) {
+    h.push('<details><summary>Ver os números em tabela</summary><table><thead><tr><th>Item</th><th class="num">Pessoas</th></tr></thead><tbody>' +
+      ferramentas.map(([k,n]) => '<tr><td>Ferramenta: ' + esc(k) + '</td><td class="num">' + n + '</td></tr>').join('') +
+      areas.map(([k,n]) => '<tr><td>Área: ' + esc(k) + '</td><td class="num">' + n + '</td></tr>').join('') +
+      '</tbody></table></details>');
+  }
+
+  h.push(atalhoPlanilha('central', 'aba Bussola', 'onde ficam os cadastros completos, com o que cada pessoa quer aprender'));
 
   h.push('<div class="escopo">Este painel apresenta o resultado do grupo e não identifica nenhuma pessoa. ' +
     'Atualizado em ' + new Date(d.gerado_em).toLocaleString('pt-BR') + '.</div>');
