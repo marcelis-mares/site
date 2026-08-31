@@ -82,6 +82,14 @@ p.body{font-size:18px;line-height:1.72;max-width:700px;margin-bottom:16px}
 .tag-azul{color:var(--blue)!important;border-color:var(--blue)!important}
 a.card:hover .tag-azul,a.card:focus-visible .tag-azul{color:#fff!important;border-color:var(--turq)!important}
 .card .tag{display:inline-block;margin-top:14px;font-size:12px;font-weight:600;color:var(--turq);border:1px solid var(--turq);padding:3px 10px;border-radius:20px}
+/* Cartao do blog: a arte do post entra no topo, no formato de compartilhamento */
+.card-post{padding:0;overflow:hidden;display:flex;flex-direction:column}
+.card-arte{width:100%;height:auto;aspect-ratio:1200/630;object-fit:cover;display:block;background:var(--navy)}
+.card-post .tag{margin:20px 24px 0}
+.card-post h3{margin:12px 24px 10px}
+.card-post p{margin:0 24px}
+.card-post p:last-child{margin-bottom:22px}
+
 /* Cartao que e um link inteiro, usado nos servicos que tem pagina propria */
 a.card{display:block;text-decoration:none;cursor:pointer}
 a.card .tag::after{content:" \2192"}
