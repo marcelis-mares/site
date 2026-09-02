@@ -1,6 +1,19 @@
-/* MARES · Aviso de cookies + carregamento condicional do Microsoft Clarity */
+/* MARES · Aviso de cookies, Google Analytics 4 e Microsoft Clarity.
+
+   Duas ferramentas, dois comportamentos, de propósito:
+
+   O Clarity grava a sessão e monta mapa de calor, então só entra depois que a
+   pessoa clica em Aceitar.
+
+   O GA4 entra sempre, mas em modo de consentimento negado, que é o Consent Mode
+   v2 do Google. Sem consentimento ele não grava cookie e não identifica ninguém:
+   manda um ping sem identificação, que alimenta a contagem de sessão e a
+   modelagem. Quando a pessoa aceita, o consentimento é atualizado para concedido
+   e a medição passa a ser completa. Assim o número de visita nunca some, e a
+   privacidade de quem recusa continua respeitada. */
 (function () {
   var CLARITY_ID = 'xrnzuvtls4';
+  var GA_ID = 'G-JEYDER00G4';
   var CHAVE = 'mares_cookies_v1';
 
   function preferencia() {
@@ -8,6 +21,33 @@
   }
   function guardar(valor) {
     try { localStorage.setItem(CHAVE, valor); } catch (e) {}
+  }
+
+  /* O gtag precisa existir antes do script do Google carregar, para que a
+     configuração de consentimento chegue primeiro que qualquer medição. */
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { window.dataLayer.push(arguments); }
+
+  function iniciarGA() {
+    if (!GA_ID || window.__mares_ga) return;
+    window.__mares_ga = true;
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      wait_for_update: 500
+    });
+    var t = document.createElement('script');
+    t.async = true;
+    t.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+    document.head.appendChild(t);
+    gtag('js', new Date());
+    gtag('config', GA_ID, { anonymize_ip: true });
+  }
+
+  function liberarGA() {
+    gtag('consent', 'update', { analytics_storage: 'granted' });
   }
 
   function carregarClarity() {
@@ -69,7 +109,7 @@
       setTimeout(function () { if (box.parentNode) box.parentNode.removeChild(box); }, 350);
     }
     box.querySelector('.sim').addEventListener('click', function () {
-      guardar('aceito'); carregarClarity(); fechar();
+      guardar('aceito'); liberarGA(); carregarClarity(); fechar();
     });
     box.querySelector('.nao').addEventListener('click', function () {
       guardar('recusado'); fechar();
@@ -77,8 +117,9 @@
   }
 
   function iniciar() {
+    iniciarGA();
     var p = preferencia();
-    if (p === 'aceito') { carregarClarity(); return; }
+    if (p === 'aceito') { liberarGA(); carregarClarity(); return; }
     if (p === 'recusado') return;
     banner();
   }
