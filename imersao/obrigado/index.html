@@ -243,6 +243,12 @@ fbq('init','673278761920486');
 fbq('track','PageView');
 fbq('track','CompleteRegistration',{content_name:'Imersao Crescimento Previsivel Agosto 2026',status:'inscrito'});
 </script>
+<script>
+/* a inscricao confirmada tambem precisa chegar ao Google Analytics, e nao so ao Pixel */
+window.addEventListener('load', function () {
+  try { if (window.maresEvento) window.maresEvento('inscricao_confirmada', {produto: 'Imersao Crescimento Previsivel'}); } catch (e) {}
+});
+</script>
 <noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=673278761920486&ev=CompleteRegistration&noscript=1"/></noscript>
 
