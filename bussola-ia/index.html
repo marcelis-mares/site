@@ -874,6 +874,10 @@ const SESSAO = 'b' + Date.now().toString(36) + Math.random().toString(36).slice(
 
 /* ======================= UTILIDADES ======================= */
 const $ = s => document.querySelector(s);
+
+/* manda o evento para o Google Analytics. O maresEvento vem do cookies.js e
+   já acrescenta a página, então aqui só vai o que é da Bússola. */
+function ev(nome, extra){ try { if (window.maresEvento) window.maresEvento(nome, extra || {}); } catch(e) {} }
 const tela = id => {
   document.querySelectorAll('.tela').forEach(t => t.classList.remove('on'));
   const alvo = $(id);
@@ -898,7 +902,7 @@ const nf = n => n.toFixed(1).replace('.', ',');
 $('#ano').textContent = new Date().getFullYear();
 
 /* ======================= CAPA ======================= */
-$('#btn-iniciar').addEventListener('click', () => tela('#tela-form'));
+$('#btn-iniciar').addEventListener('click', () => { ev('bussola_inicio'); tela('#tela-form'); });
 
 /* ======================= FORMULÁRIO ======================= */
 const wa = $('#f-whatsapp');
@@ -954,6 +958,7 @@ $('#form-lead').addEventListener('submit', e => {
   lead = {nome, email, whatsapp: whats, empresa: emp, faturamento: fat, mensagem: ''};
   enviarRD(CONFIG.RD_IDENTIFICADOR_LEAD, {});
   try{ fbq('track','Lead',{content_name:'Bussola de IA MARES'}); }catch(e){}
+  ev('bussola_lead', {faturamento: fat});
   tela('#tela-quiz');
   render();
 });
@@ -1038,6 +1043,7 @@ function render(){
 
 $('#btn-proximo').addEventListener('click', () => {
   if (!respondida(atual)) return;
+  ev('bussola_pergunta', {numero: atual+1});
   if (atual < PERGUNTAS.length-1){ atual++; render(); }
   else finalizar();
 });
@@ -1082,6 +1088,10 @@ function finalizar(){
   enviarPlanilha();
   registrarEvento(resultado);
   try{ fbq('track','CompleteRegistration',{content_name:'Bussola de IA MARES'}); }catch(e){}
+  ev('bussola_resultado', {
+    usa_ia: resultado.frequencia && /nunca|n\u00e3o/i.test(String(resultado.frequencia)) ? 'nao' : 'sim',
+    impacto: resultado.nivel_impacto || ''
+  });
 
   setTimeout(() => { pintarResultado(); tela('#tela-res'); }, 1800);
 }
@@ -1143,6 +1153,7 @@ $('#btn-enviar-msg').addEventListener('click', () => {
 $('#f-mensagem').addEventListener('input', e => { lead.mensagem = e.target.value.trim(); atualizarWhats(); });
 
 $('#btn-refazer').addEventListener('click', () => {
+  ev('bussola_refazer');
   atual = 0;
   respostas.fill(null);
   $('#preenche').style.width = '0%';
