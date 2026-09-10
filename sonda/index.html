@@ -829,6 +829,10 @@ const SESSAO = 's' + Date.now().toString(36) + Math.random().toString(36).slice(
 
 /* ======================= UTILIDADES ======================= */
 const $ = s => document.querySelector(s);
+
+/* manda o evento para o Google Analytics. O maresEvento vem do cookies.js e
+   já acrescenta a página, então aqui só vai o que é da Sonda. */
+function ev(nome, extra){ try { if (window.maresEvento) window.maresEvento(nome, extra || {}); } catch(e) {} }
 const tela = id => {
   document.querySelectorAll('.tela').forEach(t => t.classList.remove('on'));
   const alvo = $(id);
@@ -853,7 +857,7 @@ const nf = n => n.toFixed(1).replace('.', ',');
 $('#ano').textContent = new Date().getFullYear();
 
 /* ======================= CAPA ======================= */
-$('#btn-iniciar').addEventListener('click', () => tela('#tela-form'));
+$('#btn-iniciar').addEventListener('click', () => { ev('sonda_inicio'); tela('#tela-form'); });
 
 /* ======================= FORMULÁRIO ======================= */
 const wa = $('#f-whatsapp');
@@ -909,6 +913,7 @@ $('#form-lead').addEventListener('submit', e => {
   lead = {nome, email, whatsapp: whats, empresa: emp, faturamento: fat, mensagem: ''};
   enviarRD(CONFIG.RD_IDENTIFICADOR_LEAD, {});
   try{ fbq('track','Lead',{content_name:'Sonda MARES'}); }catch(e){}
+  ev('sonda_lead', {faturamento: fat});
   tela('#tela-quiz');
   render();
 });
@@ -934,6 +939,7 @@ function render(){
     b.innerHTML = `<span class="bolha"></span><span>${texto}</span>`;
     b.addEventListener('click', () => {
       respostas[atual] = i+1;
+      ev('sonda_pergunta', {numero: atual+1, nota: i+1});
       render();
       $('#btn-proximo').disabled = false;
     });
@@ -981,6 +987,7 @@ function finalizar(){
   enviarPlanilha();
   registrarEvento(resultado);
   try{ fbq('track','CompleteRegistration',{content_name:'Sonda MARES', value:Number(resultado.media.toFixed(2)), currency:'BRL'}); }catch(e){}
+  ev('sonda_resultado', {nivel: resultado.nivel.nome, pontuacao: Number(resultado.media.toFixed(2))});
 
   setTimeout(() => { pintarResultado(); tela('#tela-res'); }, 2200);
 }
@@ -1059,11 +1066,15 @@ $('#btn-enviar-msg').addEventListener('click', () => {
     ok.style.display = 'inline';
     setTimeout(()=>{ ok.style.display = 'none'; }, 3600);
   }
+  ev('sonda_mensagem', {escreveu: txt ? 'sim' : 'nao'});
   window.open($('#cta-whats').href, '_blank', 'noopener');
 });
 $('#f-mensagem').addEventListener('input', e => { lead.mensagem = e.target.value.trim(); atualizarWhats(); });
 
+$('#cta-diag').addEventListener('click', () => ev('sonda_cta_diagnostico', {nivel: resultado ? resultado.nivel.nome : ''}));
+
 $('#btn-refazer').addEventListener('click', () => {
+  ev('sonda_refazer');
   atual = 0;
   respostas.fill(null);
   $('#preenche').style.width = '0%';
