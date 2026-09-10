@@ -1114,6 +1114,10 @@ const TESTE_VERSAO = 'MARES-TEMP-web-1.0';
 const SESSAO = 'TMP-' + Math.random().toString(36).slice(2,8).toUpperCase() + '-' + Date.now().toString(36).toUpperCase();
 
 const $ = s => document.querySelector(s);
+
+/* manda o evento para o Google Analytics. O maresEvento vem do cookies.js e
+   já acrescenta a página, então aqui só vai o que é do teste. */
+function ev(nome, extra){ try { if (window.maresEvento) window.maresEvento(nome, extra || {}); } catch(e) {} }
 const $$ = s => Array.from(document.querySelectorAll(s));
 
 let lead = {};
@@ -1350,7 +1354,7 @@ if (TURMA) {
 }
 
 /* ======================= TELA: CAPA E DADOS ======================= */
-$('#ir-dados').addEventListener('click', () => mostrar('t-dados'));
+$('#ir-dados').addEventListener('click', () => { ev('temperamentos_inicio'); mostrar('t-dados'); });
 
 $('#f-whats').addEventListener('input', e => { e.target.value = mascaraTelefone(e.target.value); });
 
@@ -1400,6 +1404,7 @@ $('#ir-quiz').addEventListener('click', () => {
   };
   enviarRD(CONFIG.RD_IDENTIFICADOR_LEAD, {});
   if (window.fbq) fbq('track','Lead',{content_name:'Teste dos Temperamentos MARES'});
+  ev('temperamentos_lead', {nivel: lead.nivel || '', geracao: lead.geracao || '', time: TURMA || 'sem turma'});
   tela = 0;
   desenharTela();
   mostrar('t-quiz');
@@ -1435,6 +1440,7 @@ function atualizarContagem(){
 }
 $('#voltar').addEventListener('click', () => { if (tela > 0) { tela--; desenharTela(); window.scrollTo({top:0,behavior:'smooth'}); } });
 $('#avancar').addEventListener('click', () => {
+  ev('temperamentos_tela', {numero: tela + 1, de: TELAS.length});
   if (tela < TELAS.length - 1) { tela++; desenharTela(); window.scrollTo({top:0,behavior:'smooth'}); return; }
   perguntarAprendizagem();
 });
@@ -1505,6 +1511,14 @@ function concluir(){
   }
 
   resultado = r;
+  ev('temperamentos_resultado', {
+    predominante: r.primary || '',
+    secundario: r.secondary || '',
+    combinacao: r.chave || '',
+    classe: r.classe || '',
+    marcacoes: r.total || 0,
+    time: TURMA || 'sem turma'
+  });
   mostrar('t-calculando');
   setTimeout(() => { desenharResultado(); mostrar('t-resultado'); enviarTudo(); }, 1700);
 }
