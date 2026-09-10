@@ -683,6 +683,7 @@ fbq('init','673278761920486');fbq('track','PageView');
     var telLimpo = soDigitosBR(tel);
 
     if (window.fbq) fbq('track','Lead');
+    if (window.maresEvento) window.maresEvento('gerar_lead', {formulario: 'Poder dos Dados'});
 
     // o redirecionamento acontece de qualquer jeito, mesmo se o RD falhar
     var jaFoi = false;
