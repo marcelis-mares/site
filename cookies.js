@@ -119,8 +119,66 @@
     });
   }
 
+  /* ==================================================================
+     Medição comum a todas as páginas.
+
+     Isto vive aqui de propósito. O cookies.js é o único arquivo que todas
+     as páginas carregam, inclusive as que não usam o app.js, como o RaioX,
+     a Sonda, os Temperamentos, a Bússola, o Poder dos Dados e a imersão.
+     Um lugar só, e o site inteiro passa a medir clique de WhatsApp e de
+     checkout, que antes só o Pixel do Facebook enxergava.
+     ================================================================== */
+
+  /* nome curto da página, para separar os eventos no relatório */
+  function ondeEstou() {
+    var c = location.pathname.replace(/^\/|\/$/g, '');
+    return c === '' ? 'home' : c;
+  }
+
+  function evento(nome, extra) {
+    try {
+      var d = extra || {};
+      d.pagina = d.pagina || ondeEstou();
+      gtag('event', nome, d);
+    } catch (e) {}
+  }
+  /* qualquer página pode chamar, inclusive as que têm script próprio */
+  window.maresEvento = evento;
+
+  function rotulo(a) {
+    var t = (a.getAttribute('aria-label') || a.textContent || '').replace(/\s+/g, ' ').trim();
+    return t.slice(0, 90) || 'sem texto';
+  }
+
+  function medirCliques() {
+    document.addEventListener('click', function (e) {
+      var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+      if (!a) return;
+      var h = a.getAttribute('href') || '';
+
+      if (/wa\.me|api\.whatsapp\.com|web\.whatsapp\.com/i.test(h)) {
+        evento('clique_whatsapp', { botao: rotulo(a) });
+        return;
+      }
+      if (/eduzz\.com|sun\.eduzz|myeduzz|chk\.eduzz/i.test(h)) {
+        evento('clique_checkout', { botao: rotulo(a), destino: h.split('?')[0] });
+        return;
+      }
+      if (a.hasAttribute('download') || /\.(xlsx|xls|pdf|zip|csv|pptx|docx)(\?|$)/i.test(h)) {
+        evento('baixar_arquivo', { botao: rotulo(a), arquivo: h.split('/').pop().split('?')[0] });
+        return;
+      }
+      if (/^mailto:/i.test(h)) { evento('clique_email', { botao: rotulo(a) }); return; }
+      if (/^tel:/i.test(h))    { evento('clique_telefone', { botao: rotulo(a) }); return; }
+      if (/instagram\.com|linkedin\.com|youtube\.com|facebook\.com/i.test(h)) {
+        evento('clique_social', { botao: rotulo(a), destino: h.split('?')[0] });
+      }
+    }, true);
+  }
+
   function iniciar() {
     iniciarGA();
+    medirCliques();
     var p = preferencia();
     if (p === 'aceito') { liberarGA(); carregarClarity(); return; }
     if (p === 'recusado') return;
