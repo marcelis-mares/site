@@ -1051,7 +1051,11 @@ const PLANO_30 = {
 /* ======================= MEDIÇÃO ======================= */
 function gtagLocal(){ window.dataLayer = window.dataLayer || []; window.dataLayer.push(arguments); }
 function ev(nome, extra){
-  try { (window.gtag || gtagLocal)('event', nome, extra || {}); } catch(e) {}
+  try {
+    /* o maresEvento vem do cookies.js e já acrescenta a página no evento */
+    if (window.maresEvento) { window.maresEvento(nome, extra || {}); return; }
+    (window.gtag || gtagLocal)('event', nome, extra || {});
+  } catch(e) {}
 }
 
 /* ======================= PROGRESSO SALVO ======================= */
