@@ -2078,6 +2078,7 @@ window.maresIaEnviar = function (dados) {
   }
 
   if (window.fbq) { fbq('track', 'Lead'); }
+  if (window.maresEvento) { window.maresEvento('gerar_lead', {formulario: 'Imersao Mares.IA'}); }
 };
 </script>
 
