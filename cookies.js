@@ -27,6 +27,9 @@
      configuração de consentimento chegue primeiro que qualquer medição. */
   window.dataLayer = window.dataLayer || [];
   function gtag() { window.dataLayer.push(arguments); }
+  /* deixa o gtag disponível para o resto do site, para qualquer página poder
+     mandar evento de funil sem precisar montar a fila de novo */
+  if (!window.gtag) window.gtag = gtag;
 
   function iniciarGA() {
     if (!GA_ID || window.__mares_ga) return;
