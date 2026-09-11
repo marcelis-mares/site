@@ -4,20 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- ATENÇÃO: enquanto data, cidade e checkout estiverem como [PLACEHOLDER], a página fica
-     fora dos buscadores. Quando estiver tudo preenchido, apagar a linha robots abaixo,
-     incluir /mares-ia/ no sitemap.xml e conferir que o robots.txt não bloqueia. -->
+<!-- Turma de Curitiba, 17 de outubro de 2026. Data, cidade e preço já estão preenchidos.
+     Falta o link de checkout da Eduzz e o endereço do local: enquanto isso, os botões de
+     compra levam para o WhatsApp com a mensagem pronta.
+     Para abrir a página aos buscadores: apagar a linha robots abaixo, incluir /mares-ia/
+     no sitemap.xml e conferir que o robots.txt não bloqueia. -->
 <meta name="robots" content="noindex,nofollow">
 
-<title>Imersão Mares.IA · Construa uma empresa melhor com IA | MARES</title>
-<meta name="description" content="Imersão presencial de um dia para o dono e um líder do time redesenharem a empresa a partir do que a Inteligência Artificial já tornou possível. Ingresso duplo, mesmo investimento.">
+<title>Imersão Mares.IA · Curitiba, 17 de outubro de 2026 | MARES</title>
+<meta name="description" content="Imersão presencial de um dia em Curitiba, 17 de outubro de 2026, para o dono redesenhar a empresa a partir do que a Inteligência Artificial já tornou possível. Ingresso individual a partir de R$ 997 ou duplo, com um líder do time, a partir de R$ 1.597.">
 <link rel="canonical" href="https://www.maresconsultoria.com.br/mares-ia/">
 
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="MARES Consultoria Empresarial">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Imersão Mares.IA · Uma empresa melhor com IA">
-<meta property="og:description" content="Um dia presencial para o dono e um líder do time. Ingresso duplo, mesmo investimento. Mesmo que você nunca tenha usado IA na vida.">
+<meta property="og:title" content="Imersão Mares.IA · Curitiba, 17 de outubro">
+<meta property="og:description" content="Um dia presencial em Curitiba para construir uma empresa melhor com IA. Venha sozinho ou traga um líder do seu time. Mesmo que você nunca tenha usado IA na vida.">
 <meta property="og:url" content="https://www.maresconsultoria.com.br/mares-ia/">
 <meta property="og:image" content="https://www.maresconsultoria.com.br/mares-ia/og.jpg">
 <meta property="og:image:secure_url" content="https://www.maresconsultoria.com.br/mares-ia/og.jpg">
@@ -26,8 +28,8 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Imersão Mares.IA · uma empresa melhor com IA">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Imersão Mares.IA · Uma empresa melhor com IA">
-<meta name="twitter:description" content="Um dia presencial para o dono e um líder do time. Ingresso duplo, mesmo investimento.">
+<meta name="twitter:title" content="Imersão Mares.IA · Curitiba, 17 de outubro">
+<meta name="twitter:description" content="Um dia presencial em Curitiba para construir uma empresa melhor com IA. Individual ou duplo, com um líder do seu time.">
 <meta name="twitter:image" content="https://www.maresconsultoria.com.br/mares-ia/og.jpg">
 
 <style>
@@ -56,14 +58,15 @@ fbq('init','673278761920486');fbq('track','PageView');
   "@context": "https://schema.org",
   "@type": "Event",
   "name": "Imersão Mares.IA",
-  "description": "Imersão presencial de um dia para donos de empresa e um líder do time redesenharem a empresa a partir do que a Inteligência Artificial já tornou possível.",
+  "description": "Imersão presencial de um dia, em Curitiba, para o dono de empresa redesenhar o negócio a partir do que a Inteligência Artificial já tornou possível. Ingresso individual ou duplo, com um líder do time.",
   "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
   "eventStatus": "https://schema.org/EventScheduled",
-  "startDate": "[PREENCHER-DATA-ISO]",
+  "startDate": "2026-10-17T09:00:00-03:00",
+  "endDate": "2026-10-17T18:00:00-03:00",
   "location": {
     "@type": "Place",
-    "name": "[PREENCHER-LOCAL]",
-    "address": { "@type": "PostalAddress", "addressLocality": "[PREENCHER-CIDADE]", "addressCountry": "BR" }
+    "name": "Curitiba",
+    "address": { "@type": "PostalAddress", "addressLocality": "Curitiba", "addressRegion": "PR", "addressCountry": "BR" }
   },
   "organizer": {
     "@type": "Organization",
@@ -71,14 +74,26 @@ fbq('init','673278761920486');fbq('track','PageView');
     "url": "https://www.maresconsultoria.com.br/"
   },
   "performer": { "@type": "Person", "name": "Marcelis Pereira" },
-  "offers": {
-    "@type": "Offer",
-    "name": "Ingresso duplo · Lote 1",
-    "price": "1597.00",
-    "priceCurrency": "BRL",
-    "availability": "https://schema.org/InStock",
-    "url": "https://www.maresconsultoria.com.br/mares-ia/"
-  }
+  "offers": [
+    {
+      "@type": "Offer",
+      "name": "Ingresso individual · Lote 1",
+      "price": "997.00",
+      "priceCurrency": "BRL",
+      "availability": "https://schema.org/InStock",
+      "validThrough": "2026-09-26T23:59:00-03:00",
+      "url": "https://www.maresconsultoria.com.br/mares-ia/"
+    },
+    {
+      "@type": "Offer",
+      "name": "Ingresso duplo, dono e um líder · Lote 1",
+      "price": "1597.00",
+      "priceCurrency": "BRL",
+      "availability": "https://schema.org/InStock",
+      "validThrough": "2026-09-26T23:59:00-03:00",
+      "url": "https://www.maresconsultoria.com.br/mares-ia/"
+    }
+  ]
 }
 </script>
 
@@ -805,6 +820,106 @@ fbq('init','673278761920486');fbq('track','PageView');
     font-weight: 700;
   }
 
+  /* ---- dois precos por lote ---- */
+
+  .lote-precos {
+    display: grid;
+    gap: 8px;
+    margin: 12px 0 10px;
+  }
+
+  .lote-precos > div {
+    display: grid;
+    gap: 3px;
+  }
+
+  .lote-precos span {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .lote-precos b {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 800;
+    font-size: 26px;
+    line-height: 1.05;
+    color: var(--navy);
+    white-space: nowrap;
+  }
+
+  .lote.futuro .lote-precos b { color: var(--ink-faint); }
+  .lote.encerrado .lote-precos b { color: var(--ink-faint); text-decoration: line-through; }
+
+  /* ---- os dois cartoes de ingresso ---- */
+
+  .precos-dois {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    align-items: stretch;
+  }
+
+  @media (max-width: 760px) { .precos-dois { grid-template-columns: 1fr; } }
+
+  .precos-dois .preco-bloco {
+    display: flex;
+    flex-direction: column;
+    padding: 38px 26px;
+  }
+
+  .precos-dois .preco {
+    font-size: clamp(40px, 5.2vw, 56px);
+    white-space: nowrap;
+  }
+
+  .precos-dois .preco-inclui { margin-bottom: 26px; }
+
+  .precos-dois .cta { margin-top: auto; }
+
+  .preco-bloco.leve {
+    background: var(--surface);
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+
+  .preco-bloco.leve .preco-tag { color: var(--ink-faint); }
+  .preco-bloco.leve .preco { color: var(--navy); }
+  .preco-bloco.leve .preco small { color: var(--ink-faint); }
+  .preco-bloco.leve .preco-linha { color: var(--ink-soft); }
+  .preco-bloco.leve .preco-inclui li { color: var(--ink-soft); }
+  .preco-bloco.leve .preco-inclui li::before { color: var(--laranja); }
+  .preco-bloco.leve .cta-note { color: var(--ink-faint); }
+
+  .preco-bloco { position: relative; }
+
+  .preco-nota {
+    font-size: 15px;
+    line-height: 1.66;
+    color: var(--ink-soft);
+    max-width: 62ch;
+    margin: 26px auto 0;
+    text-align: center;
+  }
+
+  .preco-selo {
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--laranja);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
   /* ---- formulário ---- */
 
   .form-card {
@@ -1220,17 +1335,17 @@ fbq('init','673278761920486');fbq('track','PageView');
 
     <h1>Não é sobre colocar IA na sua empresa. É sobre construir <em>uma empresa melhor</em> com IA.</h1>
 
-    <p class="hero-sub">Um dia para o dono e um líder do time redesenharem a empresa a partir do que a Inteligência Artificial já tornou possível. Mesmo que você nunca tenha usado IA na vida.</p>
+    <p class="hero-sub">Um dia para o dono redesenhar a empresa a partir do que a Inteligência Artificial já tornou possível. Você pode vir sozinho ou trazer um líder do seu time. Mesmo que nunca tenha usado IA na vida.</p>
 
     <div class="hero-facts">
-      <div><b>Data</b><span class="var">[DATA]</span></div>
-      <div><b>Cidade</b><span class="var">[CIDADE]</span></div>
+      <div><b>Data</b>17 de outubro, sábado</div>
+      <div><b>Cidade</b>Curitiba</div>
       <div><b>Local</b>Em breve</div>
       <div><b>Formato</b>Presencial, dia inteiro</div>
     </div>
 
     <a class="cta" href="#inscricao">Quero garantir minha vaga</a>
-    <p class="cta-note">Ingresso duplo: você e um líder do seu time, no mesmo investimento.</p>
+    <p class="cta-note">Dois ingressos: individual, ou duplo com um líder do seu time pagando bem menos que o dobro.</p>
   </div>
 </header>
 
@@ -1372,9 +1487,9 @@ fbq('init','673278761920486');fbq('track','PageView');
 <!-- ============ INGRESSO DUPLO ============ -->
 <section class="alt">
   <div class="wrap-narrow">
-    <p class="eyebrow">Ingresso duplo</p>
+    <p class="eyebrow">A segunda vaga</p>
     <h2>Venha com um líder do seu time</h2>
-    <p class="lead">Um investimento, duas vagas. Porque transformação que só uma pessoa entendeu morre na segunda-feira.</p>
+    <p class="lead">Você pode vir sozinho, e muita gente vem. Mas no ingresso duplo a segunda vaga sai por R$ 600, e ela existe por um motivo: transformação que só uma pessoa entendeu morre na segunda-feira.</p>
 
     <div class="duplo">
       <div class="pessoa dono">
@@ -1383,7 +1498,7 @@ fbq('init','673278761920486');fbq('track','PageView');
         <p>Quem enxerga a empresa inteira, conhece os números e tem autoridade para decidir o que muda.</p>
       </div>
       <div class="pessoa lider">
-        <div class="pessoa-tag">Vaga 2</div>
+        <div class="pessoa-tag">Vaga 2 · opcional</div>
         <h3>O impulsionador</h3>
         <p>Um líder do seu time que vai sustentar o ritmo depois, quando a rotina tentar puxar tudo de volta.</p>
       </div>
@@ -1502,14 +1617,17 @@ fbq('init','673278761920486');fbq('track','PageView');
 <section class="alt" id="investimento">
   <div class="wrap-narrow">
     <p class="eyebrow">Investimento</p>
-    <h2>Duas vagas, um investimento</h2>
-    <p class="lead">O preço vira em três lotes. Quem decide antes paga menos, e é sempre assim.</p>
+    <h2>Você escolhe se vem sozinho ou acompanhado</h2>
+    <p class="lead">São dois ingressos, o individual e o duplo, e o preço dos dois vira em três lotes. Quem decide antes paga menos, e é sempre assim.</p>
 
     <div class="lotes">
       <div class="lote ativo" id="lote-1">
         <div class="lote-nome">Lote 1 · aberto</div>
-        <div class="lote-valor">R$ 1.597</div>
-        <div class="lote-cond">até <span class="var">[DATA]</span></div>
+        <div class="lote-precos">
+          <div><span>Individual</span><b>R$ 997</b></div>
+          <div><span>Duplo</span><b>R$ 1.597</b></div>
+        </div>
+        <div class="lote-cond">até 26 de setembro</div>
         <div class="contador" id="contador-lote">
           <div class="contador-rot">Encerra em</div>
           <div class="contador-relogio">
@@ -1523,14 +1641,20 @@ fbq('init','673278761920486');fbq('track','PageView');
       </div>
       <div class="lote futuro">
         <div class="lote-nome">Lote 2</div>
-        <div class="lote-valor">R$ 1.997</div>
-        <div class="lote-cond">abre em <span class="var">[DATA]</span></div>
+        <div class="lote-precos">
+          <div><span>Individual</span><b>R$ 1.297</b></div>
+          <div><span>Duplo</span><b>R$ 1.997</b></div>
+        </div>
+        <div class="lote-cond">de 27 de setembro a 10 de outubro</div>
         <div class="lote-selo">Ainda não aberto</div>
       </div>
       <div class="lote futuro">
         <div class="lote-nome">Lote 3 · último</div>
-        <div class="lote-valor">R$ 2.397</div>
-        <div class="lote-cond">abre em <span class="var">[DATA]</span></div>
+        <div class="lote-precos">
+          <div><span>Individual</span><b>R$ 1.597</b></div>
+          <div><span>Duplo</span><b>R$ 2.397</b></div>
+        </div>
+        <div class="lote-cond">de 11 a 16 de outubro</div>
         <div class="lote-selo">Ainda não aberto</div>
       </div>
     </div>
@@ -1540,7 +1664,7 @@ fbq('init','673278761920486');fbq('track','PageView');
       /* DESENVOLVEDOR: troque a data abaixo pelo fim real do lote 1.
          Formato: ano, mês (0 = janeiro), dia, hora, minuto.
          Quando a data passar, o contador some e aparece "Lote encerrado". */
-      var FIM_LOTE_1 = new Date(2026, 8, 30, 23, 59);
+      var FIM_LOTE_1 = new Date(2026, 8, 26, 23, 59);
 
       var box = document.getElementById("contador-lote");
       var fim = document.getElementById("lote-1-fim");
@@ -1572,23 +1696,48 @@ fbq('init','673278761920486');fbq('track','PageView');
     })();
     </script>
 
-    <div class="preco-bloco">
-      <div class="preco-tag">Lote 1 · ingresso duplo · dono + 1 líder</div>
-      <div class="preco">R$ 1.597<small>ou em até 12x no cartão</small></div>
+    <div class="precos-dois">
 
-      <p class="preco-linha">Menos de R$ 800 por pessoa, por um dia inteiro de trabalho sobre a sua empresa.</p>
+      <div class="preco-bloco leve">
+        <div class="preco-tag">Lote 1 · individual</div>
+        <div class="preco">R$ 997<small>ou em até 12x no cartão</small></div>
 
-      <ul class="preco-inclui">
-        <li>Duas vagas na imersão presencial de dia inteiro</li>
-        <li>Material de trabalho impresso para as duas pessoas</li>
-        <li>Diagnóstico, mapa de oportunidades e plano de 90 dias</li>
-        <li>As skills de IA que a Marcelis usa no dia a dia dela</li>
-        <li>Encontro de acompanhamento online duas semanas depois</li>
-      </ul>
+        <p class="preco-linha">Para o dono que vai conduzir a mudança com as próprias mãos.</p>
 
-      <a class="cta" href="#inscricao">Quero garantir as duas vagas</a>
-      <p class="cta-note" style="margin-top:16px">O lote 1 vale enquanto estiver aberto. Depois o valor sobe e não volta.</p>
+        <ul class="preco-inclui">
+          <li>Uma vaga na imersão presencial de dia inteiro</li>
+          <li>Material de trabalho impresso</li>
+          <li>Diagnóstico, mapa de oportunidades e plano de 90 dias</li>
+          <li>As skills de IA que a Marcelis usa no dia a dia dela</li>
+          <li>Encontro de acompanhamento online duas semanas depois</li>
+        </ul>
+
+        <a class="cta cta-vazado" href="#inscricao">Quero a minha vaga</a>
+      </div>
+
+      <div class="preco-bloco">
+        <div class="preco-selo">Mais recomendado</div>
+        <div class="preco-tag">Lote 1 · duplo · dono + 1 líder</div>
+        <div class="preco">R$ 1.597<small>ou em até 12x no cartão</small></div>
+
+        <p class="preco-linha">A segunda vaga sai por R$ 600, menos de R$ 800 por pessoa.</p>
+
+        <ul class="preco-inclui">
+          <li>Duas vagas na imersão presencial de dia inteiro</li>
+          <li>Material de trabalho impresso para as duas pessoas</li>
+          <li>Diagnóstico, mapa de oportunidades e plano de 90 dias</li>
+          <li>As skills de IA que a Marcelis usa no dia a dia dela</li>
+          <li>Encontro de acompanhamento online duas semanas depois</li>
+        </ul>
+
+        <a class="cta" href="#inscricao">Quero as duas vagas</a>
+      </div>
+
     </div>
+
+    <p class="cta-note" style="margin-top:22px;text-align:center">O lote 1 vale enquanto estiver aberto. Depois o valor sobe e não volta.</p>
+
+    <p class="preco-nota">Por que o duplo é o mais recomendado: quem volta para a empresa sozinho volta com um plano e com a agenda cheia. O líder que esteve na sala é quem sustenta o ritmo quando a rotina puxa tudo de volta. A decisão continua sendo do dono, e por isso ele precisa estar lá de qualquer jeito.</p>
   </div>
 </section>
 
@@ -1662,11 +1811,11 @@ fbq('init','673278761920486');fbq('track','PageView');
       <div class="tela" id="tela-checkout" hidden>
         <div class="ok-selo">✓</div>
         <h3 class="diag-titulo" style="text-align:center">Recebi as suas respostas.</h3>
-        <p class="diag-texto" style="text-align:center;max-width:42ch;margin:0 auto 22px">
-          Agora é só concluir o pagamento para garantir as duas vagas. A confirmação e os detalhes chegam por e-mail e WhatsApp.
+        <p class="diag-texto" style="text-align:center;max-width:44ch;margin:0 auto 22px">
+          Agora é só fechar a sua vaga comigo pelo WhatsApp. Eu confirmo a disponibilidade da turma e te mando o link de pagamento na hora.
         </p>
-        <a class="cta" href="[LINK-CHECKOUT]" style="width:100%;text-align:center">Ir para o pagamento seguro</a>
-        <p class="form-nota" style="text-align:center">Lote 1 · ingresso duplo · R$ 1.597 ou em até 12x</p>
+        <a class="cta" id="btn-checkout" href="#" target="_blank" rel="noopener" style="width:100%;text-align:center">Fechar minha vaga no WhatsApp</a>
+        <p class="form-nota" style="text-align:center" id="checkout-linha">Lote 1</p>
       </div>
 
       <!-- NÃO É O MOMENTO -->
@@ -1737,7 +1886,7 @@ fbq('init','673278761920486');fbq('track','PageView');
       ajuda: "Uma ou duas linhas bastam. É daqui que sai o conteúdo do seu dia." },
 
     { id: "data", tipo: "escolha",
-      t: "A imersão é presencial em [CIDADE], no dia [DATA]. Você consegue estar lá?",
+      t: "A imersão é presencial em Curitiba, no sábado 17 de outubro. Você consegue estar lá?",
       ajuda: "O endereço exato é divulgado em breve, com antecedência.",
       o: ["Sim, moro na região",
           "Sim, viajo para participar",
@@ -1753,10 +1902,23 @@ fbq('init','673278761920486');fbq('track','PageView');
           "Não pretendo investir agora"],
       corta: { "Não pretendo investir agora": "investimento" } },
 
+    { id: "ingresso", tipo: "escolha",
+      t: "Você vem sozinho ou traz um líder do seu time?",
+      ajuda: "No lote 1 o individual está R$ 997 e o duplo R$ 1.597, ou seja, a segunda vaga sai por R$ 600. Quem volta acompanhado tem quem sustente o plano na empresa.",
+      o: ["Duplo, levo um líder comigo",
+          "Individual, vou sozinho"] },
+
     { id: "lider", tipo: "texto", opcional: true,
+      so_se: function (r) { return r.ingresso === "Duplo, levo um líder comigo"; },
       t: "Quem vem com você?",
       ajuda: "Nome e função do líder que vai ocupar a segunda vaga. Se ainda não decidiu, escreva \"a definir\"." }
   ];
+
+  /* preço de cada ingresso no lote aberto, usado na tela final */
+  var INGRESSOS = {
+    "Individual, vou sozinho":      { curto: "individual", valor: "R$ 997" },
+    "Duplo, levo um líder comigo":  { curto: "duplo, com um líder do time", valor: "R$ 1.597" }
+  };
 
   /* ------------------------------------------------------------------
      TELAS DE "NÃO É O MOMENTO"
@@ -1771,7 +1933,7 @@ fbq('init','673278761920486');fbq('track','PageView');
     "sem-dono": {
       titulo: "Sem o dono na sala, o dia não entrega o que promete",
       texto: "As decisões que aparecem na imersão são decisões de quem tem autoridade sobre o rumo da empresa, o que a empresa vai deixar de fazer e onde o dinheiro vai. Ninguém decide isso por procuração, e transformação que o dono só recebe em resumo morre na segunda-feira.",
-      saida: "Se o dono puder vir junto, volte e responda de novo. Vocês dois entram no mesmo ingresso."
+      saida: "Se o dono puder vir junto, volte e responda de novo. O ingresso duplo existe exatamente para isso, e a segunda vaga sai por R$ 600."
     },
     "sem-operacao": {
       titulo: "Essa turma ainda não é o seu momento",
@@ -1900,6 +2062,18 @@ fbq('init','673278761920486');fbq('track','PageView');
     });
   }
 
+  /* Monta a saída final. Enquanto não existir o checkout da Eduzz, o botão abre o
+     WhatsApp da Marcelis com o ingresso escolhido e o valor já escritos na mensagem.
+     Quando os dois links existirem, é só trocar este trecho pelos endereços. */
+  function montarCheckout() {
+    var ing = INGRESSOS[respostas.ingresso] || INGRESSOS["Duplo, levo um líder comigo"];
+    var texto = "Oi, Marcelis! Acabei de preencher a inscrição da Imersão Mares.IA, em Curitiba, no dia 17 de outubro."
+              + " Quero o ingresso " + ing.curto + ", que está " + ing.valor + " no lote 1."
+              + " Meu nome é " + (respostas.nome || "") + ", da " + (respostas.empresa || "") + ".";
+    el("btn-checkout").href = "https://wa.me/5541992488092?text=" + encodeURIComponent(texto);
+    el("checkout-linha").textContent = "Lote 1 · ingresso " + ing.curto + " · " + ing.valor + " ou em até 12x";
+  }
+
   el("btn-voltar").addEventListener("click", function () {
     if (atual > 0) { atual--; render(); subir(); }
   });
@@ -1942,6 +2116,7 @@ fbq('init','673278761920486');fbq('track','PageView');
       el("bloqueio-saida").textContent = b.saida;
       mostrar("tela-bloqueio");
     } else {
+      montarCheckout();
       mostrar("tela-checkout");
     }
     subir();
@@ -1963,7 +2138,7 @@ fbq('init','673278761920486');fbq('track','PageView');
 
     <details>
       <summary>Preciso levar alguém do time?</summary>
-      <p>Não é obrigatório, mas é muito recomendado, e o investimento já contempla os dois. O líder que participa vira o impulsionador da mudança na volta, e isso muda a chance de o plano sair do papel.</p>
+      <p>Não. Existe ingresso individual e ingresso duplo, e você escolhe na hora da inscrição. Só que é muito recomendado vir acompanhado: a segunda vaga sai por R$ 600 no lote 1, e o líder que participa vira o impulsionador da mudança na volta. Isso muda a chance de o plano sair do papel.</p>
     </details>
 
     <details>
@@ -1992,6 +2167,11 @@ fbq('init','673278761920486');fbq('track','PageView');
     </details>
 
     <details>
+      <summary>A imersão é num sábado?</summary>
+      <p>É. 17 de outubro de 2026 cai num sábado, e isso é proposital: o dia inteiro é trabalho sobre a sua empresa, e num dia útil a operação te puxa de volta a cada meia hora. Sábado é o dia em que o dono consegue parar de verdade.</p>
+    </details>
+
+    <details>
       <summary>E se eu não puder ir depois de comprar?</summary>
       <p><span class="var">[POLÍTICA DE REMARCAÇÃO / REEMBOLSO]</span></p>
     </details>
@@ -2003,8 +2183,8 @@ fbq('init','673278761920486');fbq('track','PageView');
   <div class="wrap-narrow">
     <h2>A IA já está no ambiente.<br>A pergunta é se a sua empresa está <em>preparada para operar nele</em>.</h2>
     <p>Enquanto uns discutem qual ferramenta usar, outros já estão reduzindo custo, ganhando velocidade e crescendo sem inchar a estrutura.</p>
-    <a class="cta" href="#inscricao">Quero as duas vagas</a>
-    <p class="cta-note" style="margin-top:16px"><span class="var">[DATA]</span> · <span class="var">[CIDADE]</span> · Local em breve</p>
+    <a class="cta" href="#inscricao">Quero garantir minha vaga</a>
+    <p class="cta-note" style="margin-top:16px">17 de outubro de 2026, sábado · Curitiba · Local em breve</p>
   </div>
 </section>
 
