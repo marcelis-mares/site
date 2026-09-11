@@ -854,7 +854,8 @@ fbq('init','673278761920486');fbq('track','PageView');
     font-weight: 800;
     font-size: 26px;
     line-height: 1.05;
-    color: var(--navy);
+    /* --ink acompanha o modo escuro; --navy ficava invisivel no fundo escuro */
+    color: var(--ink);
     white-space: nowrap;
   }
 
@@ -894,7 +895,7 @@ fbq('init','673278761920486');fbq('track','PageView');
   }
 
   .preco-bloco.leve .preco-tag { color: var(--ink-faint); }
-  .preco-bloco.leve .preco { color: var(--navy); }
+  .preco-bloco.leve .preco { color: var(--ink); }
   .preco-bloco.leve .preco small { color: var(--ink-faint); }
   .preco-bloco.leve .preco-linha { color: var(--ink-soft); }
   .preco-bloco.leve .preco-inclui li { color: var(--ink-soft); }
@@ -1174,6 +1175,62 @@ fbq('init','673278761920486');fbq('track','PageView');
   }
 
   .voltar:hover { color: var(--ink); }
+
+  /* ---- tela do preco, antes do cadastro ---- */
+
+  .preco-tela {
+    background: var(--navy);
+    color: #fff;
+    border-radius: 3px;
+    padding: 28px 24px 26px;
+    text-align: center;
+  }
+
+  .preco-tela .preco-tag { color: var(--on-dark-soft); margin-bottom: 14px; }
+
+  .preco-tela .valor {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 800;
+    font-size: clamp(44px, 12vw, 62px);
+    line-height: 1;
+    color: #fff;
+    white-space: nowrap;
+  }
+
+  .preco-tela .parcela {
+    font-size: 15px;
+    color: var(--on-dark-soft);
+    margin: 12px 0 0;
+  }
+
+  .preco-tela .preco-inclui { margin: 22px auto 0; }
+
+  .preco-troca {
+    border: 1px dashed var(--line);
+    border-radius: 3px;
+    padding: 16px 18px;
+    margin-top: 16px;
+    font-size: 15.5px;
+    color: var(--ink-soft);
+  }
+
+  .preco-troca strong { color: var(--ink); }
+
+  .preco-troca button {
+    display: block;
+    background: none;
+    border: none;
+    padding: 0;
+    margin-top: 8px;
+    font-family: "Aileron", sans-serif;
+    font-size: 15.5px;
+    font-weight: 600;
+    color: var(--laranja);
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-align: left;
+  }
 
   .aviso {
     background: var(--areia-wash);
@@ -1795,6 +1852,26 @@ fbq('init','673278761920486');fbq('track','PageView');
         <button class="voltar" id="btn-voltar" type="button">← Voltar</button>
       </div>
 
+      <!-- PRECO, ANTES DO CADASTRO -->
+      <div class="tela" id="tela-preco" hidden>
+        <p class="diag-passo" id="contador-preco"></p>
+        <h3 class="diag-titulo">Este é o seu investimento</h3>
+        <p class="diag-ajuda">Veja o valor antes de continuar. É o preço do lote aberto hoje, e vale enquanto o lote 1 estiver no ar, até 26 de setembro.</p>
+
+        <div class="preco-tela">
+          <div class="preco-tag" id="preco-tag">Lote 1 · individual</div>
+          <div class="valor" id="preco-valor">R$ 997</div>
+          <p class="parcela">ou em até 12x no cartão</p>
+          <ul class="preco-inclui" id="preco-inclui"></ul>
+        </div>
+
+        <div class="preco-troca" id="preco-troca"></div>
+
+        <button class="cta" id="btn-preco" style="width:100%;margin-top:18px">Continuar para a inscrição</button>
+        <p class="form-nota" style="text-align:center">Aqui você ainda não paga nada. O pagamento acontece no passo seguinte, depois que eu confirmar a sua vaga.</p>
+        <button class="voltar" id="btn-voltar-preco" type="button">← Voltar</button>
+      </div>
+
       <!-- CONTATO -->
       <div class="tela" id="tela-contato" hidden>
         <p class="diag-passo" id="contador-contato">Último passo</p>
@@ -1942,12 +2019,31 @@ fbq('init','673278761920486');fbq('track','PageView');
       ajuda: "Nome e função de quem vai ocupar a segunda vaga. Se ainda não decidiu, escreva \"a definir\"." }
   ];
 
-  /* preço de cada ingresso no lote aberto, usado na tela final */
+  /* preço de cada ingresso no lote aberto, usado na tela de preço e na tela final.
+     Quando o lote virar, troque valor e tag aqui e nos cartões da seção Investimento. */
   var INGRESSOS = {
-    "Individual, vou sozinho":     { curto: "individual", valor: "R$ 997" },
-    "Duplo, levo um líder comigo": { curto: "duplo", valor: "R$ 1.597" },
-    "Duplo, vamos dois da empresa":{ curto: "duplo", valor: "R$ 1.597" }
+    "Individual, vou sozinho":     { curto: "individual", valor: "R$ 997",   tag: "Lote 1 · individual" },
+    "Duplo, levo um líder comigo": { curto: "duplo",      valor: "R$ 1.597", tag: "Lote 1 · duplo · dono + 1 líder" },
+    "Duplo, vamos dois da empresa":{ curto: "duplo",      valor: "R$ 1.597", tag: "Lote 1 · duplo · duas pessoas da empresa" }
   };
+
+  var INCLUI = {
+    individual: ["Uma vaga na imersão presencial de dia inteiro",
+                 "Material de trabalho impresso",
+                 "Diagnóstico, mapa de oportunidades e plano de 90 dias",
+                 "As skills de IA que a Marcelis usa no dia a dia dela",
+                 "Encontro de acompanhamento online duas semanas depois"],
+    duplo:      ["Duas vagas na imersão presencial de dia inteiro",
+                 "Material de trabalho impresso para as duas pessoas",
+                 "Diagnóstico, mapa de oportunidades e plano de 90 dias",
+                 "As skills de IA que a Marcelis usa no dia a dia dela",
+                 "Encontro de acompanhamento online duas semanas depois"]
+  };
+
+  /* rótulo do ingresso duplo muda conforme quem está respondendo */
+  function rotuloDuplo() {
+    return respostas.papel === "Dono ou sócio" ? "Duplo, levo um líder comigo" : "Duplo, vamos dois da empresa";
+  }
 
   /* ------------------------------------------------------------------
      TELAS DE "NÃO É O MOMENTO"
@@ -1978,10 +2074,15 @@ fbq('init','673278761920486');fbq('track','PageView');
 
   /* ------------------------------------------------------------------ */
 
-  var respostas = {}, ordem = [], atual = 0, motivo = null;
+  var respostas = {}, ordem = [], atual = 0, motivo = null, comecou = false;
+
+  /* medição: o cookies.js publica window.maresEvento em todas as páginas */
+  function ev(nome, extra) {
+    try { if (window.maresEvento) { window.maresEvento(nome, extra || {}); } } catch (e) {}
+  }
 
   function el(id) { return document.getElementById(id); }
-  var telas = ["tela-passo", "tela-contato", "tela-checkout", "tela-bloqueio"];
+  var telas = ["tela-passo", "tela-preco", "tela-contato", "tela-checkout", "tela-bloqueio"];
 
   function mostrar(id) {
     telas.forEach(function (t) { el(t).hidden = (t !== id); });
@@ -1999,24 +2100,97 @@ fbq('init','673278761920486');fbq('track','PageView');
     el("inscricao").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
+  function totalPassos() { return visiveis().length + 2; }
+
   function avancar() {
     var lista = visiveis();
     if (atual < lista.length - 1) { atual++; render(); }
-    else { irParaContato(); }
+    else { irParaPreco(); }
+  }
+
+  /* A pessoa vê o preço do ingresso que escolheu antes de entregar os dados.
+     Ninguém preenche cadastro sem saber quanto custa. */
+  function irParaPreco() {
+    var total = totalPassos();
+    el("contador-preco").textContent = "Passo " + (total - 1) + " de " + total;
+    progresso(total - 2, total);
+    pintarPreco();
+    mostrar("tela-preco");
+    subir();
+  }
+
+  function pintarPreco() {
+    var chave = respostas.ingresso || "Individual, vou sozinho";
+    var ing = INGRESSOS[chave] || INGRESSOS["Individual, vou sozinho"];
+
+    el("preco-tag").textContent = ing.tag;
+    el("preco-valor").textContent = ing.valor;
+
+    var ul = el("preco-inclui");
+    ul.innerHTML = "";
+    INCLUI[ing.curto].forEach(function (item) {
+      var li = document.createElement("li");
+      li.textContent = item;
+      ul.appendChild(li);
+    });
+
+    var troca = el("preco-troca");
+    troca.innerHTML = "";
+    var p = document.createElement("p");
+    p.style.margin = "0";
+    var b = document.createElement("button");
+    b.type = "button";
+
+    if (ing.curto === "individual") {
+      p.innerHTML = "<strong>Quer trazer alguém da empresa?</strong> No duplo a segunda vaga sai por R$ 600, e quem volta acompanhado tira o plano do papel mais rápido.";
+      b.textContent = "Quero o duplo, R$ 1.597";
+      b.addEventListener("click", function () { trocarIngresso(rotuloDuplo()); });
+    } else {
+      p.innerHTML = "<strong>Prefere vir sozinho?</strong> O ingresso individual dá a mesma sala, o mesmo conteúdo e os mesmos entregáveis, para uma pessoa só.";
+      b.textContent = "Quero o individual, R$ 997";
+      b.addEventListener("click", function () { trocarIngresso("Individual, vou sozinho"); });
+    }
+
+    troca.appendChild(p);
+    troca.appendChild(b);
+
+    ev('imersao_preco_visto', { ingresso: ing.curto, valor: ing.valor, lote: 'Lote 1' });
+  }
+
+  /* trocar de ingresso na tela de preço. Se virou duplo, volto uma pergunta para
+     saber quem ocupa a segunda vaga, que é informação que a Marcelis usa no dia. */
+  function trocarIngresso(novo) {
+    var anterior = respostas.ingresso;
+    respostas.ingresso = novo;
+    ev('imersao_troca_ingresso', { de: (INGRESSOS[anterior] || {}).curto || '', para: INGRESSOS[novo].curto });
+
+    if (novo.indexOf("Duplo") === 0) {
+      delete respostas.lider;
+      var lista = visiveis();
+      atual = lista.length - 1;
+      mostrar("tela-passo");
+      render();
+      subir();
+      return;
+    }
+    delete respostas.lider;
+    pintarPreco();
+    subir();
   }
 
   function irParaContato() {
-    var total = visiveis().length + 1;
+    var total = totalPassos();
     el("contador-contato").textContent = "Passo " + total + " de " + total;
     progresso(total - 1, total);
     mostrar("tela-contato");
+    ev('imersao_contato', { ingresso: (INGRESSOS[respostas.ingresso] || {}).curto || '' });
     subir();
   }
 
   function render() {
     var lista = visiveis();
     var p = lista[atual];
-    var total = lista.length + 1;
+    var total = lista.length + 2;
 
     el("contador").textContent = "Passo " + (atual + 1) + " de " + total;
     el("pergunta").textContent = (typeof p.t === "function") ? p.t(respostas) : p.t;
@@ -2044,6 +2218,8 @@ fbq('init','673278761920486');fbq('track','PageView');
         b.innerHTML = '<span class="opcao-num">' + (i + 1) + '</span><span>' + texto + '</span>';
         b.addEventListener("click", function () {
           respostas[p.id] = texto;
+          if (!comecou) { comecou = true; ev('imersao_inicio', {}); }
+          ev('imersao_pergunta', { passo: atual + 1, campo: p.id, resposta: texto });
           opcoes.querySelectorAll(".opcao").forEach(function (x) { x.classList.remove("marcada"); });
           b.classList.add("marcada");
           if (p.corta && p.corta[texto]) { motivo = p.corta[texto]; }
@@ -2068,6 +2244,8 @@ fbq('init','673278761920486');fbq('track','PageView');
       var v = campo.value.trim();
       if (!v && !p.opcional) { el("erro-passo").style.display = "block"; campo.focus(); return; }
       respostas[p.id] = v;
+      if (!comecou) { comecou = true; ev('imersao_inicio', {}); }
+      ev('imersao_pergunta', { passo: atual + 1, campo: p.id });
       avancar();
     };
 
@@ -2105,11 +2283,17 @@ fbq('init','673278761920486');fbq('track','PageView');
 
   render();
 
-  el("btn-voltar-contato").addEventListener("click", function () {
+  el("btn-preco").addEventListener("click", function () { irParaContato(); });
+
+  el("btn-voltar-preco").addEventListener("click", function () {
     atual = visiveis().length - 1;
     mostrar("tela-passo");
     render();
     subir();
+  });
+
+  el("btn-voltar-contato").addEventListener("click", function () {
+    irParaPreco();
   });
 
   el("btn-contato").addEventListener("click", function () {
@@ -2139,9 +2323,16 @@ fbq('init','673278761920486');fbq('track','PageView');
       el("bloqueio-titulo").textContent = b.titulo;
       el("bloqueio-texto").textContent = b.texto;
       el("bloqueio-saida").textContent = b.saida;
+      ev('imersao_bloqueio', { motivo: motivo });
       mostrar("tela-bloqueio");
     } else {
       montarCheckout();
+      ev('imersao_inscricao', {
+        ingresso: (INGRESSOS[respostas.ingresso] || {}).curto || '',
+        valor: (INGRESSOS[respostas.ingresso] || {}).valor || '',
+        faturamento: respostas.faturamento || '',
+        papel: respostas.papel || ''
+      });
       mostrar("tela-checkout");
     }
     subir();
