@@ -12,14 +12,14 @@
 <meta name="robots" content="noindex,nofollow">
 
 <title>Imersão Mares.IA · Curitiba, 17 de outubro de 2026 | MARES</title>
-<meta name="description" content="Imersão presencial de um dia em Curitiba, 17 de outubro de 2026, para o dono redesenhar a empresa a partir do que a Inteligência Artificial já tornou possível. Ingresso individual a partir de R$ 997 ou duplo, com um líder do time, a partir de R$ 1.597.">
+<meta name="description" content="Imersão presencial de um dia em Curitiba, 17 de outubro de 2026, para donos e líderes redesenharem a empresa a partir do que a Inteligência Artificial já tornou possível. Ingresso individual a partir de R$ 997 ou duplo a partir de R$ 1.597.">
 <link rel="canonical" href="https://www.maresconsultoria.com.br/mares-ia/">
 
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="MARES Consultoria Empresarial">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Imersão Mares.IA · Curitiba, 17 de outubro">
-<meta property="og:description" content="Um dia presencial em Curitiba para construir uma empresa melhor com IA. Venha sozinho ou traga um líder do seu time. Mesmo que você nunca tenha usado IA na vida.">
+<meta property="og:description" content="Um dia presencial em Curitiba para construir uma empresa melhor com IA. Para donos e para líderes. Mesmo que você nunca tenha usado IA na vida.">
 <meta property="og:url" content="https://www.maresconsultoria.com.br/mares-ia/">
 <meta property="og:image" content="https://www.maresconsultoria.com.br/mares-ia/og.jpg">
 <meta property="og:image:secure_url" content="https://www.maresconsultoria.com.br/mares-ia/og.jpg">
@@ -29,7 +29,7 @@
 <meta property="og:image:alt" content="Imersão Mares.IA · uma empresa melhor com IA">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Imersão Mares.IA · Curitiba, 17 de outubro">
-<meta name="twitter:description" content="Um dia presencial em Curitiba para construir uma empresa melhor com IA. Individual ou duplo, com um líder do seu time.">
+<meta name="twitter:description" content="Um dia presencial em Curitiba para construir uma empresa melhor com IA. Para donos e para líderes.">
 <meta name="twitter:image" content="https://www.maresconsultoria.com.br/mares-ia/og.jpg">
 
 <style>
@@ -58,7 +58,7 @@ fbq('init','673278761920486');fbq('track','PageView');
   "@context": "https://schema.org",
   "@type": "Event",
   "name": "Imersão Mares.IA",
-  "description": "Imersão presencial de um dia, em Curitiba, para o dono de empresa redesenhar o negócio a partir do que a Inteligência Artificial já tornou possível. Ingresso individual ou duplo, com um líder do time.",
+  "description": "Imersão presencial de um dia, em Curitiba, para donos de empresa e líderes redesenharem o negócio a partir do que a Inteligência Artificial já tornou possível. Ingresso individual ou duplo.",
   "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
   "eventStatus": "https://schema.org/EventScheduled",
   "startDate": "2026-10-17T09:00:00-03:00",
@@ -219,15 +219,15 @@ fbq('init','673278761920486');fbq('track','PageView');
   }
 
   @media (min-width: 900px) {
-    .hero { padding-bottom: 80px; }
+    .hero { padding-bottom: 76px; }
 
+    /* a coluna do hero é a mesma do corpo da página, senão o texto pula
+       da esquerda para o centro assim que a pessoa começa a rolar */
     .hero-inner {
-      max-width: 1180px;
-      padding: 72px 40px 0;
+      max-width: 640px;
+      padding: 68px 22px 0;
       width: 100%;
     }
-
-    .hero-inner > * { max-width: 700px; }
   }
 
   .logo {
@@ -315,9 +315,17 @@ fbq('init','673278761920486');fbq('track','PageView');
     margin-top: 14px;
   }
 
+  /* chamada no meio da página, sobre fundo claro */
+  .cta-meio { margin-top: 34px; }
+  .cta-meio .cta-note { color: var(--ink-faint); margin-top: 13px; }
+
   /* ================= SEÇÕES ================= */
 
-  section { padding: 72px 0; }
+  section { padding: 64px 0; }
+
+  /* duas seções seguidas da mesma cor somam os dois paddings e abrem um vão
+     que parece fim de página. Quando isso acontecer, fechar o de cima. */
+  section.cola { padding-top: 0; }
 
   section.alt { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 
@@ -899,9 +907,7 @@ fbq('init','673278761920486');fbq('track','PageView');
     font-size: 15px;
     line-height: 1.66;
     color: var(--ink-soft);
-    max-width: 62ch;
-    margin: 26px auto 0;
-    text-align: center;
+    margin: 22px 0 0;
   }
 
   .preco-selo {
@@ -1335,7 +1341,7 @@ fbq('init','673278761920486');fbq('track','PageView');
 
     <h1>Não é sobre colocar IA na sua empresa. É sobre construir <em>uma empresa melhor</em> com IA.</h1>
 
-    <p class="hero-sub">Um dia para o dono redesenhar a empresa a partir do que a Inteligência Artificial já tornou possível. Você pode vir sozinho ou trazer um líder do seu time. Mesmo que nunca tenha usado IA na vida.</p>
+    <p class="hero-sub">Um dia para donos e líderes redesenharem a empresa a partir do que a Inteligência Artificial já tornou possível. Você pode vir sozinho ou acompanhado. Mesmo que nunca tenha usado IA na vida.</p>
 
     <div class="hero-facts">
       <div><b>Data</b>17 de outubro, sábado</div>
@@ -1345,7 +1351,7 @@ fbq('init','673278761920486');fbq('track','PageView');
     </div>
 
     <a class="cta" href="#inscricao">Quero garantir minha vaga</a>
-    <p class="cta-note">Dois ingressos: individual, ou duplo com um líder do seu time pagando bem menos que o dobro.</p>
+    <p class="cta-note">Dois ingressos: individual, ou duplo com a segunda vaga por bem menos que a primeira.</p>
   </div>
 </header>
 
@@ -1456,6 +1462,11 @@ fbq('init','673278761920486');fbq('track','PageView');
         <p>Duas semanas depois, online, a gente volta para ver o que saiu do papel e destravar o que emperrou. Plano sem acompanhamento vira gaveta.</p>
       </div>
     </div>
+
+    <div class="cta-meio">
+      <a class="cta" href="#inscricao">Quero passar esse dia na minha empresa</a>
+      <p class="cta-note">17 de outubro, sábado · Curitiba · lote 1 a partir de R$ 997</p>
+    </div>
   </div>
 </section>
 
@@ -1487,28 +1498,28 @@ fbq('init','673278761920486');fbq('track','PageView');
 <!-- ============ INGRESSO DUPLO ============ -->
 <section class="alt">
   <div class="wrap-narrow">
-    <p class="eyebrow">A segunda vaga</p>
-    <h2>Venha com um líder do seu time</h2>
-    <p class="lead">Você pode vir sozinho, e muita gente vem. Mas no ingresso duplo a segunda vaga sai por R$ 600, e ela existe por um motivo: transformação que só uma pessoa entendeu morre na segunda-feira.</p>
+    <p class="eyebrow">Quem senta na sala</p>
+    <h2>Para o dono, para o líder, ou para os dois juntos</h2>
+    <p class="lead">A sala é a mesma e o conteúdo é o mesmo. O que muda é o que cada um faz com o plano na segunda-feira. No ingresso duplo a segunda vaga sai por R$ 600.</p>
 
     <div class="duplo">
       <div class="pessoa dono">
-        <div class="pessoa-tag">Vaga 1</div>
-        <h3>Você, o dono</h3>
-        <p>Quem enxerga a empresa inteira, conhece os números e tem autoridade para decidir o que muda.</p>
+        <div class="pessoa-tag">O dono</div>
+        <h3>Quem decide</h3>
+        <p>Enxerga a empresa inteira, conhece os números e tem autoridade para decidir o que muda. Sai do dia com decisão pronta para tomar.</p>
       </div>
       <div class="pessoa lider">
-        <div class="pessoa-tag">Vaga 2 · opcional</div>
-        <h3>O impulsionador</h3>
-        <p>Um líder do seu time que vai sustentar o ritmo depois, quando a rotina tentar puxar tudo de volta.</p>
+        <div class="pessoa-tag">O líder</div>
+        <h3>Quem faz acontecer</h3>
+        <p>Sustenta o ritmo depois, quando a rotina tenta puxar tudo de volta. Sai do dia com o mapa e com o argumento para levar a quem decide.</p>
       </div>
     </div>
 
     <div class="regra">
-      <p class="eyebrow">A condição que não é negociável</p>
-      <p><strong>A transformação acontece quando o dono conduz, não quando o dono delega.</strong></p>
-      <p>Se a ideia é mandar o líder no seu lugar e receber um resumo depois, essa imersão não vai funcionar para você. Não é rigidez, é o que a gente vê acontecer na prática.</p>
-      <p style="margin-bottom:0">Quem decide o que a empresa vai deixar de fazer é você. Ninguém decide isso por procuração.</p>
+      <p class="eyebrow">Por que os dois juntos rendem mais</p>
+      <p><strong>Transformação que só uma pessoa entendeu morre na segunda-feira.</strong></p>
+      <p>Quando o dono vem sozinho, ele volta com o plano e com a agenda cheia, e precisa de alguém que segure o ritmo. Quando o líder vem sozinho, ele volta com um caminho claro e precisa da decisão de quem manda.</p>
+      <p style="margin-bottom:0">Quando os dois vêm juntos, some a etapa de convencer, e a empresa começa a mudar na semana seguinte. Por isso o ingresso duplo é o que a gente mais recomenda.</p>
     </div>
   </div>
 </section>
@@ -1524,7 +1535,8 @@ fbq('init','673278761920486');fbq('track','PageView');
         <div class="col-titulo">É para você se</div>
         <ul class="sim">
           <li>Você é dono ou sócio e decide o rumo da empresa</li>
-          <li>A empresa cresceu e você sente que perdeu o controle do resultado</li>
+          <li>Você é líder e responde por uma área que precisa mudar</li>
+          <li>A empresa cresceu e alguém sente que perdeu o controle do resultado</li>
           <li>Você sabe o que precisa fazer e não consegue tirar do papel</li>
           <li>Você quer entender IA pelo lado do negócio, não pelo lado da ferramenta</li>
           <li>Você topa passar o dia olhando para a sua empresa de frente</li>
@@ -1533,12 +1545,17 @@ fbq('init','673278761920486');fbq('track','PageView');
       <div>
         <div class="col-titulo">Não é para você se</div>
         <ul class="nao">
-          <li>Você quer mandar alguém no seu lugar</li>
+          <li>Você quer o resumo do dia sem passar o dia</li>
           <li>Você procura um curso de prompts e atalhos</li>
           <li>Você quer uma lista de ferramentas para instalar</li>
           <li>Você espera resultado sem mudar nada de como a empresa opera</li>
         </ul>
       </div>
+    </div>
+
+    <div class="cta-meio">
+      <a class="cta" href="#inscricao">É para mim, quero minha vaga</a>
+      <p class="cta-note">17 de outubro, sábado · Curitiba · lote 1 a partir de R$ 997</p>
     </div>
   </div>
 </section>
@@ -1570,6 +1587,11 @@ fbq('init','673278761920486');fbq('track','PageView');
         <h3>Encontro de acompanhamento</h3>
         <p>Online, duas semanas depois, para revisar a execução e destravar o que ficou parado.</p>
       </div>
+    </div>
+
+    <div class="cta-meio">
+      <a class="cta" href="#inscricao">Quero garantir minha vaga</a>
+      <p class="cta-note">17 de outubro, sábado · Curitiba · lote 1 a partir de R$ 997</p>
     </div>
   </div>
 </section>
@@ -1735,9 +1757,9 @@ fbq('init','673278761920486');fbq('track','PageView');
 
     </div>
 
-    <p class="cta-note" style="margin-top:22px;text-align:center">O lote 1 vale enquanto estiver aberto. Depois o valor sobe e não volta.</p>
+    <p class="cta-note" style="margin-top:22px;color:var(--ink-faint)">O lote 1 vale enquanto estiver aberto. Depois o valor sobe e não volta.</p>
 
-    <p class="preco-nota">Por que o duplo é o mais recomendado: quem volta para a empresa sozinho volta com um plano e com a agenda cheia. O líder que esteve na sala é quem sustenta o ritmo quando a rotina puxa tudo de volta. A decisão continua sendo do dono, e por isso ele precisa estar lá de qualquer jeito.</p>
+    <p class="preco-nota">O ingresso individual serve tanto para o dono quanto para o líder, pelo mesmo valor. O duplo é o mais recomendado porque quem vai sozinho volta dependendo de alguém: o dono depende de quem sustente o ritmo, e o líder depende da decisão de quem manda. Com os dois na sala, essa conversa acontece no próprio dia.</p>
   </div>
 </section>
 
@@ -1852,10 +1874,9 @@ fbq('init','673278761920486');fbq('track','PageView');
     { id: "dono", tipo: "escolha",
       so_se: function (r) { return r.papel && r.papel !== "Dono ou sócio"; },
       t: "O dono ou sócio da empresa vai estar na sala com você?",
-      ajuda: "A imersão foi desenhada para o dono conduzir. O líder entra como impulsionador, não no lugar dele.",
+      ajuda: "Pergunto para preparar o dia, e não para barrar ninguém. Líder vem sozinho sem problema nenhum.",
       o: ["Sim, vamos os dois",
-          "Não, eu iria sozinho"],
-      corta: { "Não, eu iria sozinho": "sem-dono" } },
+          "Não, eu vou sozinho"] },
 
     { id: "segmento", tipo: "texto",
       t: "Em que segmento a sua empresa atua?",
@@ -1903,21 +1924,29 @@ fbq('init','673278761920486');fbq('track','PageView');
       corta: { "Não pretendo investir agora": "investimento" } },
 
     { id: "ingresso", tipo: "escolha",
-      t: "Você vem sozinho ou traz um líder do seu time?",
-      ajuda: "No lote 1 o individual está R$ 997 e o duplo R$ 1.597, ou seja, a segunda vaga sai por R$ 600. Quem volta acompanhado tem quem sustente o plano na empresa.",
-      o: ["Duplo, levo um líder comigo",
-          "Individual, vou sozinho"] },
+      t: function (r) {
+        return r.papel === "Dono ou sócio"
+          ? "Você vem sozinho ou traz um líder do seu time?"
+          : "Você vem sozinho ou vem com mais alguém da empresa?";
+      },
+      ajuda: "No lote 1 o individual está R$ 997 e o duplo R$ 1.597, ou seja, a segunda vaga sai por R$ 600.",
+      o: function (r) {
+        return r.papel === "Dono ou sócio"
+          ? ["Duplo, levo um líder comigo", "Individual, vou sozinho"]
+          : ["Duplo, vamos dois da empresa", "Individual, vou sozinho"];
+      } },
 
     { id: "lider", tipo: "texto", opcional: true,
-      so_se: function (r) { return r.ingresso === "Duplo, levo um líder comigo"; },
+      so_se: function (r) { return r.ingresso && r.ingresso.indexOf("Duplo") === 0; },
       t: "Quem vem com você?",
-      ajuda: "Nome e função do líder que vai ocupar a segunda vaga. Se ainda não decidiu, escreva \"a definir\"." }
+      ajuda: "Nome e função de quem vai ocupar a segunda vaga. Se ainda não decidiu, escreva \"a definir\"." }
   ];
 
   /* preço de cada ingresso no lote aberto, usado na tela final */
   var INGRESSOS = {
-    "Individual, vou sozinho":      { curto: "individual", valor: "R$ 997" },
-    "Duplo, levo um líder comigo":  { curto: "duplo, com um líder do time", valor: "R$ 1.597" }
+    "Individual, vou sozinho":     { curto: "individual", valor: "R$ 997" },
+    "Duplo, levo um líder comigo": { curto: "duplo", valor: "R$ 1.597" },
+    "Duplo, vamos dois da empresa":{ curto: "duplo", valor: "R$ 1.597" }
   };
 
   /* ------------------------------------------------------------------
@@ -1929,11 +1958,6 @@ fbq('init','673278761920486');fbq('track','PageView');
       titulo: "Essa turma ainda não é o seu momento",
       texto: "O dia inteiro é trabalhado em cima de uma empresa que já existe, com processo rodando, gente trabalhando e número para olhar. Sem isso, você sairia com um plano para uma empresa que ainda não tem onde ser aplicado.",
       saida: "Quando a operação existir, a inscrição continua no ar e você responde de novo. Enquanto isso, me segue no @marcelis.pereira, que lá eu ensino muita coisa de graça."
-    },
-    "sem-dono": {
-      titulo: "Sem o dono na sala, o dia não entrega o que promete",
-      texto: "As decisões que aparecem na imersão são decisões de quem tem autoridade sobre o rumo da empresa, o que a empresa vai deixar de fazer e onde o dinheiro vai. Ninguém decide isso por procuração, e transformação que o dono só recebe em resumo morre na segunda-feira.",
-      saida: "Se o dono puder vir junto, volte e responda de novo. O ingresso duplo existe exatamente para isso, e a segunda vaga sai por R$ 600."
     },
     "sem-operacao": {
       titulo: "Essa turma ainda não é o seu momento",
@@ -1995,7 +2019,7 @@ fbq('init','673278761920486');fbq('track','PageView');
     var total = lista.length + 1;
 
     el("contador").textContent = "Passo " + (atual + 1) + " de " + total;
-    el("pergunta").textContent = p.t;
+    el("pergunta").textContent = (typeof p.t === "function") ? p.t(respostas) : p.t;
     progresso(atual, total);
 
     var ajuda = el("ajuda");
@@ -2012,7 +2036,8 @@ fbq('init','673278761920486');fbq('track','PageView');
 
     if (p.tipo === "escolha") {
       entrada.hidden = true;
-      p.o.forEach(function (texto, i) {
+      var listaOpcoes = (typeof p.o === "function") ? p.o(respostas) : p.o;
+      listaOpcoes.forEach(function (texto, i) {
         var b = document.createElement("button");
         b.type = "button";
         b.className = "opcao" + (respostas[p.id] === texto ? " marcada" : "");
@@ -2066,7 +2091,7 @@ fbq('init','673278761920486');fbq('track','PageView');
      WhatsApp da Marcelis com o ingresso escolhido e o valor já escritos na mensagem.
      Quando os dois links existirem, é só trocar este trecho pelos endereços. */
   function montarCheckout() {
-    var ing = INGRESSOS[respostas.ingresso] || INGRESSOS["Duplo, levo um líder comigo"];
+    var ing = INGRESSOS[respostas.ingresso] || INGRESSOS["Individual, vou sozinho"];
     var texto = "Oi, Marcelis! Acabei de preencher a inscrição da Imersão Mares.IA, em Curitiba, no dia 17 de outubro."
               + " Quero o ingresso " + ing.curto + ", que está " + ing.valor + " no lote 1."
               + " Meu nome é " + (respostas.nome || "") + ", da " + (respostas.empresa || "") + ".";
@@ -2126,7 +2151,7 @@ fbq('init','673278761920486');fbq('track','PageView');
 
 
 <!-- ============ FAQ ============ -->
-<section>
+<section class="cola">
   <div class="wrap-narrow">
     <p class="eyebrow">Dúvidas</p>
     <h2>O que costumam perguntar</h2>
@@ -2143,7 +2168,7 @@ fbq('init','673278761920486');fbq('track','PageView');
 
     <details>
       <summary>Posso mandar só o meu líder?</summary>
-      <p>Não. A imersão foi desenhada para o dono conduzir. As decisões que aparecem no dia são decisões de quem tem autoridade sobre o rumo da empresa.</p>
+      <p>Pode. O líder ocupa uma vaga como qualquer outra pessoa, pelo mesmo valor, e sai do dia com o mapa de oportunidades e o plano de 90 dias na mão. Só vale saber de uma coisa: ele volta precisando da sua decisão sobre o que a empresa deixa de fazer e sobre onde o dinheiro vai. Quando o dono está na sala, essa conversa acontece no próprio dia.</p>
     </details>
 
     <details>
@@ -2175,6 +2200,11 @@ fbq('init','673278761920486');fbq('track','PageView');
       <summary>E se eu não puder ir depois de comprar?</summary>
       <p><span class="var">[POLÍTICA DE REMARCAÇÃO / REEMBOLSO]</span></p>
     </details>
+
+    <div class="cta-meio">
+      <a class="cta" href="#inscricao">Respondeu minha dúvida, quero me inscrever</a>
+      <p class="cta-note">17 de outubro, sábado · Curitiba · lote 1 a partir de R$ 997</p>
+    </div>
   </div>
 </section>
 
