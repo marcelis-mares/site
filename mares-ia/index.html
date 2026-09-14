@@ -1100,6 +1100,62 @@ fbq('init','673278761920486');fbq('track','PageView');
     margin: 0 0 20px;
   }
 
+  /* link de apoio dentro de uma pergunta, tipo "ver os valores" */
+  .diag-link { margin: -10px 0 20px; }
+
+  .diag-link button {
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: "Aileron", sans-serif;
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--laranja);
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* a tabela do lote aberto, que abre dentro da própria tela.
+     Trocar de aba faria a pessoa perder o lugar no formulário. */
+  .valores-box {
+    background: var(--navy);
+    color: #fff;
+    border-radius: 3px;
+    padding: 18px 20px;
+    margin: 0 0 20px;
+  }
+
+  .valores-box .vb-topo {
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--on-dark-soft);
+    margin-bottom: 12px;
+  }
+
+  .valores-box .vb-linha {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(255,255,255,.12);
+  }
+
+  .valores-box .vb-linha:last-of-type { border-bottom: none; }
+  .valores-box .vb-linha span { font-size: 15px; color: var(--on-dark); }
+
+  .valores-box .vb-linha b {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    white-space: nowrap;
+  }
+
+  .valores-box .vb-pe { font-size: 13.5px; color: var(--on-dark-soft); margin: 12px 0 0; }
+
   .opcao {
     display: flex;
     align-items: center;
@@ -1407,7 +1463,7 @@ fbq('init','673278761920486');fbq('track','PageView');
       <div><b>Formato</b>Presencial, dia inteiro</div>
     </div>
 
-    <a class="cta" href="#inscricao">Quero garantir minha vaga</a>
+    <a class="cta" href="#investimento">Quero garantir minha vaga</a>
     <p class="cta-note">Dois ingressos: individual, ou duplo com a segunda vaga por bem menos que a primeira.</p>
   </div>
 </header>
@@ -1521,7 +1577,7 @@ fbq('init','673278761920486');fbq('track','PageView');
     </div>
 
     <div class="cta-meio">
-      <a class="cta" href="#inscricao">Quero passar esse dia na minha empresa</a>
+      <a class="cta" href="#investimento">Quero passar esse dia na minha empresa</a>
       <p class="cta-note">17 de outubro, sábado · Curitiba · lote 1 a partir de R$ 997</p>
     </div>
   </div>
@@ -1611,7 +1667,7 @@ fbq('init','673278761920486');fbq('track','PageView');
     </div>
 
     <div class="cta-meio">
-      <a class="cta" href="#inscricao">É para mim, quero minha vaga</a>
+      <a class="cta" href="#investimento">É para mim, quero minha vaga</a>
       <p class="cta-note">17 de outubro, sábado · Curitiba · lote 1 a partir de R$ 997</p>
     </div>
   </div>
@@ -1647,7 +1703,7 @@ fbq('init','673278761920486');fbq('track','PageView');
     </div>
 
     <div class="cta-meio">
-      <a class="cta" href="#inscricao">Quero garantir minha vaga</a>
+      <a class="cta" href="#investimento">Quero garantir minha vaga</a>
       <p class="cta-note">17 de outubro, sábado · Curitiba · lote 1 a partir de R$ 997</p>
     </div>
   </div>
@@ -1837,6 +1893,8 @@ fbq('init','673278761920486');fbq('track','PageView');
         <p class="diag-passo" id="contador"></p>
         <h3 class="diag-titulo" id="pergunta"></h3>
         <p class="diag-ajuda" id="ajuda" hidden></p>
+        <p class="diag-link" id="link-passo" hidden></p>
+        <div class="valores-box" hidden></div>
 
         <div id="opcoes"></div>
 
@@ -1877,6 +1935,8 @@ fbq('init','673278761920486');fbq('track','PageView');
         <p class="diag-passo" id="contador-contato">Primeiro passo</p>
         <h3 class="diag-titulo">Primeiro, como eu falo com você</h3>
         <p class="diag-ajuda">Preciso dos seus dados para guardar a sua vez na fila e enviar os detalhes do dia. Em seguida vêm as perguntas sobre a empresa.</p>
+        <p class="diag-link"><button type="button" class="ver-valores" data-onde="contato">Ver os valores dos ingressos</button></p>
+        <div class="valores-box" hidden></div>
 
         <div class="form-erro" id="erro-contato">Preencha os campos marcados com asterisco.</div>
 
@@ -2003,8 +2063,9 @@ fbq('init','673278761920486');fbq('track','PageView');
           "Nessa data eu não consigo"],
       corta: { "Nessa data eu não consigo": "data" } },
 
-    { id: "investimento", tipo: "escolha",
+    { id: "investimento", tipo: "escolha", valores: true,
       t: "Se a imersão fizer sentido, como está a sua decisão de investimento?",
+      ajuda: "Se ainda não viu o valor, abra a tabela do lote aberto aqui embaixo antes de responder.",
       o: ["Tenho o valor disponível",
           "Consigo investir, mas preciso parcelar",
           "Preciso entender melhor antes de decidir",
@@ -2036,6 +2097,15 @@ fbq('init','673278761920486');fbq('track','PageView');
     "Individual, vou sozinho":     { curto: "individual", valor: "R$ 997",   tag: "Lote 1 · individual" },
     "Duplo, levo um líder comigo": { curto: "duplo",      valor: "R$ 1.597", tag: "Lote 1 · duplo · dono + 1 líder" },
     "Duplo, vamos dois da empresa":{ curto: "duplo",      valor: "R$ 1.597", tag: "Lote 1 · duplo · duas pessoas da empresa" }
+  };
+
+  /* o lote aberto hoje. Ao virar de lote, trocar aqui, no INGRESSOS e nos
+     cartões da seção Investimento. */
+  var LOTE_ABERTO = {
+    nome: "Lote 1 · aberto",
+    ate: "até 26 de setembro",
+    individual: "R$ 997",
+    duplo: "R$ 1.597"
   };
 
   var INCLUI = {
@@ -2201,6 +2271,35 @@ fbq('init','673278761920486');fbq('track','PageView');
     else { subir(); }
   }
 
+  /* A tabela do lote aberto abre dentro da tela, sem trocar de aba, para a
+     pessoa não perder o lugar no formulário. Pedido dela em 14 de setembro de
+     2026, junto com a medição do clique. */
+  function montarValores(caixa) {
+    caixa.innerHTML =
+      '<div class="vb-topo">' + LOTE_ABERTO.nome + ' · ' + LOTE_ABERTO.ate + '</div>' +
+      '<div class="vb-linha"><span>Individual, uma vaga</span><b>' + LOTE_ABERTO.individual + '</b></div>' +
+      '<div class="vb-linha"><span>Duplo, duas vagas</span><b>' + LOTE_ABERTO.duplo + '</b></div>' +
+      '<p class="vb-pe">Em até 12x no cartão. No duplo a segunda vaga sai por R$ 600. Depois que o lote 1 fecha, o valor sobe e não volta.</p>';
+  }
+
+  function ligarVerValores() {
+    document.querySelectorAll(".ver-valores").forEach(function (btn) {
+      if (btn.dataset.ligado) { return; }
+      btn.dataset.ligado = "1";
+      btn.addEventListener("click", function () {
+        var caixa = btn.parentNode.nextElementSibling;
+        if (!caixa || !caixa.classList.contains("valores-box")) { return; }
+        var abrindo = caixa.hidden;
+        if (abrindo) { montarValores(caixa); }
+        caixa.hidden = !abrindo;
+        btn.textContent = abrindo ? "Esconder os valores" : "Ver os valores dos ingressos";
+        if (abrindo) {
+          ev('imersao_ver_valores', { onde: btn.dataset.onde || '' });
+        }
+      });
+    });
+  }
+
   /* A opção "Outro" não avança: ela abre o campo de texto logo abaixo da lista,
      para a pessoa escrever o segmento que não estava lá. */
   function abrirOutro(p, valor) {
@@ -2244,6 +2343,18 @@ fbq('init','673278761920486');fbq('track','PageView');
     var ajuda = el("ajuda");
     if (p.ajuda) { ajuda.textContent = p.ajuda; ajuda.hidden = false; }
     else { ajuda.hidden = true; }
+
+    var linha = el("link-passo");
+    var caixaValores = linha.nextElementSibling;
+    caixaValores.hidden = true;
+    if (p.valores) {
+      linha.innerHTML = '<button type="button" class="ver-valores" data-onde="' + p.id + '">Ver os valores dos ingressos</button>';
+      linha.hidden = false;
+      ligarVerValores();
+    } else {
+      linha.innerHTML = "";
+      linha.hidden = true;
+    }
 
     el("erro-passo").style.display = "none";
 
@@ -2400,6 +2511,7 @@ fbq('init','673278761920486');fbq('track','PageView');
     subir();
   });
 
+  ligarVerValores();
   irParaContato(true);
 })();
 </script>
@@ -2457,7 +2569,7 @@ fbq('init','673278761920486');fbq('track','PageView');
     </details>
 
     <div class="cta-meio">
-      <a class="cta" href="#inscricao">Respondeu minha dúvida, quero me inscrever</a>
+      <a class="cta" href="#investimento">Respondeu minha dúvida, quero me inscrever</a>
       <p class="cta-note">17 de outubro, sábado · Curitiba · lote 1 a partir de R$ 997</p>
     </div>
   </div>
@@ -2468,7 +2580,7 @@ fbq('init','673278761920486');fbq('track','PageView');
   <div class="wrap-narrow">
     <h2>A IA já está no ambiente.<br>A pergunta é se a sua empresa está <em>preparada para operar nele</em>.</h2>
     <p>Enquanto uns discutem qual ferramenta usar, outros já estão reduzindo custo, ganhando velocidade e crescendo sem inchar a estrutura.</p>
-    <a class="cta" href="#inscricao">Quero garantir minha vaga</a>
+    <a class="cta" href="#investimento">Quero garantir minha vaga</a>
     <p class="cta-note" style="margin-top:16px">17 de outubro de 2026, sábado · Curitiba · Local em breve</p>
   </div>
 </section>
