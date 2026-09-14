@@ -1825,7 +1825,7 @@ fbq('init','673278761920486');fbq('track','PageView');
   <div class="wrap-narrow">
     <p class="eyebrow">Inscrição</p>
     <h2>Antes do pagamento, me conta da sua empresa</h2>
-    <p class="lead">Sete perguntas rápidas, mais o seu contato no fim. Leva menos de dois minutos, e não tem resposta certa. Responda pensando na sua empresa hoje, não na que você quer ter.</p>
+    <p class="lead">Primeiro o seu contato, depois sete perguntas rápidas. Leva menos de dois minutos, e não tem resposta certa. Responda pensando na sua empresa hoje, não na que você quer ter.</p>
     <p style="color:var(--ink-soft)">Eu preciso saber quem vai estar na sala para preparar o conteúdo e os exemplos do seu dia, e para te dizer com honestidade se essa turma é o seu momento.</p>
 
     <div class="diag">
@@ -1867,16 +1867,16 @@ fbq('init','673278761920486');fbq('track','PageView');
 
         <div class="preco-troca" id="preco-troca"></div>
 
-        <button class="cta" id="btn-preco" style="width:100%;margin-top:18px">Continuar para a inscrição</button>
+        <button class="cta" id="btn-preco" style="width:100%;margin-top:18px">Confirmar a minha inscrição</button>
         <p class="form-nota" style="text-align:center">Aqui você ainda não paga nada. O pagamento acontece no passo seguinte, depois que eu confirmar a sua vaga.</p>
         <button class="voltar" id="btn-voltar-preco" type="button">← Voltar</button>
       </div>
 
       <!-- CONTATO -->
       <div class="tela" id="tela-contato" hidden>
-        <p class="diag-passo" id="contador-contato">Último passo</p>
-        <h3 class="diag-titulo">Para onde eu mando a resposta</h3>
-        <p class="diag-ajuda">Preciso dos seus dados para confirmar a vaga e enviar os detalhes do dia.</p>
+        <p class="diag-passo" id="contador-contato">Primeiro passo</p>
+        <h3 class="diag-titulo">Primeiro, como eu falo com você</h3>
+        <p class="diag-ajuda">Preciso dos seus dados para guardar a sua vez na fila e enviar os detalhes do dia. Em seguida vêm as perguntas sobre a empresa.</p>
 
         <div class="form-erro" id="erro-contato">Preencha os campos marcados com asterisco.</div>
 
@@ -1902,7 +1902,6 @@ fbq('init','673278761920486');fbq('track','PageView');
         </div>
 
         <button class="cta" id="btn-contato" style="width:100%">Continuar</button>
-        <button class="voltar" id="btn-voltar-contato" type="button">← Voltar</button>
         <p class="form-nota">Seus dados ficam com a MARES e não são compartilhados.</p>
       </div>
 
@@ -1955,9 +1954,21 @@ fbq('init','673278761920486');fbq('track','PageView');
       o: ["Sim, vamos os dois",
           "Não, eu vou sozinho"] },
 
-    { id: "segmento", tipo: "texto",
+    /* A lista padroniza a resposta, que antes vinha escrita de qualquer jeito.
+       `outro` é o rótulo da opção que abre o campo de texto em vez de avançar. */
+    { id: "segmento", tipo: "escolha", outro: "Outro",
       t: "Em que segmento a sua empresa atua?",
-      ajuda: "Ex: clínica, indústria, varejo, serviços, construção." },
+      ajuda: "Escolha o mais próximo do seu. Se não estiver na lista, clique em Outro e escreva.",
+      o: ["Comércio ou varejo",
+          "Indústria",
+          "Saúde, clínica ou odontologia",
+          "Construção e engenharia",
+          "Alimentação e food service",
+          "Tecnologia e software",
+          "Educação",
+          "Agro",
+          "Serviços em geral",
+          "Outro"] },
 
     { id: "faturamento", tipo: "escolha",
       t: "Quanto a sua empresa fatura por mês hoje?",
@@ -2112,8 +2123,8 @@ fbq('init','673278761920486');fbq('track','PageView');
      Ninguém preenche cadastro sem saber quanto custa. */
   function irParaPreco() {
     var total = totalPassos();
-    el("contador-preco").textContent = "Passo " + (total - 1) + " de " + total;
-    progresso(total - 2, total);
+    el("contador-preco").textContent = "Passo " + total + " de " + total;
+    progresso(total - 1, total);
     pintarPreco();
     mostrar("tela-preco");
     subir();
@@ -2178,13 +2189,47 @@ fbq('init','673278761920486');fbq('track','PageView');
     subir();
   }
 
-  function irParaContato() {
+  /* O contato virou o primeiro passo em 14 de setembro de 2026. A pessoa deixa
+     nome e WhatsApp antes das perguntas, entao quem abandona no meio da triagem
+     continua sendo um lead que a Marcelis consegue retomar. */
+  function irParaContato(primeiraVez) {
     var total = totalPassos();
-    el("contador-contato").textContent = "Passo " + total + " de " + total;
-    progresso(total - 1, total);
+    el("contador-contato").textContent = "Passo 1 de " + total;
+    progresso(0, total);
     mostrar("tela-contato");
-    ev('imersao_contato', { ingresso: (INGRESSOS[respostas.ingresso] || {}).curto || '' });
-    subir();
+    if (primeiraVez) { ev('imersao_contato', {}); }
+    else { subir(); }
+  }
+
+  /* A opção "Outro" não avança: ela abre o campo de texto logo abaixo da lista,
+     para a pessoa escrever o segmento que não estava lá. */
+  function abrirOutro(p, valor) {
+    var opcoes = el("opcoes");
+    var botoes = opcoes.querySelectorAll(".opcao");
+    botoes.forEach(function (x) { x.classList.remove("marcada"); });
+    if (botoes.length) { botoes[botoes.length - 1].classList.add("marcada"); }
+
+    var entrada = el("entrada"), txt = el("campo-texto"), area = el("campo-area");
+    entrada.hidden = false;
+    txt.hidden = false;
+    area.hidden = true;
+    txt.value = valor || "";
+    txt.placeholder = "Escreva o seu segmento";
+    el("erro-passo").style.display = "none";
+    setTimeout(function () { txt.focus(); }, 60);
+
+    el("btn-avancar").onclick = function () {
+      var v = txt.value.trim();
+      if (!v) { el("erro-passo").style.display = "block"; txt.focus(); return; }
+      respostas[p.id] = v;
+      if (!comecou) { comecou = true; ev('imersao_inicio', {}); }
+      ev('imersao_pergunta', { passo: atual + 1, campo: p.id, resposta: 'Outro' });
+      avancar();
+    };
+
+    txt.onkeydown = function (e) {
+      if (e.key === "Enter") { e.preventDefault(); el("btn-avancar").click(); }
+    };
   }
 
   function render() {
@@ -2192,9 +2237,9 @@ fbq('init','673278761920486');fbq('track','PageView');
     var p = lista[atual];
     var total = lista.length + 2;
 
-    el("contador").textContent = "Passo " + (atual + 1) + " de " + total;
+    el("contador").textContent = "Passo " + (atual + 2) + " de " + total;
     el("pergunta").textContent = (typeof p.t === "function") ? p.t(respostas) : p.t;
-    progresso(atual, total);
+    progresso(atual + 1, total);
 
     var ajuda = el("ajuda");
     if (p.ajuda) { ajuda.textContent = p.ajuda; ajuda.hidden = false; }
@@ -2217,6 +2262,7 @@ fbq('init','673278761920486');fbq('track','PageView');
         b.className = "opcao" + (respostas[p.id] === texto ? " marcada" : "");
         b.innerHTML = '<span class="opcao-num">' + (i + 1) + '</span><span>' + texto + '</span>';
         b.addEventListener("click", function () {
+          if (p.outro && texto === p.outro) { abrirOutro(p, ""); return; }
           respostas[p.id] = texto;
           if (!comecou) { comecou = true; ev('imersao_inicio', {}); }
           ev('imersao_pergunta', { passo: atual + 1, campo: p.id, resposta: texto });
@@ -2228,11 +2274,17 @@ fbq('init','673278761920486');fbq('track','PageView');
         });
         opcoes.appendChild(b);
       });
-      el("btn-voltar").style.display = atual === 0 ? "none" : "inline-block";
+      el("btn-voltar").style.display = "inline-block";
+      /* quem voltou depois de ter escrito um segmento fora da lista reencontra
+         o campo aberto com o que tinha escrito */
+      if (p.outro && respostas[p.id] && listaOpcoes.indexOf(respostas[p.id]) === -1) {
+        abrirOutro(p, respostas[p.id]);
+      }
       return;
     }
 
     entrada.hidden = false;
+    txt.placeholder = "";
     var usaArea = (p.tipo === "area");
     txt.hidden = usaArea;
     area.hidden = !usaArea;
@@ -2253,7 +2305,7 @@ fbq('init','673278761920486');fbq('track','PageView');
       if (e.key === "Enter") { e.preventDefault(); el("btn-avancar").click(); }
     };
 
-    el("btn-voltar").style.display = atual === 0 ? "none" : "inline-block";
+    el("btn-voltar").style.display = "inline-block";
   }
 
   function recalcularMotivo() {
@@ -2279,11 +2331,8 @@ fbq('init','673278761920486');fbq('track','PageView');
 
   el("btn-voltar").addEventListener("click", function () {
     if (atual > 0) { atual--; render(); subir(); }
+    else { irParaContato(false); }
   });
-
-  render();
-
-  el("btn-preco").addEventListener("click", function () { irParaContato(); });
 
   el("btn-voltar-preco").addEventListener("click", function () {
     atual = visiveis().length - 1;
@@ -2292,10 +2341,8 @@ fbq('init','673278761920486');fbq('track','PageView');
     subir();
   });
 
-  el("btn-voltar-contato").addEventListener("click", function () {
-    irParaPreco();
-  });
-
+  /* PASSO 1: o contato. Sai daqui direto para a primeira pergunta, e o lead
+     já vai para a central e para o RD, mesmo que a pessoa pare no meio. */
   el("btn-contato").addEventListener("click", function () {
     var faltam = ["nome", "empresa", "whats", "email"].filter(function (id) {
       return !el(id).value.trim();
@@ -2311,10 +2358,25 @@ fbq('init','673278761920486');fbq('track','PageView');
       respostas[id] = el(id).value.trim();
     });
 
+    if (!respostas.lead_enviado) {
+      respostas.lead_enviado = true;
+      respostas.resultado = "em-andamento";
+      if (window.maresIaEnviar) { window.maresIaEnviar(respostas, "contato"); }
+      ev('imersao_lead', {});
+    }
+
+    atual = 0;
+    mostrar("tela-passo");
+    render();
+    subir();
+  });
+
+  /* ÚLTIMO PASSO: o botão da tela de preço fecha a inscrição. */
+  el("btn-preco").addEventListener("click", function () {
     recalcularMotivo();
     respostas.resultado = motivo ? ("nao-qualificado: " + motivo) : "qualificado";
 
-    if (window.maresIaEnviar) { window.maresIaEnviar(respostas); }
+    if (window.maresIaEnviar) { window.maresIaEnviar(respostas, "final"); }
 
     progresso(1, 1);
 
@@ -2337,6 +2399,8 @@ fbq('init','673278761920486');fbq('track','PageView');
     }
     subir();
   });
+
+  irParaContato(true);
 })();
 </script>
 
@@ -2436,10 +2500,16 @@ window.MARESIA_CFG = {
   RD_CONVERSAO_INSCRICAO: 'mares-ia-imersao-inscricao'
 };
 
-window.maresIaEnviar = function (dados) {
+/* etapa 'contato' = a pessoa acabou de deixar o contato, antes das perguntas.
+   etapa 'final'   = terminou a triagem e viu o preço.
+   A central grava por e-mail, então o segundo envio atualiza a linha do primeiro
+   em vez de criar outra. O aviso por e-mail e a conversão de inscrição só saem
+   no final, para ninguém receber o mesmo lead duas vezes. */
+window.maresIaEnviar = function (dados, etapa) {
   var C = window.MARESIA_CFG;
+  var fim = (etapa !== 'contato');
 
-  var payload = Object.assign({ registro: 'mares-ia' }, dados);
+  var payload = Object.assign({ registro: 'mares-ia', etapa: (etapa || 'final') }, dados);
 
   if (C.SHEETS_WEBHOOK.indexOf('[') !== 0) {
     fetch(C.SHEETS_WEBHOOK, {
@@ -2450,7 +2520,7 @@ window.maresIaEnviar = function (dados) {
     }).catch(function () {});
   }
 
-  if (C.WEB3FORMS.indexOf('[') !== 0) {
+  if (fim && C.WEB3FORMS.indexOf('[') !== 0) {
     fetch('https://api.web3forms.com/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
@@ -2463,7 +2533,7 @@ window.maresIaEnviar = function (dados) {
       event_type: 'CONVERSION',
       event_family: 'CDP',
       payload: {
-        conversion_identifier: C.RD_CONVERSAO_INSCRICAO,
+        conversion_identifier: fim ? C.RD_CONVERSAO_INSCRICAO : C.RD_CONVERSAO_INICIO,
         name: dados.nome || '',
         email: dados.email || '',
         mobile_phone: dados.whats || '',
@@ -2478,8 +2548,12 @@ window.maresIaEnviar = function (dados) {
     }).catch(function () {});
   }
 
-  if (window.fbq) { fbq('track', 'Lead'); }
-  if (window.maresEvento) { window.maresEvento('gerar_lead', {formulario: 'Imersao Mares.IA'}); }
+  /* o Lead do Pixel e o gerar_lead do Analytics contam a captura, que acontece
+     no primeiro passo. Repetir no final contaria a mesma pessoa duas vezes. */
+  if (!fim) {
+    if (window.fbq) { fbq('track', 'Lead'); }
+    if (window.maresEvento) { window.maresEvento('gerar_lead', { formulario: 'Imersao Mares.IA' }); }
+  }
 };
 </script>
 
