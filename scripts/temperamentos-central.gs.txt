@@ -1059,6 +1059,11 @@ function codigoDeAcesso(time) {
   return out;
 }
 
+/* Times cujo mapa mostra todas as respostas com nome, inclusive as dadas antes
+   do aceite existir. Decisão da Marcelis em 15/09/2026 para a turma
+   Extraordinários, que já tinha enviado o link sem o nominal=1. */
+var PREFIXOS_NOMINAIS = ['extraordinarios-'];
+
 function mapaDaEquipe(time, acesso, chave) {
   if (!time) return { erro: 'informe o codigo do time' };
   var liberado = (chave === CHAVE_PAINEL) ||
@@ -1073,7 +1078,8 @@ function mapaDaEquipe(time, acesso, chave) {
   var cab = v[0];
   var col = function (n) { return cab.indexOf(n); };
   var iTime = col('time'), iVis = col('visivel_lider'), iStatus = col('status');
-  if (iTime < 0 || iVis < 0) return base;
+  var todosComNome = PREFIXOS_NOMINAIS.some(function (pre) { return time.indexOf(pre) === 0; });
+  if (iTime < 0 || (iVis < 0 && !todosComNome)) return base;
 
   /* A mesma pessoa pode refazer o teste. Vale a resposta mais recente,
      identificada pelo e-mail, que nunca sai daqui. */
@@ -1081,7 +1087,7 @@ function mapaDaEquipe(time, acesso, chave) {
   for (var i = 1; i < v.length; i++) {
     var r = v[i];
     if (String(r[iTime]).toLowerCase().trim() !== time) continue;
-    if (String(r[iVis]).toLowerCase().trim() !== 'sim') continue;
+    if (!todosComNome && String(r[iVis]).toLowerCase().trim() !== 'sim') continue;
     if (iStatus >= 0 && r[iStatus] === 'blocked') continue;
     var pega = function (n) { var c = col(n); return c < 0 ? '' : r[c]; };
     var q = pega('processed_at');
