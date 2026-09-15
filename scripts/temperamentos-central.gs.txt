@@ -33,7 +33,7 @@ var COLUNAS = [
   'score_S','score_C','score_M','score_F','total_marcadas','desempates',
   'confidence','status','review_reason','test_version','rule_version','content_version','itens_version',
   'utm_source','utm_medium','utm_campaign','utm_content','utm_term','origem',
-  'marcadas_S','marcadas_C','marcadas_M','marcadas_F'
+  'marcadas_S','marcadas_C','marcadas_M','marcadas_F','visivel_lider'
 ];
 
 /* A aba Eventos é propositalmente enxuta e igual para todos os testes. */
@@ -995,8 +995,15 @@ function doGet(e) {
   var p = (e && e.parameter) || {};
   var saida;
 
-  if (p.chave !== CHAVE_PAINEL) {
+  if (p.modo === 'equipe') {
+    /* Mapa da Equipe: tem acesso próprio por time, e não a chave geral. */
+    saida = mapaDaEquipe(limpar(p.time), p.acesso || '', p.chave || '');
+  } else if (p.chave !== CHAVE_PAINEL) {
     saida = { erro: 'chave invalida' };
+  } else if (p.modo === 'acesso') {
+    /* Gera o código de acesso do Mapa da Equipe de um time. Só com a chave geral. */
+    var cod = limpar(p.time);
+    saida = cod ? { time: cod, acesso: codigoDeAcesso(cod) } : { erro: 'informe o codigo do time' };
   } else if (p.modo === 'turmas') {
     saida = listaDeTurmas();
   } else if (p.geral === '1') {
@@ -1019,6 +1026,96 @@ function doGet(e) {
   }
   return ContentService.createTextOutput(txt)
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+/* ============================================================================
+   MAPA DA EQUIPE
+   Painel nominal que o mentorado recebe como bônus: nome, área e perfis
+   predominante e secundário de cada pessoa do time dele.
+   Três travas:
+   1. Só aparecem respostas com visivel_lider = 'sim', ou seja, de quem
+      respondeu pelo link com nominal=1 e marcou o aceite na tela. Resposta
+      dada com a promessa de leitura só do conjunto nunca sai com nome.
+   2. Cada time tem um código de acesso próprio, calculado com um segredo que
+      fica nas Propriedades do script, fora do código e fora do GitHub. Um
+      mentorado não consegue abrir o time do outro.
+   3. E-mail, telefone, marcações e análise completa continuam na planilha.
+   ============================================================================ */
+function segredoDaEquipe() {
+  var props = PropertiesService.getScriptProperties();
+  var s = props.getProperty('SEGREDO_EQUIPE');
+  if (!s) {
+    s = Utilities.getUuid() + Utilities.getUuid();
+    props.setProperty('SEGREDO_EQUIPE', s);
+  }
+  return s;
+}
+
+function codigoDeAcesso(time) {
+  var bytes = Utilities.computeHmacSha256Signature('equipe:' + time, segredoDaEquipe());
+  var alfabeto = 'abcdefghjkmnpqrstuvwxyz23456789';
+  var out = '';
+  for (var i = 0; i < 8; i++) out += alfabeto.charAt((bytes[i] + 256) % alfabeto.length);
+  return out;
+}
+
+function mapaDaEquipe(time, acesso, chave) {
+  if (!time) return { erro: 'informe o codigo do time' };
+  var liberado = (chave === CHAVE_PAINEL) ||
+                 (String(acesso).trim().toLowerCase() === codigoDeAcesso(time));
+  if (!liberado) return { erro: 'acesso invalido' };
+
+  var a = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(ABA);
+  var base = { time: time, total: 0, pessoas: [], gerado_em: new Date().toISOString() };
+  if (!a || a.getLastRow() < 2) return base;
+
+  var v = a.getRange(1, 1, a.getLastRow(), a.getLastColumn()).getValues();
+  var cab = v[0];
+  var col = function (n) { return cab.indexOf(n); };
+  var iTime = col('time'), iVis = col('visivel_lider'), iStatus = col('status');
+  if (iTime < 0 || iVis < 0) return base;
+
+  /* A mesma pessoa pode refazer o teste. Vale a resposta mais recente,
+     identificada pelo e-mail, que nunca sai daqui. */
+  var porPessoa = {};
+  for (var i = 1; i < v.length; i++) {
+    var r = v[i];
+    if (String(r[iTime]).toLowerCase().trim() !== time) continue;
+    if (String(r[iVis]).toLowerCase().trim() !== 'sim') continue;
+    if (iStatus >= 0 && r[iStatus] === 'blocked') continue;
+    var pega = function (n) { var c = col(n); return c < 0 ? '' : r[c]; };
+    var q = pega('processed_at');
+    var quando = q instanceof Date ? q.toISOString() : String(q || '');
+    var chaveP = String(pega('email') || pega('nome') || i).toLowerCase().trim();
+    var antigo = porPessoa[chaveP];
+    if (antigo && String(antigo.quando) > String(quando)) continue;
+    porPessoa[chaveP] = {
+      nome: String(pega('nome') || '').trim(),
+      setor: pega('setor'),
+      cargo: pega('cargo'),
+      lidera: pega('lidera'),
+      tempo_casa: pega('tempo_casa'),
+      predominante: pega('predominante_animal'),
+      secundario: pega('secundario_animal'),
+      combinacao: pega('combinacao'),
+      classe: pega('classe'),
+      quando: quando
+    };
+  }
+  var pessoas = Object.keys(porPessoa).map(function (k) { return porPessoa[k]; });
+  pessoas.sort(function (x, y) { return x.nome.localeCompare(y.nome, 'pt-BR'); });
+  base.pessoas = pessoas;
+  base.total = pessoas.length;
+  return base;
+}
+
+/* Rode no editor para ver os códigos de acesso de uma lista de times. */
+function listarAcessosDaEquipe() {
+  var times = ['extraordinarios-alessandra','extraordinarios-allan','extraordinarios-emanuelle',
+    'extraordinarios-geovana','extraordinarios-ivan','extraordinarios-jaqueline',
+    'extraordinarios-luciana','extraordinarios-marcio','extraordinarios-mariana',
+    'extraordinarios-rafael','extraordinarios-wagner'];
+  times.forEach(function (t) { Logger.log(t + '  ' + codigoDeAcesso(t)); });
 }
 
 /* Mesma limpeza que o site aplica no código do time. */
