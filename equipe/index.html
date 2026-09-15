@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa da Equipe · MARES</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#06182a">
+<link rel="icon" href="data:,">
+<style>
+@font-face{font-family:'Aileron';src:url('/fonts/Aileron-Regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Aileron';src:url('/fonts/Aileron-SemiBold.woff2') format('woff2');font-weight:500 600;font-style:normal;font-display:swap}
+@font-face{font-family:'Aileron';src:url('/fonts/Aileron-Bold.woff2') format('woff2');font-weight:700 800;font-style:normal;font-display:swap}
+@font-face{font-family:'Bricolage Grotesque';src:url('/fonts/Bricolage-Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Bricolage Grotesque';src:url('/fonts/Bricolage-Bold.woff2') format('woff2');font-weight:600 700;font-style:normal;font-display:swap}
+@font-face{font-family:'Bricolage Grotesque';src:url('/fonts/Bricolage-ExtraBold.woff2') format('woff2');font-weight:800 900;font-style:normal;font-display:swap}
+
+:root{
+  /* Mesma paleta categórica do /painel/, validada para daltonismo. Ordem S, C, M, F. */
+  --S:#BE8C10; --C:#A34418; --M:#215F98; --F:#0E8F7E;
+  --navy:#06182a; --azul:#1C6795; --turq:#15A5A8; --laranja:#E26220; --areia:#FEEAD4;
+  --tinta:#132430; --tinta-2:#4a5b68; --tinta-3:#6b7a85;
+  --linha:#e4e8ec; --fundo:#ffffff; --fundo-2:#f7f9fa;
+  --display:'Bricolage Grotesque',system-ui,sans-serif;
+  --corpo:'Aileron',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--corpo);background:var(--fundo);color:var(--tinta);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+[hidden]{display:none!important}
+
+header.topo{background:var(--navy);padding:20px 0;color:var(--areia)}
+.topo-in{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.topo img{height:30px;width:auto;display:block}
+.topo span{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(254,234,212,.7)}
+.faixa{height:4px;background:linear-gradient(90deg,var(--laranja) 0%,var(--turq) 55%,var(--azul) 100%)}
+
+.capa{padding:42px 0 6px;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.eyebrow{font-size:11.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--laranja);font-weight:700;margin-bottom:10px}
+h1{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-height:1.05;font-size:clamp(1.9rem,4.6vw,2.8rem);margin-bottom:12px}
+.sub{color:var(--tinta-2);font-size:16px;max-width:620px}
+.acoes{display:flex;gap:8px;flex-wrap:wrap}
+.bt{font:inherit;font-size:13.5px;font-weight:600;border-radius:100px;padding:9px 18px;cursor:pointer;border:1.5px solid var(--navy);background:#fff;color:var(--navy);text-decoration:none}
+.bt:hover{background:var(--navy);color:#fff}
+.bt.cheio{background:var(--laranja);border-color:var(--laranja);color:#fff}
+.bt.cheio:hover{background:#c24f14;border-color:#c24f14}
+
+h2{font-family:var(--display);font-weight:700;font-size:1.3rem;letter-spacing:-.01em;margin:44px 0 6px;padding-top:26px;border-top:1px solid var(--linha)}
+.nota{color:var(--tinta-2);font-size:14.5px;margin-bottom:18px;max-width:700px}
+
+/* Composição */
+.resumo{display:grid;grid-template-columns:1.1fr repeat(4,1fr);gap:12px;margin:30px 0 8px}
+@media(max-width:860px){.resumo{grid-template-columns:repeat(2,1fr)}.resumo .tile.total{grid-column:1/-1}}
+.tile{border:1px solid var(--linha);border-radius:14px;padding:16px 16px 14px;background:var(--fundo-2);position:relative;overflow:hidden}
+.tile.total{background:var(--navy);border-color:var(--navy);color:#fff}
+.tile.total small{color:#b9c9d6}
+.tile b{display:block;font-family:var(--display);font-weight:800;font-size:2.1rem;letter-spacing:-.03em;line-height:1}
+.tile small{display:block;font-size:12.5px;color:var(--tinta-2);margin-top:6px;line-height:1.4}
+.tile .ic{font-size:20px;position:absolute;right:14px;top:12px}
+.tile.perfil{border-top:4px solid var(--cor)}
+.tile.perfil b{color:var(--cor)}
+.pilha{display:flex;height:14px;border-radius:4px;overflow:hidden;background:var(--fundo-2);margin:14px 0 4px}
+.pilha span{height:100%;box-shadow:inset -2px 0 0 #fff}
+.leitura{border:1px solid var(--linha);border-left:4px solid var(--turq);border-radius:12px;padding:16px 18px;background:var(--fundo-2);margin-top:16px;font-size:15px;line-height:1.7}
+.leitura b{font-family:var(--display)}
+
+/* Filtros e tabela */
+.filtros{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:4px 0 14px}
+.chip{font:inherit;font-size:13px;border:1.5px solid var(--linha);background:#fff;border-radius:100px;padding:6px 14px;cursor:pointer;color:var(--tinta);display:inline-flex;align-items:center;gap:7px}
+.chip s{width:10px;height:10px;border-radius:50%;display:block;text-decoration:none}
+.chip[aria-pressed="true"]{border-color:var(--navy);background:var(--navy);color:#fff}
+.busca{font:inherit;font-size:14px;border:1.5px solid var(--linha);border-radius:100px;padding:7px 14px;min-width:200px;flex:1;max-width:280px}
+.busca:focus,.chip:focus-visible,.bt:focus-visible{outline:2px solid var(--laranja);outline-offset:2px}
+.tabela{overflow-x:auto;border:1px solid var(--linha);border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:720px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--linha);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+th{font-family:var(--display);font-weight:700;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--tinta-3);background:var(--fundo-2);cursor:pointer;user-select:none;white-space:nowrap}
+th[aria-sort]::after{content:' ↕';opacity:.35}
+th[aria-sort="ascending"]::after{content:' ↑';opacity:1}
+th[aria-sort="descending"]::after{content:' ↓';opacity:1}
+td.nome{font-weight:700}
+td small{display:block;color:var(--tinta-3);font-size:12.5px;font-weight:400}
+.perf{display:inline-flex;align-items:center;gap:7px;font-weight:600;white-space:nowrap}
+.perf s{width:11px;height:11px;border-radius:3px;display:block;text-decoration:none;flex:0 0 11px}
+.perf.sec{font-weight:400;color:var(--tinta-2)}
+.classe{font-size:12px;border-radius:100px;padding:3px 10px;white-space:nowrap;font-weight:600}
+.classe.natural{background:rgba(14,143,126,.1);color:#0b6f62}
+.classe.complementar{background:rgba(33,95,152,.1);color:#1a4d7c}
+.classe.oposta{background:rgba(226,98,32,.12);color:#9a3f0f}
+.sem{padding:22px;text-align:center;color:var(--tinta-3)}
+
+/* Como liderar */
+.guias{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:760px){.guias{grid-template-columns:1fr}}
+.guia{border:1px solid var(--linha);border-top:4px solid var(--cor);border-radius:12px;padding:18px 18px 16px}
+.guia h3{font-family:var(--display);font-size:1.1rem;margin-bottom:2px}
+.guia .quem{font-size:13px;color:var(--tinta-2);margin-bottom:12px}
+.guia dl{font-size:14px;line-height:1.55}
+.guia dt{font-weight:700;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-3);margin-top:10px}
+.guia dd{margin:2px 0 0}
+
+/* Link do time */
+.convite{background:var(--navy);color:#fff;border-radius:14px;padding:22px;margin-top:10px}
+.convite p{color:#cdd8e1;font-size:14.5px;margin-bottom:12px}
+.link-box{display:flex;gap:8px;flex-wrap:wrap}
+.link-box input{flex:1;min-width:220px;font:inherit;font-size:13.5px;border:0;border-radius:100px;padding:10px 16px;background:#fff;color:var(--tinta)}
+.convite .bt{border-color:#fff;background:transparent;color:#fff}
+.convite .bt.cheio{background:var(--laranja);border-color:var(--laranja)}
+
+.escopo{margin:40px 0 0;border-top:1px solid var(--linha);padding-top:18px;font-size:12.5px;color:var(--tinta-3);line-height:1.65}
+footer{padding:24px 0 44px;font-size:12.5px;color:var(--tinta-3)}
+.estado{padding:70px 0;text-align:center;color:var(--tinta-2);max-width:560px;margin:0 auto}
+.estado h1{font-size:1.8rem}
+.estado.aviso{color:#7a4318}
+
+@media print{
+  header.topo{background:#fff;color:var(--tinta)} .topo img{filter:invert(1)}
+  .acoes,.filtros,.convite,.no-print{display:none!important}
+  .tile,.leitura{background:#fff}
+  .tile.total{background:#fff;color:var(--tinta)} .tile.total small{color:var(--tinta-2)}
+  body{font-size:12px} table{min-width:0;font-size:11px} h2{break-after:avoid} .guia,tr{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<header class="topo">
+  <div class="wrap topo-in">
+    <img src="/assets/logo-mares.png" alt="MARES Consultoria Empresarial">
+    <span>Mapa da Equipe · Metodologia MARES</span>
+  </div>
+</header>
+<div class="faixa"></div>
+<main class="wrap" id="conteudo">
+  <div class="estado" id="estado">Carregando o mapa da sua equipe…</div>
+</main>
+<footer class="wrap">© <span id="ano"></span> MARES Consultoria Empresarial · Pessoas, Dados e Gestão</footer>
+
+<script>
+/* =======================================================================
+   MAPA DA EQUIPE
+   Bônus da Mentoria O Poder dos Dados. Cada mentorado recebe o link do seu
+   time e vê o nome, a área e os perfis predominante e secundário de quem
+   respondeu pelo link nominal (/temperamentos/?time=codigo&nominal=1).
+
+   Endereço: /equipe/?time=codigo&acesso=CODIGO
+   O código de acesso é próprio de cada time e é conferido no Apps Script.
+   Só aparecem respostas com aceite explícito da pessoa na tela do teste.
+   Esta página não carrega o cookies.js de propósito: ela mostra nomes, e o
+   Clarity gravaria a sessão com eles.
+   ======================================================================= */
+const WEBHOOK = 'https://script.google.com/macros/s/AKfycbx4UBHQ5yh13Tx3IEX8SN4xEHMCZtYoSz_Vm53f2P7v44nQidwErRvq_uximUQdmU58/exec';
+const SITE = 'https://www.maresconsultoria.com.br';
+
+const ORDEM = ['C','S','M','F'];
+const PERFIS = {
+  C:{animal:'Tubarão', classico:'Colérico', ic:'🦈', cor:'var(--C)',
+     define:'Obstinado, independente, prático, eficiente e decidido.',
+     forte:'Alta capacidade de liderança, decisão e eficiência.',
+     risco:'Autoritarismo, falta de empatia e de paciência.',
+     liderar:'Trabalhe empatia e paciência com ele e aproveite a determinação para metas ambiciosas.'},
+  S:{animal:'Golfinho', classico:'Sanguíneo', ic:'🐬', cor:'var(--S)',
+     define:'Comunicativo, entusiasta, amável e bom companheiro.',
+     forte:'Comunicação, socialização e otimismo.',
+     risco:'Dispersão, superficialidade e falta de disciplina.',
+     liderar:'Estimule foco e disciplina e use o entusiasmo dele para motivar o time.'},
+  M:{animal:'Polvo', classico:'Melancólico', ic:'🐙', cor:'var(--M)',
+     define:'Habilidoso, sensível, perfeccionista, leal e dedicado.',
+     forte:'Atenção aos detalhes, dedicação e lealdade.',
+     risco:'Perfeccionismo excessivo, isolamento e dificuldade com crítica.',
+     liderar:'Incentive flexibilidade e relacionamento e aproveite a qualidade da entrega.'},
+  F:{animal:'Tartaruga Marinha', classico:'Fleumático', ic:'🐢', cor:'var(--F)',
+     define:'Calmo, responsável, conservador, prático e bem-humorado.',
+     forte:'Estabilidade, responsabilidade e eficiência.',
+     risco:'Passividade, indecisão e falta de proatividade.',
+     liderar:'Estimule proatividade e use a calma dele para resolver conflitos.'}
+};
+const NATURAIS = ['CM','MC','SF','FS'];
+const OPOSTAS  = ['CF','FC','MS','SM'];
+const ROTULO_CLASSE = {natural:'Natural', complementar:'Complementar', oposta:'Oposta'};
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+$('#ano').textContent = new Date().getFullYear();
+
+const params = new URLSearchParams(location.search);
+const TIME = (params.get('time') || '').trim().toLowerCase().replace(/[^a-z0-9-]/g,'').slice(0,40);
+const ACESSO = (params.get('acesso') || '').trim();
+const CHAVE = params.get('chave') || '';
+
+function nomeDoLider(){
+  const dado = (params.get('lider') || '').trim();
+  if (dado) return dado;
+  const parte = TIME.split('-').pop() || TIME;
+  const fixos = {marcio:'Márcio'};
+  return fixos[parte] || parte.charAt(0).toUpperCase() + parte.slice(1);
+}
+
+function letra(animal){
+  const a = String(animal||'').toLowerCase();
+  if (a.startsWith('tub')) return 'C';
+  if (a.startsWith('gol')) return 'S';
+  if (a.startsWith('pol')) return 'M';
+  if (a.startsWith('tar')) return 'F';
+  return '';
+}
+function classeDe(p, s){
+  const k = p + s;
+  if (!p || !s) return '';
+  return NATURAIS.includes(k) ? 'natural' : OPOSTAS.includes(k) ? 'oposta' : 'complementar';
+}
+const primeiroNome = n => String(n||'').trim().split(/\s+/)[0] || '';
+const pl = (n, um, varios) => n + ' ' + (n === 1 ? um : varios);
+function listaNomes(arr){
+  if (!arr.length) return '';
+  if (arr.length === 1) return arr[0];
+  return arr.slice(0,-1).join(', ') + ' e ' + arr[arr.length-1];
+}
+
+function jsonp(url){
+  return new Promise((ok, falha) => {
+    const nome = 'mares_eq_' + Math.random().toString(36).slice(2,9);
+    const s = document.createElement('script');
+    const limpar = () => { delete window[nome]; s.remove(); };
+    window[nome] = d => { limpar(); ok(d); };
+    s.onerror = () => { limpar(); falha(new Error('falha')); };
+    s.src = url + '&callback=' + nome;
+    document.body.appendChild(s);
+    setTimeout(() => { if (window[nome]) { limpar(); falha(new Error('demorou')); } }, 25000);
+  });
+}
+async function buscar(url){
+  try {
+    const r = await fetch(url, {cache:'no-store'});
+    if (!r.ok) throw new Error('resposta ' + r.status);
+    return await r.json();
+  } catch (e) { return jsonp(url); }
+}
+
+function estado(titulo, texto, aviso){
+  $('#conteudo').innerHTML = '<div class="estado' + (aviso ? ' aviso' : '') + '"><h1>' + esc(titulo) + '</h1><p>' + texto + '</p></div>';
+}
+
+const linkDoTime = () => SITE + '/temperamentos/?time=' + encodeURIComponent(TIME) + '&nominal=1';
+
+let PESSOAS = [];
+let filtro = '', busca = '', ordem = {campo:'nome', dir:1};
+
+async function iniciar(){
+  if (!TIME || (!ACESSO && !CHAVE)) {
+    return estado('Link incompleto', 'Este endereço precisa do código do time e do código de acesso. Confira o link que você recebeu da MARES.', true);
+  }
+  document.title = 'Mapa da Equipe · ' + nomeDoLider() + ' · MARES';
+  try {
+    const url = WEBHOOK + '?modo=equipe&time=' + encodeURIComponent(TIME) +
+      (ACESSO ? '&acesso=' + encodeURIComponent(ACESSO) : '') +
+      (CHAVE ? '&chave=' + encodeURIComponent(CHAVE) : '');
+    const d = await buscar(url);
+    if (d.erro === 'acesso invalido') return estado('Código de acesso inválido', 'O código deste link não confere com o time. Peça o link correto para a equipe MARES pelo WhatsApp (41) 99248-8092.', true);
+    if (d.erro) return estado('Não foi possível abrir o mapa', esc(d.erro), true);
+    PESSOAS = (d.pessoas || []).map(p => {
+      const lp = letra(p.predominante), ls = letra(p.secundario);
+      return Object.assign({}, p, {lp, ls, cls: classeDe(lp, ls)});
+    }).filter(p => p.lp);
+    montar(d);
+  } catch (e) {
+    estado('Não foi possível carregar agora', 'Verifique a conexão e tente de novo em alguns instantes.', true);
+  }
+}
+
+function montar(d){
+  const lider = nomeDoLider();
+  const total = PESSOAS.length;
+  const cont = {C:0,S:0,M:0,F:0};
+  PESSOAS.forEach(p => cont[p.lp]++);
+  const atualizado = new Date(d.gerado_em || Date.now()).toLocaleString('pt-BR', {dateStyle:'short', timeStyle:'short'});
+
+  let h = '';
+  h += '<section class="capa"><div>' +
+       '<div class="eyebrow">Bônus · Mentoria O Poder dos Dados</div>' +
+       '<h1>Mapa da Equipe de ' + esc(lider) + '</h1>' +
+       '<p class="sub">Quem é quem no seu time, pelo Teste dos Temperamentos MARES. Use para ajustar o jeito de conduzir cada pessoa. A régua é a mesma para todos; o que muda é o jeito.</p>' +
+       '</div><div class="acoes no-print">' +
+       '<button class="bt" id="bt-atualizar" type="button">Atualizar</button>' +
+       '<button class="bt cheio" id="bt-imprimir" type="button">Salvar em PDF</button>' +
+       '</div></section>';
+
+  if (!total) {
+    h += '<div class="leitura" style="margin-top:28px"><b>Ninguém do seu time respondeu ainda.</b> Envie o link abaixo para as pessoas da sua equipe. Cada resposta aparece aqui assim que a pessoa termina o teste.</div>';
+    h += blocoConvite();
+    h += escopo(atualizado);
+    $('#conteudo').innerHTML = h;
+    ligar();
+    return;
+  }
+
+  /* Composição */
+  h += '<div class="resumo">' +
+       '<div class="tile total"><b>' + total + '</b><small>' + (total === 1 ? 'pessoa respondeu' : 'pessoas responderam') + '<br>atualizado em ' + esc(atualizado) + '</small></div>' +
+       ORDEM.map(k => '<div class="tile perfil" style="--cor:' + PERFIS[k].cor + '"><span class="ic" aria-hidden="true">' + PERFIS[k].ic + '</span><b>' + cont[k] + '</b><small>' + PERFIS[k].animal + '<br>' + PERFIS[k].classico + '</small></div>').join('') +
+       '</div>';
+  h += '<div class="pilha" role="img" aria-label="Composição do time por perfil predominante">' +
+       ORDEM.filter(k => cont[k]).map(k => '<span style="width:' + (cont[k]/total*100) + '%;background:' + PERFIS[k].cor + '" title="' + PERFIS[k].animal + ': ' + cont[k] + '"></span>').join('') + '</div>';
+  h += '<div class="leitura">' + leitura(cont, total) + '</div>';
+
+  /* Tabela */
+  h += '<h2>Quem é quem</h2>';
+  h += '<p class="nota">O primeiro perfil é o que aparece com mais força no dia a dia. O segundo é o que tempera o primeiro. A combinação diz se os dois se equilibram (natural), se somam forças (complementar) ou se puxam para lados diferentes (oposta).</p>';
+  h += '<div class="filtros no-print" role="group" aria-label="Filtrar por perfil predominante">' +
+       '<button class="chip" type="button" data-f="" aria-pressed="true">Todos (' + total + ')</button>' +
+       ORDEM.filter(k => cont[k]).map(k => '<button class="chip" type="button" data-f="' + k + '" aria-pressed="false"><s style="background:' + PERFIS[k].cor + '"></s>' + PERFIS[k].animal + ' (' + cont[k] + ')</button>').join('') +
+       '<input class="busca" type="search" id="busca" placeholder="Buscar por nome ou área" aria-label="Buscar por nome ou área">' +
+       '</div>';
+  h += '<div class="tabela"><table><thead><tr>' +
+       '<th data-o="nome" aria-sort="ascending">Nome</th>' +
+       '<th data-o="setor" aria-sort="none">Área e cargo</th>' +
+       '<th data-o="lp" aria-sort="none">Perfil primário</th>' +
+       '<th data-o="ls" aria-sort="none">Perfil secundário</th>' +
+       '<th data-o="cls" aria-sort="none">Combinação</th>' +
+       '</tr></thead><tbody id="linhas"></tbody></table></div>';
+
+  /* Como liderar cada perfil */
+  h += '<h2>Como conduzir cada perfil</h2>';
+  h += '<p class="nota">Leitura da Metodologia MARES para cada perfil predominante, com quem do seu time está em cada um.</p>';
+  h += '<div class="guias">' + ORDEM.map(k => {
+    const P = PERFIS[k];
+    const quem = PESSOAS.filter(p => p.lp === k).map(p => primeiroNome(p.nome));
+    return '<div class="guia" style="--cor:' + P.cor + '">' +
+      '<h3>' + P.ic + ' ' + P.animal + ' <small style="font-weight:500;color:var(--tinta-3);font-size:.8em">' + P.classico + '</small></h3>' +
+      '<p class="quem">' + (quem.length ? 'No seu time: ' + esc(listaNomes(quem)) : 'Ninguém do seu time tem este perfil como predominante.') + '</p>' +
+      '<dl><dt>Como é</dt><dd>' + P.define + '</dd>' +
+      '<dt>Ponto forte</dt><dd>' + P.forte + '</dd>' +
+      '<dt>Ponto de atenção</dt><dd>' + P.risco + '</dd>' +
+      '<dt>Como liderar</dt><dd>' + P.liderar + '</dd></dl></div>';
+  }).join('') + '</div>';
+
+  h += blocoConvite();
+  h += escopo(atualizado);
+  $('#conteudo').innerHTML = h;
+  desenharLinhas();
+  ligar();
+}
+
+function leitura(cont, total){
+  const ordenado = ORDEM.slice().sort((a,b) => cont[b] - cont[a]);
+  const topo = ordenado[0];
+  const ausentes = ORDEM.filter(k => !cont[k]).map(k => PERFIS[k].animal);
+  const opostas = PESSOAS.filter(p => p.cls === 'oposta').map(p => primeiroNome(p.nome));
+  let t = '<b>Leitura rápida.</b> ';
+  if (total < 3) {
+    t += 'Com ' + pl(total, 'resposta', 'respostas') + ' ainda não dá para ler o time como conjunto. Vale esperar mais pessoas responderem. ';
+  } else {
+    const empate = ordenado.filter(k => cont[k] === cont[topo]);
+    t += empate.length > 1
+      ? 'O seu time se divide entre ' + listaNomes(empate.map(k => PERFIS[k].animal)) + ', com ' + cont[topo] + ' pessoas em cada. '
+      : 'O perfil que mais aparece no seu time é o ' + PERFIS[topo].animal + ', com ' + pl(cont[topo], 'pessoa', 'pessoas') + ' de ' + total + '. ';
+  }
+  if (ausentes.length) t += 'Nenhuma pessoa tem ' + listaNomes(ausentes) + ' como predominante: vale observar quem cobre essa função quando ela é necessária. ';
+  if (opostas.length) t += (opostas.length === 1 ? listaNomes(opostas) + ' tem combinação oposta, o que pede' : listaNomes(opostas) + ' têm combinação oposta, o que pede') + ' conversa de autoconhecimento antes de qualquer cobrança.';
+  return t;
+}
+
+function desenharLinhas(){
+  const q = busca.trim().toLowerCase();
+  let lista = PESSOAS.filter(p => (!filtro || p.lp === filtro) &&
+    (!q || (p.nome + ' ' + p.setor + ' ' + p.cargo).toLowerCase().includes(q)));
+  const pos = {C:0,S:1,M:2,F:3};
+  lista.sort((a,b) => {
+    const c = ordem.campo;
+    let x = a[c] || '', y = b[c] || '';
+    if (c === 'lp' || c === 'ls') { x = pos[x] ?? 9; y = pos[y] ?? 9; return (x - y || a.nome.localeCompare(b.nome,'pt-BR')) * ordem.dir; }
+    return String(x).localeCompare(String(y),'pt-BR') * ordem.dir;
+  });
+  const perf = (k, sec) => k ? '<span class="perf' + (sec ? ' sec' : '') + '"><s style="background:' + PERFIS[k].cor + '"></s>' + PERFIS[k].ic + ' ' + PERFIS[k].animal + '</span>' : '';
+  $('#linhas').innerHTML = lista.length ? lista.map(p =>
+    '<tr><td class="nome">' + esc(p.nome) + (p.lidera && !/^não/i.test(p.lidera) ? '<small>' + esc(p.lidera) + '</small>' : '') + '</td>' +
+    '<td>' + esc(p.setor || '') + '<small>' + esc(p.cargo || '') + '</small></td>' +
+    '<td>' + perf(p.lp) + '</td>' +
+    '<td>' + perf(p.ls, true) + '</td>' +
+    '<td>' + (p.cls ? '<span class="classe ' + p.cls + '">' + ROTULO_CLASSE[p.cls] + '</span>' : '') + '</td></tr>'
+  ).join('') : '<tr><td colspan="5" class="sem">Ninguém com esse filtro.</td></tr>';
+}
+
+function blocoConvite(){
+  return '<h2 class="no-print">Chame quem ainda não respondeu</h2>' +
+    '<div class="convite no-print"><p>Mande este link para as pessoas do seu time. Na tela do teste elas são avisadas de que você vai ver o nome e os perfis delas, e só aparecem aqui depois de concordar. A análise completa de cada uma vai para o e-mail dela.</p>' +
+    '<div class="link-box"><input id="link-time" readonly value="' + esc(linkDoTime()) + '" aria-label="Link do teste para o seu time">' +
+    '<button class="bt cheio" type="button" id="bt-copiar">Copiar link</button>' +
+    '<a class="bt" id="bt-whats" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent('Oi! Quero conhecer melhor o jeito de cada pessoa do time. Faz o Teste dos Temperamentos MARES, leva uns 10 minutos e a sua análise completa chega no seu e-mail: ' + linkDoTime()) + '">Enviar no WhatsApp</a></div></div>';
+}
+
+function escopo(atualizado){
+  return '<p class="escopo">O Teste dos Temperamentos descreve tendências de comportamento. Ele não é diagnóstico psicológico e não deve ser usado para contratar, demitir ou promover ninguém. Use este mapa para conversar melhor com cada pessoa, nunca para rotular. Este link é seu: não compartilhe com o time. Dados atualizados em ' + esc(atualizado) + '. Metodologia MARES · Marcelis Pereira.</p>';
+}
+
+function ligar(){
+  const a = $('#bt-atualizar'); if (a) a.onclick = () => { estado('Atualizando…',''); iniciar(); };
+  const i = $('#bt-imprimir'); if (i) i.onclick = () => window.print();
+  const c = $('#bt-copiar');
+  if (c) c.onclick = async () => {
+    const inp = $('#link-time');
+    try { await navigator.clipboard.writeText(inp.value); }
+    catch (e) { inp.select(); try { document.execCommand('copy'); } catch (_) {} }
+    c.textContent = 'Link copiado'; setTimeout(() => c.textContent = 'Copiar link', 2200);
+  };
+  document.querySelectorAll('.chip').forEach(b => b.onclick = () => {
+    filtro = b.dataset.f;
+    document.querySelectorAll('.chip').forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+    desenharLinhas();
+  });
+  const bu = $('#busca'); if (bu) bu.oninput = () => { busca = bu.value; desenharLinhas(); };
+  document.querySelectorAll('th[data-o]').forEach(th => th.onclick = () => {
+    const campo = th.dataset.o;
+    ordem = {campo, dir: ordem.campo === campo ? -ordem.dir : 1};
+    document.querySelectorAll('th[data-o]').forEach(x => x.setAttribute('aria-sort',
+      x === th ? (ordem.dir === 1 ? 'ascending' : 'descending') : 'none'));
+    desenharLinhas();
+  });
+}
+
+iniciar();
+</script>
+</body>
+</html>
