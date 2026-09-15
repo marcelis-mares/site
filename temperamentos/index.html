@@ -398,6 +398,8 @@ a.btn{text-decoration:none}
   background:rgba(21,165,168,.07);color:var(--texto-suave);font-size:14px;line-height:1.55;margin-bottom:22px;
 }
 .instrucao b{color:var(--areia);font-family:var(--display);font-weight:700}
+.campo label.aceite{display:flex;color:var(--texto-suave);gap:10px;align-items:flex-start;cursor:pointer;font-size:14px;line-height:1.5;text-transform:none;letter-spacing:0}
+.campo label.aceite input{width:18px;height:18px;margin-top:2px;flex:0 0 auto;accent-color:#15A5A8}
 .grade{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 @media(max-width:640px){.grade{grid-template-columns:1fr}}
 .item{
@@ -846,6 +848,10 @@ fbq('init','673278761920486');fbq('track','PageView');
             <option>Mais de 10 anos</option>
           </select>
           <div class="msg-erro" id="e-tempo">Escolha uma opção.</div>
+        </div>
+        <div class="campo" id="campo-nominal" hidden>
+          <label class="aceite" for="f-nominal"><input type="checkbox" id="f-nominal"> <span>Estou de acordo que a liderança que me enviou este link veja o meu nome, a minha área e os meus perfis predominante e secundário.</span></label>
+          <div class="msg-erro" id="e-nominal">Para responder por este link, é preciso marcar esta opção.</div>
         </div>
       </div>
 
@@ -1347,10 +1353,20 @@ function lerTurma(){
   return bruto.trim().toLowerCase().replace(/[^a-z0-9-]/g,'').slice(0,40);
 }
 const TURMA = lerTurma();
+/* Modo nominal: /temperamentos/?time=codigo&nominal=1
+   É o link do Mapa da Equipe, em que a liderança vê o nome e os perfis de cada
+   pessoa. Por isso a tela avisa isso com todas as letras e pede o aceite.
+   Sem o nominal=1 continua valendo a promessa de leitura só do conjunto, e as
+   respostas dadas assim nunca aparecem com nome em painel nenhum. */
+const NOMINAL = !!TURMA && new URLSearchParams(location.search).get('nominal') === '1';
 if (TURMA) {
   $('#aviso-turma').hidden = false;
   $('#campos-turma').hidden = false;
   document.querySelector('.selo').innerHTML = '<b></b> Diagnóstico de time · Metodologia MARES';
+}
+if (NOMINAL) {
+  $('#aviso-turma').innerHTML = '<b>Você está respondendo para o Mapa da Equipe da sua liderança.</b> A sua análise completa chega no seu e-mail e é sua. A liderança que enviou este link vai ver o seu nome, a sua área e os seus perfis predominante e secundário, para conduzir o time respeitando o jeito de cada pessoa. As 200 características que você marcar e a sua análise completa não são mostradas a ela.';
+  $('#campo-nominal').hidden = false;
 }
 
 /* ======================= TELA: CAPA E DADOS ======================= */
@@ -1375,6 +1391,11 @@ function validarDados(){
     ['f-tempo','e-tempo', v => !!v]
   );
   let ok = true;
+  if (NOMINAL) {
+    const aceitou = $('#f-nominal').checked;
+    $('#e-nominal').classList.toggle('on', !aceitou);
+    if (!aceitou) ok = false;
+  }
   campos.forEach(([id, erro, teste]) => {
     const el = $('#'+id);
     const bom = teste(el.value);
@@ -1400,7 +1421,8 @@ $('#ir-quiz').addEventListener('click', () => {
     setor: TURMA ? $('#f-setor').value : '',
     cargo: TURMA ? $('#f-cargo').value.trim() : '',
     lidera: TURMA ? $('#f-lidera').value : '',
-    tempo_casa: TURMA ? $('#f-tempo').value : ''
+    tempo_casa: TURMA ? $('#f-tempo').value : '',
+    visivel_lider: NOMINAL ? 'sim' : ''
   };
   enviarRD(CONFIG.RD_IDENTIFICADOR_LEAD, {});
   if (window.fbq) fbq('track','Lead',{content_name:'Teste dos Temperamentos MARES'});
@@ -1556,7 +1578,8 @@ function desenharResultado(){
   $('#res-fortes').innerHTML = b.fortes.map(x => '<li>' + esc(x) + '</li>').join('');
   $('#res-atencao').innerHTML = b.atencao.map(x => '<li>' + esc(x) + '</li>').join('');
   $('#cta-email').textContent = 'Ela vai para ' + lead.email + ' e traz a leitura completa da combinação entre os dois perfis, as orientações práticas de desenvolvimento e o caminho para aprofundar esse trabalho.'
-    + (TURMA ? ' A sua empresa recebe apenas a leitura do time como conjunto, sem o resultado individual de ninguém.' : '');
+    + (NOMINAL ? ' A sua liderança vê apenas o seu nome, a sua área e os seus dois perfis, como você autorizou.'
+       : TURMA ? ' A sua empresa recebe apenas a leitura do time como conjunto, sem o resultado individual de ninguém.' : '');
   $('#cta-guia').href = CONFIG.GUIA;
   $('#cta-whats').href = 'https://wa.me/' + CONFIG.WHATSAPP + '?text=' +
     encodeURIComponent('Oi! Fiz o Teste dos Temperamentos e deu ' + P.animal + ' predominante com ' + S.animal + ' secundário. Quero entender melhor o meu resultado.');
@@ -1643,6 +1666,7 @@ function registrar(status, motivo, html){
     cargo: lead.cargo || '',
     lidera: lead.lidera || '',
     tempo_casa: lead.tempo_casa || '',
+    visivel_lider: lead.visivel_lider || '',
     como_aprende: aprender.join(' | '),
     predominante: PERFIS[r.primary].nome,
     predominante_animal: P.animal,
