@@ -1358,7 +1358,11 @@ const TURMA = lerTurma();
    pessoa. Por isso a tela avisa isso com todas as letras e pede o aceite.
    Sem o nominal=1 continua valendo a promessa de leitura só do conjunto, e as
    respostas dadas assim nunca aparecem com nome em painel nenhum. */
-const NOMINAL = !!TURMA && new URLSearchParams(location.search).get('nominal') === '1';
+/* Times com nome liberado desde a origem, mesmo sem o nominal=1 no link.
+   A turma Extraordinários recebeu o link sem o parâmetro e ele não pode mudar. */
+const PREFIXOS_NOMINAIS = ['extraordinarios-'];
+const NOMINAL = !!TURMA && (new URLSearchParams(location.search).get('nominal') === '1' ||
+  PREFIXOS_NOMINAIS.some(pre => TURMA.indexOf(pre) === 0));
 if (TURMA) {
   $('#aviso-turma').hidden = false;
   $('#campos-turma').hidden = false;
