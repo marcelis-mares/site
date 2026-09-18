@@ -230,12 +230,21 @@ function jsonp(url){
     setTimeout(() => { if (window[nome]) { limpar(); falha(new Error('demorou')); } }, 25000);
   });
 }
+/* O Apps Script às vezes recusa a primeira chamada logo depois que a página
+   abre, e a mesma chamada funciona um segundo depois. Por isso são três
+   tentativas antes de desistir, e o JSONP continua como último recurso. */
+const espera = ms => new Promise(r => setTimeout(r, ms));
 async function buscar(url){
-  try {
-    const r = await fetch(url, {cache:'no-store'});
-    if (!r.ok) throw new Error('resposta ' + r.status);
-    return await r.json();
-  } catch (e) { return jsonp(url); }
+  for (let tentativa = 0; tentativa < 3; tentativa++) {
+    try {
+      const r = await fetch(url, {cache:'no-store'});
+      if (!r.ok) throw new Error('resposta ' + r.status);
+      return await r.json();
+    } catch (e) {
+      if (tentativa < 2) await espera(1200 * (tentativa + 1));
+    }
+  }
+  return jsonp(url);
 }
 
 function estado(titulo, texto, aviso){
@@ -265,7 +274,9 @@ async function iniciar(){
     }).filter(p => p.lp);
     montar(d);
   } catch (e) {
-    estado('Não foi possível carregar agora', 'Verifique a conexão e tente de novo em alguns instantes.', true);
+    estado('Não foi possível carregar agora', 'A conexão com a base falhou. <button class="bt" id="bt-tentar" type="button" style="margin-left:8px">Tentar de novo</button>', true);
+    const t = document.querySelector('#bt-tentar');
+    if (t) t.onclick = () => { estado('Carregando o mapa da sua equipe…', ''); iniciar(); };
   }
 }
 
