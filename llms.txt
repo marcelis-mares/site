@@ -1,12 +1,12 @@
 # MARES Consultoria Empresarial
 
-> Consultoria de gestão orientada por dados, fundada por Marcelis Pereira,
+> A MARES ajuda empresários sufocados pela própria empresa a crescer com
+> liberdade: a empresa cresce sem depender só do dono, porque as decisões saem
+> da cabeça dele e passam a se apoiar em dados. Fundada por Marcelis Pereira,
 > bacharel em Estatística pela UFES, com mais de 20 anos liderando projetos
-> estratégicos em instituições públicas e privadas. O Método MARES une
-> Pessoas, Dados e Gestão para que empresas parem de decidir no achismo e
-> passem a crescer com previsibilidade. Bases no Espírito Santo e em Curitiba,
-> atendimento em todo o Brasil, presencial e online. Assinatura da marca: Pessoas, Dados
-> e Gestão.
+> estratégicos em instituições públicas e privadas. Bases no Espírito Santo e
+> em Curitiba, atendimento em todo o Brasil, presencial e online. Assinatura
+> da marca: Pessoas, Dados e Gestão.
 
 ## O que a MARES faz
 
@@ -19,17 +19,17 @@
 
 ## O Método MARES
 
-O Método de Aceleração Empresarial para o Crescimento se apoia em três
-pilares e cinco eixos. Os pilares são Pessoas, que trata de autoconhecimento,
-engajamento e liderança assertiva; Dados, que trata de inteligência de
-mercado e decisão baseada em evidências; e Gestão, que trata de estratégia e
-execução acompanhadas por indicadores. Os cinco eixos são colaboração e
-engajamento, personalização, análise de dados, tecnologias e inovação.
+MARES é a sigla de Método de Aceleração Empresarial para o Crescimento. O
+método tem três pilares, que são a assinatura da marca: Pessoas, Dados e
+Gestão. E tem cinco eixos de trabalho, um para cada letra do nome:
+transforMação, dAdos, lideRança, markEting e geStão. O objetivo é fazer o
+dado virar rotina de decisão, com o time junto, para a empresa crescer sem
+depender só do dono.
 
 ## Páginas principais
 
-- [Início](https://www.maresconsultoria.com.br/): posicionamento da MARES e o
-  tamanho do problema de decidir sem dados.
+- [Início](https://www.maresconsultoria.com.br/): a promessa da MARES,
+  crescimento com liberdade para o dono, e o problema de decidir sem dados.
 - [Sobre Marcelis Pereira](https://www.maresconsultoria.com.br/sobre/):
   trajetória da fundadora, formação em Estatística pela UFES e o conceito de
   Liderança Oxigênio.
@@ -45,6 +45,10 @@ engajamento, personalização, análise de dados, tecnologias e inovação.
 - [Diagnóstico MARES](https://www.maresconsultoria.com.br/diagnostico/):
   o programa completo, com mapa de maturidade, plano de ação visual e
   workshop de devolutiva, em 90 a 120 dias.
+- [Consultoria Empresarial](https://www.maresconsultoria.com.br/consultoria/):
+  contrato de 12 meses em quatro frentes, com meta de 24% de crescimento.
+- [Blog](https://www.maresconsultoria.com.br/blog/): análises de mercado com
+  fonte primária e data.
 - [Contato](https://www.maresconsultoria.com.br/contato/): formas de falar
   com a equipe.
 
@@ -65,34 +69,27 @@ engajamento, personalização, análise de dados, tecnologias e inovação.
   O resultado descreve tendências de comportamento e não constitui diagnóstico
   psicológico.
 
-## Evento em cartaz
-
-- [Imersão Crescimento Previsível](https://www.maresconsultoria.com.br/imersao/):
-  imersão online e gratuita em três noites, 25, 26 e 27 de agosto de 2026, às
-  20h, com Marcelis Pereira, para empresários e líderes acharem o gargalo que
-  trava o crescimento, montarem o mapa de indicadores e aplicarem inteligência
-  artificial na rotina de decisão.
-
 ## Dados que a MARES usa como referência
 
-- Apenas 22% das empresas brasileiras usam dados de forma estratégica.
-  Fonte: beAnalytic, 2025.
-- Até 8% do PIB pode ser perdido em 10 anos por baixa maturidade em dados.
-  Fonte: FGV.
+- 31% das áreas de recrutamento usam dados de mercado de trabalho para definir
+  a estratégia de contratação. Fonte: Gartner, pesquisa com 426 CHROs,
+  fevereiro de 2026.
+- 14% dos CEOs definiram claramente o impacto no resultado de todas as suas
+  iniciativas de IA. Fonte: BCG, pesquisa com 152 CEOs, julho de 2026.
 
 ## Resultados documentados
 
 - Confiauto Proteção Veicular (ES): mais de 40% de crescimento em 10 meses.
 - Rhema Neuroeducação: ticket 20% acima dos principais concorrentes e 25% de
   crescimento no faturamento entre 2021 e 2023.
-- Empresas atendidas pelo Diagnóstico MARES registraram até 24% de
-  crescimento em 12 meses.
+- A Consultoria MARES assume em contrato a meta de 24% de crescimento em até
+  12 meses.
 
 ## Para quem é
 
-Empresário ou líder de empresa que já fatura e está em crescimento, mas sente
-que decide no achismo, não sabe o retorno do que investe e quer escalar com
-segurança.
+Empresário que cresceu, já tem time e faturamento, e se sente sufocado pela
+própria empresa: tudo passa por ele, nada anda sem ele, e as decisões vivem
+só na cabeça dele. Também líderes que precisam decidir com dados.
 
 ## Contato
 
