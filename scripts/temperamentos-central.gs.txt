@@ -1004,6 +1004,9 @@ function doGet(e) {
     /* Gera o código de acesso do Mapa da Equipe de um time. Só com a chave geral. */
     var cod = limpar(p.time);
     saida = cod ? { time: cod, acesso: codigoDeAcesso(cod) } : { erro: 'informe o codigo do time' };
+  } else if (p.modo === 'nominal') {
+    /* Bloco Quem respondeu do painel. Só com a chave geral. */
+    saida = nominalDaTurma(limparLista(p.time), p.teste || '');
   } else if (p.modo === 'turmas') {
     saida = listaDeTurmas();
   } else if (p.geral === '1') {
@@ -1062,7 +1065,8 @@ function codigoDeAcesso(time) {
 /* Times cujo mapa mostra todas as respostas com nome, inclusive as dadas antes
    do aceite existir. Decisão da Marcelis em 15/09/2026 para a turma
    Extraordinários, que já tinha enviado o link sem o nominal=1. */
-var PREFIXOS_NOMINAIS = ['extraordinarios-'];
+/* 02/10/2026: Instituto Rafael Dias entra igual, equipe avisada de que o resultado seria nominal. */
+var PREFIXOS_NOMINAIS = ['extraordinarios-', 'instituto-rafael-dias-'];
 
 function mapaDaEquipe(time, acesso, chave) {
   if (!time) return { erro: 'informe o codigo do time' };
@@ -1345,4 +1349,127 @@ function testarPermissaoDeEmail() {
     subject: 'MARES · permissão de e-mail confirmada',
     htmlBody: '<p>Se você recebeu esta mensagem, o Apps Script já pode enviar as análises.</p>'
   });
+}
+
+/* ============================================================================
+   QUEM RESPONDEU (bloco nominal do painel)
+   Decisão da Marcelis em 02/10/2026: o painel de qualquer teste mostra, no fim,
+   o nome de cada pessoa da turma e o resultado dela. Só responde com a chave
+   geral do painel. O nome não vem do teste: vem das planilhas, cruzando pela
+   sessão. Assim RaioX, Sonda, Bússola e qualquer teste novo que grave sessão e
+   nome numa aba entram sozinhos, sem mexer na página do teste.
+   E-mail e telefone continuam sem sair da planilha.
+   ============================================================================ */
+var PLANILHA_RESULTADOS = '1Zj0XEtRNaOOZYhOoCu8jTjMEdaOpBR1TpMZ8gEpG6Hk';
+
+/* Junta sessao -> cadastro olhando todas as abas que têm as colunas sessao e nome,
+   na central e na MARES Resultados. */
+function cadastrosPorSessao() {
+  var mapa = {};
+  var varrer = function (ss) {
+    ss.getSheets().forEach(function (a) {
+      if (a.getName() === ABA_EVENTOS || a.getLastRow() < 2) return;
+      var v = a.getRange(1, 1, a.getLastRow(), a.getLastColumn()).getValues();
+      var cab = v[0].map(function (c) { return String(c).trim().toLowerCase(); });
+      var iS = cab.indexOf('sessao'), iN = cab.indexOf('nome');
+      if (iS < 0 || iN < 0) return;
+      var iE = cab.indexOf('empresa'), iSet = cab.indexOf('setor'), iC = cab.indexOf('cargo');
+      for (var i = 1; i < v.length; i++) {
+        var s = String(v[i][iS] || '').trim();
+        var n = String(v[i][iN] || '').trim();
+        if (!s || !n) continue;
+        mapa[s] = {
+          nome: n,
+          empresa: iE < 0 ? '' : String(v[i][iE] || ''),
+          setor: iSet < 0 ? '' : String(v[i][iSet] || ''),
+          cargo: iC < 0 ? '' : String(v[i][iC] || '')
+        };
+      }
+    });
+  };
+  varrer(SpreadsheetApp.getActiveSpreadsheet());
+  try { varrer(SpreadsheetApp.openById(PLANILHA_RESULTADOS)); } catch (err) {}
+  return mapa;
+}
+
+function textoData(q) {
+  return q instanceof Date ? q.toISOString() : String(q || '');
+}
+
+function nominalDaTurma(codigo, teste) {
+  var codigos = (codigo instanceof Array) ? codigo : limparLista(codigo);
+  var ehTemp = !teste || teste === 'Temperamentos';
+  var porPessoa = {};
+  var guardar = function (k, p) {
+    if (porPessoa[k] && porPessoa[k].quando > p.quando) return;
+    porPessoa[k] = p;
+  };
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  if (ehTemp) {
+    var a = ss.getSheetByName(ABA);
+    if (a && a.getLastRow() > 1) {
+      var v = a.getRange(1, 1, a.getLastRow(), a.getLastColumn()).getValues();
+      var cab = v[0];
+      var col = function (n) { return cab.indexOf(n); };
+      var iTime = col('time'), iStatus = col('status');
+      for (var i = 1; i < v.length; i++) {
+        var r = v[i];
+        if (iTime < 0 || !pertence(r[iTime], codigos)) continue;
+        if (iStatus >= 0 && r[iStatus] === 'blocked') continue;
+        var pega = function (n) { var c = col(n); return c < 0 ? '' : r[c]; };
+        var nome = String(pega('nome') || '').trim();
+        var p = {
+          teste: 'Temperamentos',
+          nome: nome || 'Sem nome no cadastro',
+          empresa: String(pega('empresa') || ''),
+          setor: String(pega('setor') || ''),
+          cargo: String(pega('cargo') || ''),
+          resultado: [pega('predominante_animal'), pega('secundario_animal')].filter(String).join(' + '),
+          detalhe: String(pega('combinacao') || ''),
+          quando: textoData(pega('processed_at'))
+        };
+        guardar(String(pega('email') || nome || i).toLowerCase().trim(), p);
+      }
+    }
+  } else {
+    var e = ss.getSheetByName(ABA_EVENTOS);
+    if (e && e.getLastRow() > 1) {
+      var cad = cadastrosPorSessao();
+      var ve = e.getRange(1, 1, e.getLastRow(), e.getLastColumn()).getValues();
+      var ce = ve[0];
+      var ic = function (n) { return ce.indexOf(n); };
+      for (var j = 1; j < ve.length; j++) {
+        var x = ve[j];
+        if (String(x[ic('teste')]) === 'teste') continue;
+        if (!pertence(x[ic('time')], codigos)) continue;
+        if (String(x[ic('teste')]) !== teste) continue;
+        var sessao = String(x[ic('sessao')] || '').trim();
+        var c = cad[sessao] || {};
+        var media = x[ic('media')], nivel = x[ic('nivel')];
+        var forte = x[ic('forte')], fraco = x[ic('fraco')];
+        var res = /buss/i.test(teste)
+          ? (nivel ? 'Impacto esperado: ' + nivel : '')
+          : [media !== '' ? 'Média ' + Number(media).toFixed(1).replace('.', ',') : '', nivel].filter(String).join(' · ');
+        var det = [forte ? 'Forte: ' + forte : '', fraco ? 'Frágil: ' + fraco : ''].filter(String).join(' · ');
+        var nm = c.nome || '';
+        var pe = {
+          teste: teste,
+          nome: nm || 'Sem nome no cadastro',
+          empresa: c.empresa || '',
+          setor: c.setor || '',
+          cargo: c.cargo || '',
+          resultado: res,
+          detalhe: det,
+          quando: textoData(x[ic('processed_at')])
+        };
+        guardar(nm ? nm.toLowerCase() : 'sessao:' + (sessao || j), pe);
+      }
+    }
+  }
+
+  var pessoas = Object.keys(porPessoa).map(function (k) { return porPessoa[k]; });
+  pessoas.sort(function (x, y) { return x.nome.localeCompare(y.nome, 'pt-BR'); });
+  return { time: codigos.join(','), teste: ehTemp ? 'Temperamentos' : teste,
+           total: pessoas.length, pessoas: pessoas, gerado_em: new Date().toISOString() };
 }
