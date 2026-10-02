@@ -766,6 +766,7 @@ async function painelDeDimensoes(){
   h.push('<div class="escopo">Este painel apresenta o resultado do grupo e não identifica nenhuma pessoa. ' +
     'Atualizado em ' + new Date(d.gerado_em).toLocaleString('pt-BR') + '.</div>');
   $('#conteudo').innerHTML = h.join('');
+  anexarNominal();
   agendar();
 }
 
@@ -896,6 +897,7 @@ async function painelDaBussola(){
   h.push('<div class="escopo">Este painel apresenta o resultado do grupo e não identifica nenhuma pessoa. ' +
     'Atualizado em ' + new Date(d.gerado_em).toLocaleString('pt-BR') + '.</div>');
   $('#conteudo').innerHTML = h.join('');
+  anexarNominal();
   agendar();
 }
 
@@ -1071,6 +1073,47 @@ function montar(d){
     'Dados atualizados em ' + new Date(d.gerado_em).toLocaleString('pt-BR') + '.</div>');
 
   $('#conteudo').innerHTML = h.join('');
+  anexarNominal();
+}
+
+/* ======================= QUEM RESPONDEU =======================
+   Decisão da Marcelis em 02/10/2026: todo painel, de qualquer teste, termina
+   com o nome de quem respondeu e o resultado de cada pessoa. O nome vem das
+   planilhas, cruzado pela sessão no Apps Script, e só sai com a chave geral.
+   E-mail e telefone nunca chegam até aqui. */
+async function anexarNominal(){
+  if (!TIME || GERAL) return;
+  let d;
+  try {
+    d = await buscar(WEBHOOK + '?modo=nominal&time=' + encodeURIComponent(TIME) +
+      '&teste=' + encodeURIComponent(TESTE || 'Temperamentos') + '&chave=' + encodeURIComponent(CHAVE));
+  } catch (e) { return; }
+  if (!d || d.erro || !d.total) return;
+  const temOrg = d.pessoas.some(p => p.setor || p.cargo);
+  const temDet = d.pessoas.some(p => p.detalhe);
+  const quando = q => { const t = new Date(q); return isNaN(t) ? '' : t.toLocaleDateString('pt-BR'); };
+  const html = '<section id="nominal"><h2>Quem respondeu</h2>' +
+    '<p class="nota">' + d.total + (d.total === 1 ? ' pessoa' : ' pessoas') + ' desta turma, com o resultado de cada uma. ' +
+    'O nome vem do cadastro feito no teste. Uso restrito à liderança que conduz a turma.</p>' +
+    '<table><thead><tr><th>Nome</th>' + (temOrg ? '<th>Área e cargo</th>' : '') +
+    '<th>Resultado</th>' + (temDet ? '<th>Detalhe</th>' : '') + '<th class="num">Data</th></tr></thead><tbody>' +
+    d.pessoas.map(p => '<tr><td>' + esc(p.nome) + '</td>' +
+      (temOrg ? '<td>' + esc([p.setor, p.cargo].filter(Boolean).join(' · ')) + '</td>' : '') +
+      '<td>' + esc(p.resultado || '') + '</td>' + (temDet ? '<td>' + esc(p.detalhe || '') + '</td>' : '') +
+      '<td class="num">' + quando(p.quando) + '</td></tr>').join('') +
+    '</tbody></table></section>';
+  const velho = document.getElementById('nominal');
+  if (velho) velho.remove();
+  const escopo = document.querySelector('#conteudo .escopo');
+  if (escopo) {
+    escopo.insertAdjacentHTML('beforebegin', html);
+    escopo.innerHTML = escopo.innerHTML
+      .replace('e não identifica nenhuma pessoa', 'e, no bloco Quem respondeu, identifica cada pessoa da turma')
+      .replace('O resultado individual pertence a cada pessoa e foi enviado apenas para ela.',
+               'A análise completa de cada pessoa foi enviada apenas para ela; aqui aparece só o resumo do resultado.');
+  } else {
+    document.getElementById('conteudo').insertAdjacentHTML('beforeend', html);
+  }
 }
 
 iniciar();
