@@ -998,6 +998,9 @@ function doGet(e) {
   if (p.modo === 'equipe') {
     /* Mapa da Equipe: tem acesso próprio por time, e não a chave geral. */
     saida = mapaDaEquipe(limpar(p.time), p.acesso || '', p.chave || '');
+  } else if (p.modo === 'parceira') {
+    /* Painel da parceira: todos os grupos dela, com acesso próprio. */
+    saida = painelDaParceira(limpar(p.parceira), p.acesso || '', p.chave || '');
   } else if (p.chave !== CHAVE_PAINEL) {
     saida = { erro: 'chave invalida' };
   } else if (p.modo === 'acesso') {
@@ -1126,6 +1129,89 @@ function listarAcessosDaEquipe() {
     'extraordinarios-luciana','extraordinarios-marcio','extraordinarios-mariana',
     'extraordinarios-rafael','extraordinarios-wagner'];
   times.forEach(function (t) { Logger.log(t + '  ' + codigoDeAcesso(t)); });
+}
+
+/* ============================================================================
+   PAINEL DA PARCEIRA
+   Parceira da MARES que aplica o Teste dos Temperamentos em grupos dela.
+   Cada grupo tem o link /temperamentos/?time=<slug>-<grupo>, e a tela do teste
+   avisa que a parceira vai ver o resultado e pede o aceite (visivel_lider).
+   O painel /parceira/?p=<slug>&acesso=CODIGO junta todos os grupos dela.
+   Travas:
+   1. Acesso próprio, calculado com o mesmo segredo do Mapa da Equipe, sobre o
+      texto 'parceira-<slug>'. A parceira não abre nenhuma outra turma.
+   2. Só sai resposta com visivel_lider = 'sim', ou seja, com aceite na tela.
+   3. E-mail, telefone, sessão, salário e as 200 marcações ficam na planilha.
+   Para gerar o código: ?modo=acesso&time=parceira-<slug>&chave=CHAVE_PAINEL
+   ============================================================================ */
+var PARCEIRAS = {
+  'maira-do-vale': 'Maira do Vale'   /* 08/10/2026, pedido da Marcelis */
+};
+
+function painelDaParceira(slug, acesso, chave) {
+  if (!slug || !PARCEIRAS[slug]) return { erro: 'parceira nao encontrada' };
+  var liberado = (chave === CHAVE_PAINEL) ||
+                 (String(acesso).trim().toLowerCase() === codigoDeAcesso('parceira-' + slug));
+  if (!liberado) return { erro: 'acesso invalido' };
+
+  var base = { parceira: slug, nome: PARCEIRAS[slug], total: 0, grupos: [], pessoas: [],
+               gerado_em: new Date().toISOString() };
+  var a = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(ABA);
+  if (!a || a.getLastRow() < 2) return base;
+
+  var v = a.getRange(1, 1, a.getLastRow(), a.getLastColumn()).getValues();
+  var cab = v[0];
+  var col = function (n) { return cab.indexOf(n); };
+  var iTime = col('time'), iVis = col('visivel_lider'), iStatus = col('status');
+  if (iTime < 0 || iVis < 0) return base;
+  var prefixo = slug + '-';
+
+  /* Vale a resposta mais recente de cada pessoa dentro de cada grupo. */
+  var porPessoa = {};
+  for (var i = 1; i < v.length; i++) {
+    var r = v[i];
+    var t = String(r[iTime]).toLowerCase().trim();
+    if (t !== slug && t.indexOf(prefixo) !== 0) continue;
+    if (String(r[iVis]).toLowerCase().trim() !== 'sim') continue;
+    if (iStatus >= 0 && r[iStatus] === 'blocked') continue;
+    var pega = function (n) { var c = col(n); return c < 0 ? '' : r[c]; };
+    var quando = textoData(pega('processed_at'));
+    var k = t + '|' + String(pega('email') || pega('nome') || i).toLowerCase().trim();
+    if (porPessoa[k] && String(porPessoa[k].quando) > quando) continue;
+    var num = function (n) { var x = Number(pega(n)); return isNaN(x) ? 0 : x; };
+    porPessoa[k] = {
+      grupo: t === slug ? 'sem-grupo' : t.slice(prefixo.length),
+      nome: String(pega('nome') || '').trim() || 'Sem nome no cadastro',
+      empresa: String(pega('empresa') || ''),
+      setor: String(pega('setor') || ''),
+      cargo: String(pega('cargo') || ''),
+      lidera: String(pega('lidera') || ''),
+      tempo_casa: String(pega('tempo_casa') || ''),
+      enquadramento: String(pega('enquadramento') || ''),
+      geracao: String(pega('geracao') || ''),
+      predominante: String(pega('predominante_animal') || ''),
+      secundario: String(pega('secundario_animal') || ''),
+      combinacao: String(pega('combinacao') || ''),
+      classe: String(pega('classe') || ''),
+      S: num('score_S'), C: num('score_C'), M: num('score_M'), F: num('score_F'),
+      total_marcadas: num('total_marcadas'),
+      quando: quando
+    };
+  }
+  var pessoas = Object.keys(porPessoa).map(function (k) { return porPessoa[k]; });
+  pessoas.sort(function (x, y) { return x.nome.localeCompare(y.nome, 'pt-BR'); });
+
+  var grupos = {};
+  pessoas.forEach(function (p) {
+    var g = grupos[p.grupo] || (grupos[p.grupo] = { grupo: p.grupo, total: 0, ultima: '' });
+    g.total++;
+    if (p.quando > g.ultima) g.ultima = p.quando;
+  });
+  base.grupos = Object.keys(grupos).map(function (k) { return grupos[k]; })
+    .sort(function (x, y) { return x.ultima < y.ultima ? 1 : -1; });
+  base.pessoas = pessoas;
+  base.total = pessoas.length;
+  return base;
 }
 
 /* Mesma limpeza que o site aplica no código do time. */
