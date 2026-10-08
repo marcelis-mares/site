@@ -108,6 +108,10 @@ footer img{height:26px;width:auto;opacity:.5;margin-bottom:14px}
   color:var(--turquesa);background:rgba(21,165,168,.07);margin-bottom:26px;
 }
 .selo b{width:6px;height:6px;border-radius:50%;background:var(--turquesa);animation:pulso 2.4s ease-in-out infinite}
+/* Marca da parceira acima do selo, nos links de parceira */
+.parceria{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:22px}
+.parceria small{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(254,234,212,.6)}
+.parceria img{display:block;width:auto}
 @keyframes pulso{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1.25)}}
 
 h1{
@@ -1408,8 +1412,8 @@ const PREFIXOS_NOMINAIS = ['extraordinarios-'];
    apoia a entrevista e não elimina ninguém, e somem as perguntas de quem já é
    da casa (área, liderança e tempo de casa). */
 const PARCEIRAS = {
-  'maira-do-vale': {nome: 'Maíra do Vale'},
-  'rhema': {nome: 'Rhema Neuroeducação', selecao: true}
+  'maira-do-vale': {nome: 'Maíra do Vale', logo: '/parceira/logos/maira-do-vale.png', h: 72},
+  'rhema': {nome: 'Rhema Neuroeducação', selecao: true, logo: '/parceira/logos/rhema.png', h: 34}
 };
 const PARCEIRA = Object.keys(PARCEIRAS).find(k => TURMA === k || TURMA.indexOf(k + '-') === 0) || '';
 const NOME_PARCEIRA = PARCEIRA ? PARCEIRAS[PARCEIRA].nome : '';
@@ -1424,6 +1428,14 @@ if (TURMA) {
 if (NOMINAL) {
   $('#aviso-turma').innerHTML = '<b>Você está respondendo para o Mapa da Equipe da sua liderança.</b> A sua análise completa chega no seu e-mail e é sua. A liderança que enviou este link vai ver o seu nome, a sua área e os seus perfis predominante e secundário, para conduzir o time respeitando o jeito de cada pessoa. As 200 características que você marcar e a sua análise completa não são mostradas a ela.';
   $('#campo-nominal').hidden = false;
+}
+if (PARCEIRA && PARCEIRAS[PARCEIRA].logo) {
+  const P = PARCEIRAS[PARCEIRA], selo = document.querySelector('.selo');
+  const box = document.createElement('div');
+  box.className = 'parceria';
+  box.innerHTML = '<small>Em parceria com</small><img src="' + P.logo + '" alt="' + NOME_PARCEIRA + '" style="height:' + P.h + 'px">';
+  selo.parentNode.insertBefore(box, selo);
+  if (SELECAO) selo.innerHTML = '<b></b> Processo seletivo · Metodologia MARES';
 }
 if (SELECAO) {
   $('#aviso-turma').innerHTML = '<b>Você está respondendo como parte do processo seletivo da ' + NOME_PARCEIRA + '.</b> A sua análise completa chega no seu e-mail e é sua. A ' + NOME_PARCEIRA + ' vai ver o seu nome e o resultado do teste: perfis predominante e secundário, combinação e quantas características você reconheceu em cada temperamento. Ele serve de apoio para a conversa na entrevista e não elimina ninguém do processo. Não existe resposta certa: responda como você é, e não como acha que esperam. A MARES Consultoria, que aplica o teste, também recebe o seu contato.';
