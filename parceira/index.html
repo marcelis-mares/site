@@ -270,9 +270,14 @@ const ACESSO = (params.get('acesso') || '').trim();
 const CHAVE = params.get('chave') || '';
 const LIMITE = 40;
 /* Logo da parceira, em branco com fundo transparente, ao lado do logo da MARES. */
-const LOGOS = {rhema: {src: '/parceira/logos/rhema.png', alt: 'Rhema Neuroeducação'}};
+const LOGOS = {
+  rhema: {src: '/parceira/logos/rhema.png', alt: 'Rhema Neuroeducação'},
+  'maira-do-vale': {src: '/parceira/logos/maira-do-vale.png', alt: 'Maíra do Vale Inovação', h: 56}
+};
+/* Nome como a parceira escreve, com acento. Vence o nome que vem do Apps Script. */
+const NOMES = {'maira-do-vale': 'Maíra do Vale'};
 if (LOGOS[PARCEIRA]) {
-  $('#marcas').innerHTML = '<img src="' + LOGOS[PARCEIRA].src + '" alt="' + LOGOS[PARCEIRA].alt + '"><span class="sep" aria-hidden="true"></span><img class="mares-co" src="/assets/logo-mares.png" alt="MARES Consultoria Empresarial">';
+  $('#marcas').innerHTML = '<img src="' + LOGOS[PARCEIRA].src + '" alt="' + LOGOS[PARCEIRA].alt + '"' + (LOGOS[PARCEIRA].h ? ' style="height:' + LOGOS[PARCEIRA].h + 'px"' : '') + '><span class="sep" aria-hidden="true"></span><img class="mares-co" src="/assets/logo-mares.png" alt="MARES Consultoria Empresarial">';
 }
 /* Parceiras em modo processo seletivo: o grupo é a vaga e o painel apoia a
    entrevista, sem eliminar ninguém. A mesma lista vive em /temperamentos/. */
@@ -326,6 +331,7 @@ async function iniciar(){
     const d = await buscar(url);
     if (d.erro === 'acesso invalido') return estado('Código de acesso inválido', 'O código deste link não confere. Peça o link correto para a equipe MARES pelo WhatsApp (41) 99248-8092.', true);
     if (d.erro) return estado('Não foi possível abrir o painel', esc(d.erro), true);
+    if (NOMES[PARCEIRA]) d.nome = NOMES[PARCEIRA];
     DADOS = d;
     document.title = 'Painel ' + (SELECAO ? 'da ' : 'de ') + d.nome + ' · MARES';
     TODAS = (d.pessoas || []).map((p, i) => {
