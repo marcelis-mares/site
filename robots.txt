@@ -3,6 +3,7 @@ Allow: /
 Disallow: /painel/
 Disallow: /bussola-ia/
 Disallow: /equipe/
+Disallow: /parceira/
 
 Sitemap: https://www.maresconsultoria.com.br/sitemap.xml
 # atualizado em 24/08/2026
