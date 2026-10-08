@@ -742,7 +742,7 @@ fbq('init','673278761920486');fbq('track','PageView');
       <div class="campo">
         <label for="f-nome">Nome completo</label>
         <input type="text" id="f-nome" autocomplete="name" placeholder="Como você se chama">
-        <div class="msg-erro" id="e-nome">Escreva o seu nome.</div>
+        <div class="msg-erro" id="e-nome">Escreva o seu nome e sobrenome.</div>
       </div>
       <div class="campo">
         <label for="f-email">E-mail</label>
@@ -752,7 +752,7 @@ fbq('init','673278761920486');fbq('track','PageView');
       <div class="campo">
         <label for="f-whats">WhatsApp</label>
         <input type="tel" id="f-whats" autocomplete="tel" inputmode="numeric" placeholder="(41) 99999-9999">
-        <div class="msg-erro" id="e-whats">Informe um número com DDD.</div>
+        <div class="msg-erro" id="e-whats">Confira o número: celular com DDD, no formato (41) 99999-9999.</div>
       </div>
       <div class="campo">
         <label for="f-empresa">Empresa</label>
@@ -1001,6 +1001,7 @@ const CONFIG = {
   RD_CAMPO_COMBINACAO: '',
   RD_CAMPO_NIVEL: '',
   RD_CAMPO_SALARIO: '',
+  RD_CAMPO_URL: 'cf_url',            /* campo URL do RD: endereço completo de onde a pessoa converteu */
 
   /* 4) WhatsApp de destino e link do Guia do Autoconhecimento. */
   WHATSAPP: '5541992488092',
@@ -1146,6 +1147,31 @@ function mascaraTelefone(v){
   if (d.length > 2) return '('+d.slice(0,2)+') '+d.slice(2);
   if (d.length > 0) return '('+d;
   return '';
+}
+/* Validação de cadastro (08/10/2026): barra telefone e nome claramente falsos. */
+const DDDS_BR = [11,12,13,14,15,16,17,18,19,21,22,24,27,28,31,32,33,34,35,37,38,41,42,43,44,45,46,47,48,49,51,53,54,55,61,62,63,64,65,66,67,68,69,71,73,74,75,77,79,81,82,83,84,85,86,87,88,89,91,92,93,94,95,96,97,98,99];
+function telefoneValido(v){
+  const d = soDigitosBR(v);
+  if (d.length !== 11) return false;                       /* celular com DDD */
+  if (DDDS_BR.indexOf(+d.slice(0,2)) < 0) return false;    /* DDD que existe */
+  if (d[2] !== '9') return false;                          /* celular começa com 9 */
+  const n = d.slice(3);                                    /* os 8 dígitos finais */
+  if (new Set(n).size <= 2) return false;                  /* 11111111, 98989898 */
+  if ('0123456789012'.indexOf(n) >= 0 || '9876543210987'.indexOf(n) >= 0) return false; /* sequência */
+  return true;
+}
+function nomeValido(v){
+  const partes = String(v||'').trim().replace(/\s+/g,' ').split(' ');
+  if (partes.length < 2) return false;                     /* nome e sobrenome */
+  for (let i = 0; i < partes.length; i++) {
+    const w = partes[i];
+    const meio = i > 0 && i < partes.length - 1;
+    if (meio && /^[A-Za-zÀ-ÿ]\.?$/.test(w)) continue;      /* inicial do meio, ex: Maria F. Souza */
+    if (!/^[A-Za-zÀ-ÿ'’-]{2,}$/.test(w)) return false;      /* só letras, no mínimo 2 */
+    if (/(.)\1\1/i.test(w)) return false;                  /* letra repetida em série: Ddddddd */
+    if (!/[aeiouyáàâãéêíóôõúü]/i.test(w)) return false;    /* palavra sem vogal: dfdf */
+  }
+  return true;
 }
 function emailValido(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(v||'').trim()); }
 function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
@@ -1380,9 +1406,9 @@ $('#f-whats').addEventListener('input', e => { e.target.value = mascaraTelefone(
 
 function validarDados(){
   const campos = [
-    ['f-nome','e-nome', v => v.trim().length >= 2],
+    ['f-nome','e-nome', v => nomeValido(v)],
     ['f-email','e-email', v => emailValido(v)],
-    ['f-whats','e-whats', v => soDigitosBR(v).length >= 10],
+    ['f-whats','e-whats', v => telefoneValido(v)],
     ['f-empresa','e-empresa', v => v.trim().length >= 2],
     ['f-nivel','e-nivel', v => !!v],
     ['f-geracao','e-geracao', v => !!v],
@@ -1607,7 +1633,7 @@ function enviarRD(identificador, extra){
       personal_phone: telefoneE164(lead.whatsapp),
       mobile_phone: telefoneE164(lead.whatsapp),
       company_name: lead.empresa
-    }, utms(), extra || {})
+    }, utms(), campos({ RD_CAMPO_URL: String(location.href).slice(0, 255) }), extra || {})
   };
   fetch('https://api.rd.services/platform/conversions?api_key=' + CONFIG.RD_TOKEN, {
     method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
