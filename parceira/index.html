@@ -266,6 +266,30 @@ const PARCEIRA = (params.get('p') || params.get('parceira') || '').trim().toLowe
 const ACESSO = (params.get('acesso') || '').trim();
 const CHAVE = params.get('chave') || '';
 const LIMITE = 40;
+/* Parceiras em modo processo seletivo: o grupo é a vaga e o painel apoia a
+   entrevista, sem eliminar ninguém. A mesma lista vive em /temperamentos/. */
+const SELECAO = ['rhema'].includes(PARCEIRA);
+const T = SELECAO ? {
+  eyebrow: 'Processo seletivo · Metodologia MARES',
+  sub: 'O resultado de cada candidato que respondeu o Teste dos Temperamentos pelos links das suas vagas. Use como apoio para preparar e conduzir a entrevista. Clique em um nome para abrir a ficha completa.',
+  grupos: 'Vagas', todos: 'Todas as vagas', grupo: 'vaga', grupos_pl: 'vagas', um_grupo: 'Vaga',
+  guias: 'O que observar na entrevista', notaGuias: 'Leitura da Metodologia MARES para cada perfil predominante, com os candidatos em cada um. Use para preparar perguntas, nunca para eliminar.',
+  links: 'Links das suas vagas', nomeNovo: 'Nome da vaga nova', exemplo: 'Ex.: Assistente Comercial',
+  convite: 'Cada vaga tem o seu link. Escreva o nome da vaga e envie o link para os candidatos. Na tela do teste eles são avisados de que vocês vão ver o resultado, que ele apoia a entrevista e não elimina ninguém, e só aparecem aqui depois de concordar. A análise completa de cada um vai para o e-mail dele.',
+  zap: 'Olá! Como parte do nosso processo seletivo, pedimos que você faça o Teste dos Temperamentos. Leva uns 10 minutos, não tem resposta certa e a sua análise completa chega no seu e-mail: ',
+  escopo: 'O Teste dos Temperamentos descreve tendências de comportamento. Ele não é diagnóstico psicológico, não mede competência e não deve ser usado como critério de corte: use o resultado como apoio para conhecer melhor o candidato na entrevista, junto com a avaliação técnica e as referências. ',
+  vazio: 'Nenhum candidato respondeu ainda. Crie abaixo o link de uma vaga e envie para os candidatos.'
+} : {
+  eyebrow: 'Parceira · Metodologia MARES',
+  sub: 'O resultado de cada pessoa que respondeu o Teste dos Temperamentos pelos seus links, grupo a grupo. Clique em um nome para abrir a ficha completa.',
+  grupos: 'Grupos', todos: 'Todos os grupos', grupo: 'grupo', grupos_pl: 'grupos', um_grupo: 'Grupo',
+  guias: 'Como conduzir cada perfil', notaGuias: '',
+  links: 'Links dos seus grupos', nomeNovo: 'Nome do grupo novo', exemplo: 'Ex.: Turma Outubro ou Empresa X',
+  convite: 'Cada grupo tem o seu link. Escreva o nome do grupo novo e envie o link gerado para as pessoas. Na tela do teste elas são avisadas de que você vai ver o resultado e só aparecem aqui depois de concordar. A análise completa de cada uma vai para o e-mail dela.',
+  zap: 'Oi! Faz o Teste dos Temperamentos MARES, leva uns 10 minutos e a sua análise completa chega no seu e-mail: ',
+  escopo: 'O Teste dos Temperamentos descreve tendências de comportamento. Ele não é diagnóstico psicológico e não deve ser usado para contratar, demitir ou promover ninguém. Use este painel para conversar melhor com cada pessoa, nunca para rotular. ',
+  vazio: 'Ninguém respondeu ainda. Crie abaixo o link de um grupo e envie para as pessoas.'
+};
 
 function estado(titulo, texto, aviso){
   $('#conteudo').innerHTML = '<div class="estado' + (aviso ? ' aviso' : '') + '"><h1>' + esc(titulo) + '</h1><p>' + texto + '</p></div>';
@@ -294,7 +318,7 @@ async function iniciar(){
     if (d.erro === 'acesso invalido') return estado('Código de acesso inválido', 'O código deste link não confere. Peça o link correto para a equipe MARES pelo WhatsApp (41) 99248-8092.', true);
     if (d.erro) return estado('Não foi possível abrir o painel', esc(d.erro), true);
     DADOS = d;
-    document.title = 'Painel de ' + d.nome + ' · MARES';
+    document.title = 'Painel ' + (SELECAO ? 'da ' : 'de ') + d.nome + ' · MARES';
     TODAS = (d.pessoas || []).map((p, i) => {
       const lp = letra(p.predominante), ls = letra(p.secundario);
       return Object.assign({}, p, {id: 'p' + i, lp, ls, cls: classeDe(lp, ls)});
@@ -319,9 +343,9 @@ function montar(){
 
   let h = '';
   h += '<section class="capa"><div>' +
-       '<div class="eyebrow">Parceira · Metodologia MARES</div>' +
-       '<h1>Painel de ' + esc(d.nome) + '</h1>' +
-       '<p class="sub">O resultado de cada pessoa que respondeu o Teste dos Temperamentos pelos seus links, grupo a grupo. Clique em um nome para abrir a ficha completa.</p>' +
+       '<div class="eyebrow">' + T.eyebrow + '</div>' +
+       '<h1>Painel ' + (SELECAO ? 'da ' : 'de ') + esc(d.nome) + '</h1>' +
+       '<p class="sub">' + T.sub + '</p>' +
        '</div><div class="acoes no-print">' +
        '<button class="bt" id="bt-atualizar" type="button">Atualizar</button>' +
        (total ? '<button class="bt" id="bt-csv" type="button">Baixar planilha</button>' : '') +
@@ -329,27 +353,27 @@ function montar(){
        '</div></section>';
 
   if (grupos.length) {
-    h += '<p class="grupos-rot">Grupos</p><div class="grupos" role="group" aria-label="Escolher grupo">' +
-      '<button class="chip" type="button" data-g="" aria-pressed="' + (!grupo) + '">Todos os grupos (' + TODAS.length + ')</button>' +
+    h += '<p class="grupos-rot">' + T.grupos + '</p><div class="grupos" role="group" aria-label="Escolher">' +
+      '<button class="chip" type="button" data-g="" aria-pressed="' + (!grupo) + '">' + T.todos + ' (' + TODAS.length + ')</button>' +
       grupos.map(g => '<button class="chip" type="button" data-g="' + esc(g.grupo) + '" aria-pressed="' + (grupo === g.grupo) + '">' + esc(nomeGrupo(g.grupo)) + ' (' + g.total + ')</button>').join('') +
       '</div>';
   }
 
   if (!total) {
-    h += '<div class="leitura" style="margin-top:28px"><b>Ninguém respondeu ainda.</b> Crie abaixo o link de um grupo e envie para as pessoas. Cada resposta aparece aqui assim que a pessoa termina o teste e concorda em compartilhar o resultado com você.</div>';
+    h += '<div class="leitura" style="margin-top:28px"><b>' + T.vazio + '</b> Cada resposta aparece aqui assim que a pessoa termina o teste e concorda em compartilhar o resultado com você.</div>';
     h += blocoGerador(grupos) + escopo(atualizado);
     $('#conteudo').innerHTML = h; ligar(); return;
   }
 
   h += '<div class="resumo">' +
-       '<div class="tile total"><b>' + total + '</b><small>' + (total === 1 ? 'pessoa respondeu' : 'pessoas responderam') + (grupo ? ' em ' + esc(nomeGrupo(grupo)) : ' em ' + pl(grupos.length, 'grupo', 'grupos')) + '<br>atualizado em ' + esc(atualizado) + '</small></div>' +
+       '<div class="tile total"><b>' + total + '</b><small>' + (total === 1 ? 'pessoa respondeu' : 'pessoas responderam') + (grupo ? ' em ' + esc(nomeGrupo(grupo)) : ' em ' + pl(grupos.length, T.grupo, T.grupos_pl)) + '<br>atualizado em ' + esc(atualizado) + '</small></div>' +
        ORDEM.map(k => '<div class="tile perfil" style="--cor:' + PERFIS[k].cor + '"><span class="ic" aria-hidden="true">' + PERFIS[k].ic + '</span><b>' + cont[k] + '</b><small>' + PERFIS[k].animal + '<br>' + PERFIS[k].classico + '</small></div>').join('') +
        '</div>';
   h += '<div class="pilha" role="img" aria-label="Composição por perfil predominante">' +
        ORDEM.filter(k => cont[k]).map(k => '<span style="width:' + (cont[k]/total*100) + '%;background:' + PERFIS[k].cor + '" title="' + PERFIS[k].animal + ': ' + cont[k] + '"></span>').join('') + '</div>';
   h += '<div class="leitura">' + leitura(cont, total) + '</div>';
 
-  h += '<h2>Resultado de cada pessoa</h2>';
+  h += '<h2>Resultado de cada ' + (SELECAO ? 'candidato' : 'pessoa') + '</h2>';
   h += '<p class="nota">O primeiro perfil é o que aparece com mais força no dia a dia; o segundo tempera o primeiro. A contagem mostra quantas das 50 características de cada temperamento a pessoa reconheceu em si. É quantidade, não intensidade.</p>';
   h += '<div class="filtros no-print" role="group" aria-label="Filtrar por perfil predominante">' +
        '<button class="chip" type="button" data-f="" aria-pressed="true">Todos (' + total + ')</button>' +
@@ -358,7 +382,7 @@ function montar(){
        '</div>';
   h += '<div class="tabela"><table><thead><tr>' +
        '<th data-o="nome" aria-sort="ascending">Nome</th>' +
-       (grupo ? '' : '<th data-o="grupo" aria-sort="none">Grupo</th>') +
+       (grupo ? '' : '<th data-o="grupo" aria-sort="none">' + T.um_grupo + '</th>') +
        '<th data-o="lp" aria-sort="none">Primário</th>' +
        '<th data-o="ls" aria-sort="none">Secundário</th>' +
        '<th data-o="cls" aria-sort="none">Combinação</th>' +
@@ -366,8 +390,8 @@ function montar(){
        '<th data-o="quando" aria-sort="none">Data</th>' +
        '</tr></thead><tbody id="linhas"></tbody></table></div>';
 
-  h += '<h2>Como conduzir cada perfil</h2>';
-  h += '<p class="nota">Leitura da Metodologia MARES para cada perfil predominante, com quem ' + (grupo ? 'deste grupo' : 'dos seus grupos') + ' está em cada um.</p>';
+  h += '<h2>' + T.guias + '</h2>';
+  h += '<p class="nota">' + (T.notaGuias || 'Leitura da Metodologia MARES para cada perfil predominante, com quem ' + (grupo ? 'deste grupo' : 'dos seus grupos') + ' está em cada um.') + '</p>';
   h += '<div class="guias">' + ORDEM.map(k => {
     const P = PERFIS[k];
     const quem = PESSOAS.filter(p => p.lp === k).map(p => primeiroNome(p.nome));
@@ -414,7 +438,7 @@ function ficha(p){
   const linha = (r, v) => v ? '<dt>' + r + '</dt><dd>' + esc(v) + '</dd>' : '';
   const maior = Math.max(1, p.S||0, p.C||0, p.M||0, p.F||0);
   return '<div class="ficha-in"><div><h4>' + esc(p.nome) + '</h4><dl>' +
-    linha('Grupo', nomeGrupo(p.grupo)) + linha('Empresa', p.empresa) + linha('Área', p.setor) + linha('Cargo', p.cargo) +
+    linha(T.um_grupo, nomeGrupo(p.grupo)) + linha('Empresa', p.empresa) + linha('Área', p.setor) + linha('Cargo', p.cargo) +
     linha('Lidera pessoas', p.lidera) + linha('Tempo de casa', p.tempo_casa) + linha('Enquadramento', p.enquadramento) +
     linha('Faixa de nascimento', p.geracao) + linha('Respondeu em', dataCurta(p.quando)) +
     '<dt>Características reconhecidas</dt><dd><div class="barras">' +
@@ -458,22 +482,22 @@ function desenharLinhas(){
 }
 
 function blocoGerador(grupos){
-  return '<h2 class="no-print">Links dos seus grupos</h2>' +
+  return '<h2 class="no-print">' + T.links + '</h2>' +
     '<div class="convite no-print"><div class="gerador">' +
-    '<p>Cada grupo tem o seu link. Escreva o nome do grupo novo e envie o link gerado para as pessoas. Na tela do teste elas são avisadas de que você vai ver o resultado e só aparecem aqui depois de concordar. A análise completa de cada uma vai para o e-mail dela.</p>' +
-    '<label for="nome-grupo">Nome do grupo novo</label>' +
-    '<div class="link-box"><input id="nome-grupo" maxlength="' + maxGrupo() + '" placeholder="Ex.: Turma Outubro ou Empresa X" autocomplete="off"></div>' +
+    '<p>' + T.convite + '</p>' +
+    '<label for="nome-grupo">' + T.nomeNovo + '</label>' +
+    '<div class="link-box"><input id="nome-grupo" maxlength="' + maxGrupo() + '" placeholder="' + T.exemplo + '" autocomplete="off"></div>' +
     '<div class="link-box"><input id="link-grupo" readonly aria-label="Link do teste para o grupo" placeholder="O link aparece aqui">' +
     '<button class="bt cheio" type="button" id="bt-copiar">Copiar link</button>' +
     '<a class="bt" id="bt-whats" target="_blank" rel="noopener" href="#">Enviar no WhatsApp</a></div></div>' +
-    (grupos.length ? '<div class="lista-links"><b>Grupos que já têm respostas</b>' + grupos.map(g =>
+    (grupos.length ? '<div class="lista-links"><b>' + T.grupos + ' que já têm respostas</b>' + grupos.map(g =>
       '<div><span>' + esc(nomeGrupo(g.grupo)) + ' · ' + pl(g.total, 'pessoa', 'pessoas') + '<br><code>' + esc(linkDoGrupo(g.grupo)) + '</code></span>' +
       '<button type="button" data-copia="' + esc(linkDoGrupo(g.grupo)) + '">Copiar</button></div>').join('') + '</div>' : '') +
     '</div>';
 }
 
 function escopo(atualizado){
-  return '<p class="escopo">O Teste dos Temperamentos descreve tendências de comportamento. Ele não é diagnóstico psicológico e não deve ser usado para contratar, demitir ou promover ninguém. Use este painel para conversar melhor com cada pessoa, nunca para rotular. Este link é seu e dá acesso aos resultados de todos os seus grupos: não compartilhe. Dados atualizados em ' + esc(atualizado) + '. Metodologia MARES · Marcelis Pereira.</p>';
+  return '<p class="escopo">' + T.escopo + 'Este link é seu e dá acesso aos resultados de todos os seus ' + T.grupos_pl + ': não compartilhe. Dados atualizados em ' + esc(atualizado) + '. Metodologia MARES · Marcelis Pereira.</p>';
 }
 
 async function copiar(txt, bt, rot){
@@ -517,7 +541,7 @@ function ligar(){
     const atualizar = () => {
       const g = slug(ng.value).slice(0, maxGrupo()).replace(/-+$/,'');
       lg.value = g ? linkDoGrupo(g) : '';
-      bw.href = g ? 'https://wa.me/?text=' + encodeURIComponent('Oi! Faz o Teste dos Temperamentos MARES, leva uns 10 minutos e a sua análise completa chega no seu e-mail: ' + lg.value) : '#';
+      bw.href = g ? 'https://wa.me/?text=' + encodeURIComponent(T.zap + lg.value) : '#';
     };
     ng.oninput = atualizar;
     bc.onclick = () => { if (lg.value) copiar(lg.value, bc, 'Copiar link'); else ng.focus(); };
