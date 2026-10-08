@@ -1387,8 +1387,14 @@ const TURMA = lerTurma();
 /* Times com nome liberado desde a origem, mesmo sem o nominal=1 no link.
    A turma Extraordinários recebeu o link sem o parâmetro e ele não pode mudar. */
 const PREFIXOS_NOMINAIS = ['extraordinarios-'];
+/* Parceiras que aplicam o teste em grupos delas: /temperamentos/?time=<slug>-<grupo>.
+   A parceira vê o resultado de cada pessoa no painel /parceira/, por isso o link
+   é sempre nominal e a tela pede o aceite. A lista igual vive no Apps Script. */
+const PARCEIRAS = {'maira-do-vale': 'Maira do Vale'};
+const PARCEIRA = Object.keys(PARCEIRAS).find(k => TURMA === k || TURMA.indexOf(k + '-') === 0) || '';
+const NOME_PARCEIRA = PARCEIRA ? PARCEIRAS[PARCEIRA] : '';
 const NOMINAL = !!TURMA && (new URLSearchParams(location.search).get('nominal') === '1' ||
-  PREFIXOS_NOMINAIS.some(pre => TURMA.indexOf(pre) === 0));
+  !!PARCEIRA || PREFIXOS_NOMINAIS.some(pre => TURMA.indexOf(pre) === 0));
 if (TURMA) {
   $('#aviso-turma').hidden = false;
   $('#campos-turma').hidden = false;
@@ -1397,6 +1403,10 @@ if (TURMA) {
 if (NOMINAL) {
   $('#aviso-turma').innerHTML = '<b>Você está respondendo para o Mapa da Equipe da sua liderança.</b> A sua análise completa chega no seu e-mail e é sua. A liderança que enviou este link vai ver o seu nome, a sua área e os seus perfis predominante e secundário, para conduzir o time respeitando o jeito de cada pessoa. As 200 características que você marcar e a sua análise completa não são mostradas a ela.';
   $('#campo-nominal').hidden = false;
+}
+if (PARCEIRA) {
+  $('#aviso-turma').innerHTML = '<b>Você está respondendo pelo grupo de ' + NOME_PARCEIRA + ', parceira da MARES.</b> A sua análise completa chega no seu e-mail e é sua. ' + NOME_PARCEIRA + ' vai ver o seu resultado: nome, empresa, área, perfis predominante e secundário, combinação e quantas características você reconheceu em cada temperamento, para conduzir o trabalho com o grupo. O seu e-mail, o seu telefone e as características que você marcar, uma a uma, não são mostrados a ela.';
+  document.querySelector('label[for="f-nominal"] span').textContent = 'Estou de acordo que ' + NOME_PARCEIRA + ' veja o meu nome e o resultado do meu teste.';
 }
 
 /* ======================= TELA: CAPA E DADOS ======================= */
@@ -1608,7 +1618,8 @@ function desenharResultado(){
   $('#res-fortes').innerHTML = b.fortes.map(x => '<li>' + esc(x) + '</li>').join('');
   $('#res-atencao').innerHTML = b.atencao.map(x => '<li>' + esc(x) + '</li>').join('');
   $('#cta-email').textContent = 'Ela vai para ' + lead.email + ' e traz a leitura completa da combinação entre os dois perfis, as orientações práticas de desenvolvimento e o caminho para aprofundar esse trabalho.'
-    + (NOMINAL ? ' A sua liderança vê apenas o seu nome, a sua área e os seus dois perfis, como você autorizou.'
+    + (PARCEIRA ? ' ' + NOME_PARCEIRA + ' vê o seu nome e o resultado do teste, como você autorizou.'
+       : NOMINAL ? ' A sua liderança vê apenas o seu nome, a sua área e os seus dois perfis, como você autorizou.'
        : TURMA ? ' A sua empresa recebe apenas a leitura do time como conjunto, sem o resultado individual de ninguém.' : '');
   $('#cta-guia').href = CONFIG.GUIA;
   $('#cta-whats').href = 'https://wa.me/' + CONFIG.WHATSAPP + '?text=' +
