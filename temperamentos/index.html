@@ -1390,9 +1390,16 @@ const PREFIXOS_NOMINAIS = ['extraordinarios-'];
 /* Parceiras que aplicam o teste em grupos delas: /temperamentos/?time=<slug>-<grupo>.
    A parceira vê o resultado de cada pessoa no painel /parceira/, por isso o link
    é sempre nominal e a tela pede o aceite. A lista igual vive no Apps Script. */
-const PARCEIRAS = {'maira-do-vale': 'Maira do Vale'};
+/* selecao: true é o modo de processo seletivo. O grupo é a vaga, o resultado
+   apoia a entrevista e não elimina ninguém, e somem as perguntas de quem já é
+   da casa (área, liderança e tempo de casa). */
+const PARCEIRAS = {
+  'maira-do-vale': {nome: 'Maira do Vale'},
+  'rhema': {nome: 'Rhema Neuroeducação', selecao: true}
+};
 const PARCEIRA = Object.keys(PARCEIRAS).find(k => TURMA === k || TURMA.indexOf(k + '-') === 0) || '';
-const NOME_PARCEIRA = PARCEIRA ? PARCEIRAS[PARCEIRA] : '';
+const NOME_PARCEIRA = PARCEIRA ? PARCEIRAS[PARCEIRA].nome : '';
+const SELECAO = !!(PARCEIRA && PARCEIRAS[PARCEIRA].selecao);
 const NOMINAL = !!TURMA && (new URLSearchParams(location.search).get('nominal') === '1' ||
   !!PARCEIRA || PREFIXOS_NOMINAIS.some(pre => TURMA.indexOf(pre) === 0));
 if (TURMA) {
@@ -1404,7 +1411,14 @@ if (NOMINAL) {
   $('#aviso-turma').innerHTML = '<b>Você está respondendo para o Mapa da Equipe da sua liderança.</b> A sua análise completa chega no seu e-mail e é sua. A liderança que enviou este link vai ver o seu nome, a sua área e os seus perfis predominante e secundário, para conduzir o time respeitando o jeito de cada pessoa. As 200 características que você marcar e a sua análise completa não são mostradas a ela.';
   $('#campo-nominal').hidden = false;
 }
-if (PARCEIRA) {
+if (SELECAO) {
+  $('#aviso-turma').innerHTML = '<b>Você está respondendo como parte do processo seletivo da ' + NOME_PARCEIRA + '.</b> A sua análise completa chega no seu e-mail e é sua. A ' + NOME_PARCEIRA + ' vai ver o seu nome e o resultado do teste: perfis predominante e secundário, combinação e quantas características você reconheceu em cada temperamento. Ele serve de apoio para a conversa na entrevista e não elimina ninguém do processo. Não existe resposta certa: responda como você é, e não como acha que esperam. A MARES Consultoria, que aplica o teste, também recebe o seu contato.';
+  document.querySelector('label[for="f-nominal"] span').textContent = 'Estou de acordo que a ' + NOME_PARCEIRA + ' veja o meu nome e o resultado do meu teste, e que a MARES receba o meu contato.';
+  ['f-setor','f-lidera','f-tempo'].forEach(id => { $('#' + id).closest('.campo').hidden = true; });
+  document.querySelector('label[for="f-cargo"]').textContent = 'Cargo atual ou último cargo';
+  document.querySelector('label[for="f-empresa"]').textContent = 'Empresa atual ou última';
+  $('#f-empresa').placeholder = 'Se não estiver trabalhando, a última';
+} else if (PARCEIRA) {
   $('#aviso-turma').innerHTML = '<b>Você está respondendo pelo grupo de ' + NOME_PARCEIRA + ', parceira da MARES.</b> A sua análise completa chega no seu e-mail e é sua. ' + NOME_PARCEIRA + ' vai ver o seu resultado: nome, empresa, área, perfis predominante e secundário, combinação e quantas características você reconheceu em cada temperamento, para conduzir o trabalho com o grupo. O seu e-mail, o seu telefone e as características que você marcar, uma a uma, não são mostrados a ela.';
   document.querySelector('label[for="f-nominal"] span').textContent = 'Estou de acordo que ' + NOME_PARCEIRA + ' veja o meu nome e o resultado do meu teste.';
 }
@@ -1424,7 +1438,10 @@ function validarDados(){
     ['f-geracao','e-geracao', v => !!v],
     ['f-salario','e-salario', v => !!v]
   ];
-  if (TURMA) campos.push(
+  if (SELECAO) campos.push(
+    ['f-cargo','e-cargo', v => v.trim().length >= 2]
+  );
+  else if (TURMA) campos.push(
     ['f-setor','e-setor', v => !!v],
     ['f-cargo','e-cargo', v => v.trim().length >= 2],
     ['f-lidera','e-lidera', v => !!v],
@@ -1458,10 +1475,10 @@ $('#ir-quiz').addEventListener('click', () => {
     geracao: $('#f-geracao').value,
     salario: $('#f-salario').value,
     time: TURMA,
-    setor: TURMA ? $('#f-setor').value : '',
+    setor: TURMA && !SELECAO ? $('#f-setor').value : '',
     cargo: TURMA ? $('#f-cargo').value.trim() : '',
-    lidera: TURMA ? $('#f-lidera').value : '',
-    tempo_casa: TURMA ? $('#f-tempo').value : '',
+    lidera: TURMA && !SELECAO ? $('#f-lidera').value : '',
+    tempo_casa: TURMA && !SELECAO ? $('#f-tempo').value : '',
     visivel_lider: NOMINAL ? 'sim' : ''
   };
   enviarRD(CONFIG.RD_IDENTIFICADOR_LEAD, {});
@@ -1618,7 +1635,8 @@ function desenharResultado(){
   $('#res-fortes').innerHTML = b.fortes.map(x => '<li>' + esc(x) + '</li>').join('');
   $('#res-atencao').innerHTML = b.atencao.map(x => '<li>' + esc(x) + '</li>').join('');
   $('#cta-email').textContent = 'Ela vai para ' + lead.email + ' e traz a leitura completa da combinação entre os dois perfis, as orientações práticas de desenvolvimento e o caminho para aprofundar esse trabalho.'
-    + (PARCEIRA ? ' ' + NOME_PARCEIRA + ' vê o seu nome e o resultado do teste, como você autorizou.'
+    + (SELECAO ? ' A ' + NOME_PARCEIRA + ' vê o seu nome e o resultado do teste, como você autorizou, como apoio para a entrevista.'
+       : PARCEIRA ? ' ' + NOME_PARCEIRA + ' vê o seu nome e o resultado do teste, como você autorizou.'
        : NOMINAL ? ' A sua liderança vê apenas o seu nome, a sua área e os seus dois perfis, como você autorizou.'
        : TURMA ? ' A sua empresa recebe apenas a leitura do time como conjunto, sem o resultado individual de ninguém.' : '');
   $('#cta-guia').href = CONFIG.GUIA;
