@@ -12,7 +12,7 @@
 <meta name="robots" content="noindex,nofollow">
 
 <title>Imersão Mares.IA · Curitiba, 17 de outubro de 2026 | MARES</title>
-<meta name="description" content="Imersão presencial de um dia em Curitiba, 17 de outubro de 2026, para donos e líderes redesenharem a empresa a partir do que a Inteligência Artificial já tornou possível. Ingresso individual a partir de R$ 997 ou duplo a partir de R$ 1.597.">
+<meta name="description" content="Imersão presencial de um dia em Curitiba, 17 de outubro de 2026, para donos e líderes redesenharem a empresa a partir do que a Inteligência Artificial já tornou possível. Ingresso individual ou duplo, em três lotes.">
 <link rel="canonical" href="https://www.maresconsultoria.com.br/mares-ia/">
 
 <meta property="og:locale" content="pt_BR">
@@ -77,20 +77,20 @@ fbq('init','673278761920486');fbq('track','PageView');
   "offers": [
     {
       "@type": "Offer",
-      "name": "Ingresso individual · Lote 1",
-      "price": "997.00",
+      "name": "Ingresso individual · Lote 2",
+      "price": "1297.00",
       "priceCurrency": "BRL",
       "availability": "https://schema.org/InStock",
-      "validThrough": "2026-09-26T23:59:00-03:00",
+      "validThrough": "2026-10-10T23:59:00-03:00",
       "url": "https://www.maresconsultoria.com.br/mares-ia/"
     },
     {
       "@type": "Offer",
-      "name": "Ingresso duplo, dono e um líder · Lote 1",
-      "price": "1597.00",
+      "name": "Ingresso duplo, dono e um líder · Lote 2",
+      "price": "1997.00",
       "priceCurrency": "BRL",
       "availability": "https://schema.org/InStock",
-      "validThrough": "2026-09-26T23:59:00-03:00",
+      "validThrough": "2026-10-10T23:59:00-03:00",
       "url": "https://www.maresconsultoria.com.br/mares-ia/"
     }
   ]
@@ -1578,7 +1578,7 @@ fbq('init','673278761920486');fbq('track','PageView');
 
     <div class="cta-meio">
       <a class="cta" href="#investimento">Quero passar esse dia na minha empresa</a>
-      <p class="cta-note">17 de outubro, sábado · Curitiba · lote 1 a partir de R$ 997</p>
+      <p class="cta-note" data-preco="linha">17 de outubro, sábado · Curitiba</p>
     </div>
   </div>
 </section>
@@ -1613,7 +1613,7 @@ fbq('init','673278761920486');fbq('track','PageView');
   <div class="wrap-narrow">
     <p class="eyebrow">Quem senta na sala</p>
     <h2>Para o dono, para o líder, ou para os dois juntos</h2>
-    <p class="lead">A sala é a mesma e o conteúdo é o mesmo. O que muda é o que cada um faz com o plano na segunda-feira. No ingresso duplo a segunda vaga sai por R$ 600.</p>
+    <p class="lead">A sala é a mesma e o conteúdo é o mesmo. O que muda é o que cada um faz com o plano na segunda-feira. No ingresso duplo a segunda vaga sai por <span data-preco="segunda">menos que a primeira</span>.</p>
 
     <div class="duplo">
       <div class="pessoa dono">
@@ -1668,7 +1668,7 @@ fbq('init','673278761920486');fbq('track','PageView');
 
     <div class="cta-meio">
       <a class="cta" href="#investimento">É para mim, quero minha vaga</a>
-      <p class="cta-note">17 de outubro, sábado · Curitiba · lote 1 a partir de R$ 997</p>
+      <p class="cta-note" data-preco="linha">17 de outubro, sábado · Curitiba</p>
     </div>
   </div>
 </section>
@@ -1704,7 +1704,7 @@ fbq('init','673278761920486');fbq('track','PageView');
 
     <div class="cta-meio">
       <a class="cta" href="#investimento">Quero garantir minha vaga</a>
-      <p class="cta-note">17 de outubro, sábado · Curitiba · lote 1 a partir de R$ 997</p>
+      <p class="cta-note" data-preco="linha">17 de outubro, sábado · Curitiba</p>
     </div>
   </div>
 </section>
@@ -1748,6 +1748,43 @@ fbq('init','673278761920486');fbq('track','PageView');
   </div>
 </section>
 
+<script>
+/* =====================================================================
+   OS LOTES DA IMERSÃO · fonte única de preço da página
+   Para virar de lote não se mexe em mais nada: os cartões, as chamadas
+   ao longo da página, a tabela que abre na inscrição, a tela de preço e
+   a mensagem do WhatsApp leem daqui.
+   Atenção: no JavaScript o mês é base zero, 8 é setembro e 9 é outubro.
+   `fim` é o último instante em que o lote ainda vale.
+   ===================================================================== */
+window.MARES_LOTES = [
+  { nome: "Lote 1", cond: "até 26 de setembro",                fim: new Date(2026, 8, 26, 23, 59), individual: 997,  duplo: 1597 },
+  { nome: "Lote 2", cond: "de 27 de setembro a 10 de outubro", fim: new Date(2026, 9, 10, 23, 59), individual: 1297, duplo: 1997 },
+  { nome: "Lote 3", cond: "de 11 a 16 de outubro",             fim: new Date(2026, 9, 16, 23, 59), individual: 1597, duplo: 2397 }
+];
+
+/* 997 vira "R$ 997" e 998.5 vira "R$ 998,50" */
+window.maresPreco = function (n) {
+  return "R$ " + n.toLocaleString("pt-BR", { minimumFractionDigits: (n % 1 ? 2 : 0), maximumFractionDigits: 2 });
+};
+
+/* devolve o lote aberto hoje, ou null quando a inscrição já fechou */
+window.maresLoteAberto = function () {
+  var agora = new Date();
+  for (var i = 0; i < window.MARES_LOTES.length; i++) {
+    if (window.MARES_LOTES[i].fim > agora) { return window.MARES_LOTES[i]; }
+  }
+  return null;
+};
+
+/* a linha que aparece embaixo de cada botão ao longo da página */
+window.maresLinhaLote = function () {
+  var l = window.maresLoteAberto();
+  if (!l) { return "17 de outubro, sábado · Curitiba · inscrições encerradas"; }
+  return "17 de outubro, sábado · Curitiba · " + l.nome.toLowerCase() + " a partir de " + window.maresPreco(l.individual);
+};
+</script>
+
 <!-- ============ INVESTIMENTO ============ -->
 <section class="alt" id="investimento">
   <div class="wrap-narrow">
@@ -1755,89 +1792,81 @@ fbq('init','673278761920486');fbq('track','PageView');
     <h2>Você escolhe se vem sozinho ou acompanhado</h2>
     <p class="lead">São dois ingressos, o individual e o duplo, e o preço dos dois vira em três lotes. Quem decide antes paga menos, e é sempre assim.</p>
 
-    <div class="lotes">
-      <div class="lote ativo" id="lote-1">
-        <div class="lote-nome">Lote 1 · aberto</div>
-        <div class="lote-precos">
-          <div><span>Individual</span><b>R$ 997</b></div>
-          <div><span>Duplo</span><b>R$ 1.597</b></div>
-        </div>
-        <div class="lote-cond">até 26 de setembro</div>
-        <div class="contador" id="contador-lote">
-          <div class="contador-rot">Encerra em</div>
-          <div class="contador-relogio">
-            <div class="cx"><b id="c-d">00</b><span>dias</span></div>
-            <div class="cx"><b id="c-h">00</b><span>horas</span></div>
-            <div class="cx"><b id="c-m">00</b><span>min</span></div>
-            <div class="cx"><b id="c-s">00</b><span>seg</span></div>
-          </div>
-        </div>
-        <div class="lote-encerrado" id="lote-1-fim" hidden>Lote encerrado</div>
-      </div>
-      <div class="lote futuro">
-        <div class="lote-nome">Lote 2</div>
-        <div class="lote-precos">
-          <div><span>Individual</span><b>R$ 1.297</b></div>
-          <div><span>Duplo</span><b>R$ 1.997</b></div>
-        </div>
-        <div class="lote-cond">de 27 de setembro a 10 de outubro</div>
-        <div class="lote-selo">Ainda não aberto</div>
-      </div>
-      <div class="lote futuro">
-        <div class="lote-nome">Lote 3 · último</div>
-        <div class="lote-precos">
-          <div><span>Individual</span><b>R$ 1.597</b></div>
-          <div><span>Duplo</span><b>R$ 2.397</b></div>
-        </div>
-        <div class="lote-cond">de 11 a 16 de outubro</div>
-        <div class="lote-selo">Ainda não aberto</div>
-      </div>
-    </div>
+    <div class="lotes" id="lotes"></div>
 
     <script>
     (function () {
-      /* DESENVOLVEDOR: troque a data abaixo pelo fim real do lote 1.
-         Formato: ano, mês (0 = janeiro), dia, hora, minuto.
-         Quando a data passar, o contador some e aparece "Lote encerrado". */
-      var FIM_LOTE_1 = new Date(2026, 8, 26, 23, 59);
-
-      var box = document.getElementById("contador-lote");
-      var fim = document.getElementById("lote-1-fim");
-      var cartao = document.getElementById("lote-1");
-      var dd = document.getElementById("c-d"), hh = document.getElementById("c-h"),
-          mm = document.getElementById("c-m"), ss = document.getElementById("c-s");
+      var caixa = document.getElementById("lotes");
+      var aberto = window.maresLoteAberto();
+      var t = null;
 
       function pad(n) { return n < 10 ? "0" + n : "" + n; }
 
+      function desenhar() {
+        var html = "";
+        window.MARES_LOTES.forEach(function (l, i) {
+          var ultimo = (i === window.MARES_LOTES.length - 1);
+          var estado = (aberto && l === aberto) ? "ativo" : (l.fim <= new Date() ? "encerrado" : "futuro");
+          html += '<div class="lote ' + estado + '">';
+          html += '<div class="lote-nome">' + l.nome + (ultimo ? " · último" : "") +
+                  (estado === "ativo" ? " · aberto" : "") + '</div>';
+          html += '<div class="lote-precos">' +
+                    '<div><span>Individual</span><b>' + window.maresPreco(l.individual) + '</b></div>' +
+                    '<div><span>Duplo</span><b>' + window.maresPreco(l.duplo) + '</b></div>' +
+                  '</div>';
+          html += '<div class="lote-cond">' + l.cond + '</div>';
+          if (estado === "ativo") {
+            html += '<div class="contador" id="contador-lote">' +
+                      '<div class="contador-rot">Encerra em</div>' +
+                      '<div class="contador-relogio">' +
+                        '<div class="cx"><b id="c-d">00</b><span>dias</span></div>' +
+                        '<div class="cx"><b id="c-h">00</b><span>horas</span></div>' +
+                        '<div class="cx"><b id="c-m">00</b><span>min</span></div>' +
+                        '<div class="cx"><b id="c-s">00</b><span>seg</span></div>' +
+                      '</div>' +
+                    '</div>';
+          } else if (estado === "encerrado") {
+            html += '<div class="lote-encerrado">Lote encerrado</div>';
+          } else {
+            html += '<div class="lote-selo">Ainda não aberto</div>';
+          }
+          html += '</div>';
+        });
+        caixa.innerHTML = html;
+        if (aberto) { tique(); t = setInterval(tique, 1000); }
+      }
+
+      /* quando o lote vira com a página aberta, a tela se redesenha sozinha
+         em vez de continuar vendendo pelo preço velho */
       function tique() {
-        var falta = FIM_LOTE_1 - new Date();
+        var falta = aberto.fim - new Date();
         if (falta <= 0) {
-          box.hidden = true;
-          fim.hidden = false;
-          cartao.classList.remove("ativo");
-          cartao.classList.add("encerrado");
           clearInterval(t);
+          aberto = window.maresLoteAberto();
+          desenhar();
+          if (window.maresPintarPrecos) { window.maresPintarPrecos(); }
           return;
         }
         var s = Math.floor(falta / 1000);
+        var dd = document.getElementById("c-d");
+        if (!dd) { return; }
         dd.textContent = pad(Math.floor(s / 86400));
-        hh.textContent = pad(Math.floor(s % 86400 / 3600));
-        mm.textContent = pad(Math.floor(s % 3600 / 60));
-        ss.textContent = pad(s % 60);
+        document.getElementById("c-h").textContent = pad(Math.floor(s % 86400 / 3600));
+        document.getElementById("c-m").textContent = pad(Math.floor(s % 3600 / 60));
+        document.getElementById("c-s").textContent = pad(s % 60);
       }
 
-      tique();
-      var t = setInterval(tique, 1000);
+      desenhar();
     })();
     </script>
 
     <div class="precos-dois">
 
       <div class="preco-bloco leve">
-        <div class="preco-tag">Lote 1 · individual</div>
-        <div class="preco">R$ 997<small>ou em até 12x no cartão</small></div>
+        <div class="preco-tag" data-preco="tag-individual">Lote · individual</div>
+        <div class="preco"><span data-preco="individual">&nbsp;</span><small>ou em até 12x no cartão</small></div>
 
-        <p class="preco-linha">Para o dono que vai conduzir a mudança com as próprias mãos.</p>
+        <p class="preco-linha">Para quem vai conduzir a mudança com as próprias mãos.</p>
 
         <ul class="preco-inclui">
           <li>Uma vaga na imersão presencial de dia inteiro</li>
@@ -1852,10 +1881,10 @@ fbq('init','673278761920486');fbq('track','PageView');
 
       <div class="preco-bloco">
         <div class="preco-selo">Mais recomendado</div>
-        <div class="preco-tag">Lote 1 · duplo · dono + 1 líder</div>
-        <div class="preco">R$ 1.597<small>ou em até 12x no cartão</small></div>
+        <div class="preco-tag" data-preco="tag-duplo">Lote · duplo · dono + 1 líder</div>
+        <div class="preco"><span data-preco="duplo">&nbsp;</span><small>ou em até 12x no cartão</small></div>
 
-        <p class="preco-linha">A segunda vaga sai por R$ 600, menos de R$ 800 por pessoa.</p>
+        <p class="preco-linha" data-preco="linha-duplo">&nbsp;</p>
 
         <ul class="preco-inclui">
           <li>Duas vagas na imersão presencial de dia inteiro</li>
@@ -1870,7 +1899,39 @@ fbq('init','673278761920486');fbq('track','PageView');
 
     </div>
 
-    <p class="cta-note" style="margin-top:22px;color:var(--ink-faint)">O lote 1 vale enquanto estiver aberto. Depois o valor sobe e não volta.</p>
+    <p class="cta-note" style="margin-top:22px;color:var(--ink-faint)" data-preco="aviso-lote">O lote vale enquanto estiver aberto. Depois o valor sobe e não volta.</p>
+
+    <script>
+    /* Pinta tudo que depende do lote aberto: os dois cartões de preço, o aviso
+       logo abaixo deles e a linha embaixo de cada botão da página. */
+    window.maresPintarPrecos = function () {
+      var l = window.maresLoteAberto();
+      var fechou = !l;
+      if (fechou) { l = window.MARES_LOTES[window.MARES_LOTES.length - 1]; }
+
+      function pintar(chave, texto) {
+        document.querySelectorAll('[data-preco="' + chave + '"]').forEach(function (e) {
+          e.textContent = texto;
+        });
+      }
+
+      pintar("tag-individual", l.nome + " · individual");
+      pintar("tag-duplo", l.nome + " · duplo · dono + 1 líder");
+      pintar("individual", window.maresPreco(l.individual));
+      pintar("duplo", window.maresPreco(l.duplo));
+      pintar("linha-duplo",
+        "A segunda vaga sai por " + window.maresPreco(l.duplo - l.individual) +
+        ", e o duplo fica em " + window.maresPreco(l.duplo / 2) + " por pessoa.");
+      pintar("segunda", window.maresPreco(l.duplo - l.individual));
+      pintar("linha", window.maresLinhaLote());
+      var ultimo = (l === window.MARES_LOTES[window.MARES_LOTES.length - 1]);
+      pintar("aviso-lote", fechou
+        ? "As inscrições desta turma estão encerradas. Fale comigo no WhatsApp para saber da próxima."
+        : "O " + l.nome.toLowerCase() + " vale " + l.cond +
+          (ultimo ? ", e é o último. Depois dele as inscrições encerram." : ". Depois o valor sobe e não volta."));
+    };
+    window.maresPintarPrecos();
+    </script>
 
     <p class="preco-nota">O ingresso individual serve tanto para o dono quanto para o líder, pelo mesmo valor. O duplo é o mais recomendado porque quem vai sozinho volta dependendo de alguém: o dono depende de quem sustente o ritmo, e o líder depende da decisão de quem manda. Com os dois na sala, essa conversa acontece no próprio dia.</p>
   </div>
@@ -1914,11 +1975,11 @@ fbq('init','673278761920486');fbq('track','PageView');
       <div class="tela" id="tela-preco" hidden>
         <p class="diag-passo" id="contador-preco"></p>
         <h3 class="diag-titulo">Este é o seu investimento</h3>
-        <p class="diag-ajuda">Veja o valor antes de continuar. É o preço do lote aberto hoje, e vale enquanto o lote 1 estiver no ar, até 26 de setembro.</p>
+        <p class="diag-ajuda" id="preco-ajuda">Veja o valor antes de continuar.</p>
 
         <div class="preco-tela">
-          <div class="preco-tag" id="preco-tag">Lote 1 · individual</div>
-          <div class="valor" id="preco-valor">R$ 997</div>
+          <div class="preco-tag" id="preco-tag">&nbsp;</div>
+          <div class="valor" id="preco-valor">&nbsp;</div>
           <p class="parcela">ou em até 12x no cartão</p>
           <ul class="preco-inclui" id="preco-inclui"></ul>
         </div>
@@ -1973,7 +2034,7 @@ fbq('init','673278761920486');fbq('track','PageView');
           Agora é só fechar a sua vaga comigo pelo WhatsApp. Eu confirmo a disponibilidade da turma e te mando o link de pagamento na hora.
         </p>
         <a class="cta" id="btn-checkout" href="#" target="_blank" rel="noopener" style="width:100%;text-align:center">Fechar minha vaga no WhatsApp</a>
-        <p class="form-nota" style="text-align:center" id="checkout-linha">Lote 1</p>
+        <p class="form-nota" style="text-align:center" id="checkout-linha">&nbsp;</p>
       </div>
 
       <!-- NÃO É O MOMENTO -->
@@ -2078,7 +2139,10 @@ fbq('init','673278761920486');fbq('track','PageView');
           ? "Você vem sozinho ou traz um líder do seu time?"
           : "Você vem sozinho ou vem com mais alguém da empresa?";
       },
-      ajuda: "No lote 1 o individual está R$ 997 e o duplo R$ 1.597, ou seja, a segunda vaga sai por R$ 600.",
+      ajuda: function () {
+        return "No " + LOTE.nome.toLowerCase() + " o individual está " + VL_INDIVIDUAL +
+               " e o duplo " + VL_DUPLO + ", ou seja, a segunda vaga sai por " + VL_SEGUNDA + ".";
+      },
       o: function (r) {
         return r.papel === "Dono ou sócio"
           ? ["Duplo, levo um líder comigo", "Individual, vou sozinho"]
@@ -2093,21 +2157,24 @@ fbq('init','673278761920486');fbq('track','PageView');
 
   /* preço de cada ingresso no lote aberto, usado na tela de preço e na tela final.
      Quando o lote virar, troque valor e tag aqui e nos cartões da seção Investimento. */
+  /* o lote aberto manda no preço. Se a inscrição já fechou, vale o último
+     lote, e a tela de preço avisa que as vagas desta turma acabaram. */
+  var LOTE = window.maresLoteAberto();
+  var LOTE_FECHOU = !LOTE;
+  if (LOTE_FECHOU) { LOTE = window.MARES_LOTES[window.MARES_LOTES.length - 1]; }
+
+  var VL_INDIVIDUAL = window.maresPreco(LOTE.individual);
+  var VL_DUPLO = window.maresPreco(LOTE.duplo);
+  var VL_SEGUNDA = window.maresPreco(LOTE.duplo - LOTE.individual);
+
   var INGRESSOS = {
-    "Individual, vou sozinho":     { curto: "individual", valor: "R$ 997",   tag: "Lote 1 · individual" },
-    "Duplo, levo um líder comigo": { curto: "duplo",      valor: "R$ 1.597", tag: "Lote 1 · duplo · dono + 1 líder" },
-    "Duplo, vamos dois da empresa":{ curto: "duplo",      valor: "R$ 1.597", tag: "Lote 1 · duplo · duas pessoas da empresa" }
+    "Individual, vou sozinho":     { curto: "individual", valor: VL_INDIVIDUAL, tag: LOTE.nome + " · individual" },
+    "Duplo, levo um líder comigo": { curto: "duplo",      valor: VL_DUPLO,      tag: LOTE.nome + " · duplo · dono + 1 líder" },
+    "Duplo, vamos dois da empresa":{ curto: "duplo",      valor: VL_DUPLO,      tag: LOTE.nome + " · duplo · duas pessoas da empresa" }
   };
 
   /* o lote aberto hoje. Ao virar de lote, trocar aqui, no INGRESSOS e nos
      cartões da seção Investimento. */
-  var LOTE_ABERTO = {
-    nome: "Lote 1 · aberto",
-    ate: "até 26 de setembro",
-    individual: "R$ 997",
-    duplo: "R$ 1.597"
-  };
-
   var INCLUI = {
     individual: ["Uma vaga na imersão presencial de dia inteiro",
                  "Material de trabalho impresso",
@@ -2204,6 +2271,9 @@ fbq('init','673278761920486');fbq('track','PageView');
     var chave = respostas.ingresso || "Individual, vou sozinho";
     var ing = INGRESSOS[chave] || INGRESSOS["Individual, vou sozinho"];
 
+    el("preco-ajuda").textContent = LOTE_FECHOU
+      ? "As inscrições desta turma já encerraram. Siga assim mesmo e eu confirmo com você no WhatsApp se ainda sobrou vaga."
+      : "Veja o valor antes de continuar. É o preço do " + LOTE.nome.toLowerCase() + ", que vale " + LOTE.cond + ".";
     el("preco-tag").textContent = ing.tag;
     el("preco-valor").textContent = ing.valor;
 
@@ -2223,19 +2293,19 @@ fbq('init','673278761920486');fbq('track','PageView');
     b.type = "button";
 
     if (ing.curto === "individual") {
-      p.innerHTML = "<strong>Quer trazer alguém da empresa?</strong> No duplo a segunda vaga sai por R$ 600, e quem volta acompanhado tira o plano do papel mais rápido.";
-      b.textContent = "Quero o duplo, R$ 1.597";
+      p.innerHTML = "<strong>Quer trazer alguém da empresa?</strong> No duplo a segunda vaga sai por " + VL_SEGUNDA + ", e quem volta acompanhado tira o plano do papel mais rápido.";
+      b.textContent = "Quero o duplo, " + VL_DUPLO;
       b.addEventListener("click", function () { trocarIngresso(rotuloDuplo()); });
     } else {
       p.innerHTML = "<strong>Prefere vir sozinho?</strong> O ingresso individual dá a mesma sala, o mesmo conteúdo e os mesmos entregáveis, para uma pessoa só.";
-      b.textContent = "Quero o individual, R$ 997";
+      b.textContent = "Quero o individual, " + VL_INDIVIDUAL;
       b.addEventListener("click", function () { trocarIngresso("Individual, vou sozinho"); });
     }
 
     troca.appendChild(p);
     troca.appendChild(b);
 
-    ev('imersao_preco_visto', { ingresso: ing.curto, valor: ing.valor, lote: 'Lote 1' });
+    ev('imersao_preco_visto', { ingresso: ing.curto, valor: ing.valor, lote: LOTE.nome });
   }
 
   /* trocar de ingresso na tela de preço. Se virou duplo, volto uma pergunta para
@@ -2276,10 +2346,15 @@ fbq('init','673278761920486');fbq('track','PageView');
      2026, junto com a medição do clique. */
   function montarValores(caixa) {
     caixa.innerHTML =
-      '<div class="vb-topo">' + LOTE_ABERTO.nome + ' · ' + LOTE_ABERTO.ate + '</div>' +
-      '<div class="vb-linha"><span>Individual, uma vaga</span><b>' + LOTE_ABERTO.individual + '</b></div>' +
-      '<div class="vb-linha"><span>Duplo, duas vagas</span><b>' + LOTE_ABERTO.duplo + '</b></div>' +
-      '<p class="vb-pe">Em até 12x no cartão. No duplo a segunda vaga sai por R$ 600. Depois que o lote 1 fecha, o valor sobe e não volta.</p>';
+      '<div class="vb-topo">' + LOTE.nome + (LOTE_FECHOU ? ' · encerrado' : ' · aberto, ' + LOTE.cond) + '</div>' +
+      '<div class="vb-linha"><span>Individual, uma vaga</span><b>' + VL_INDIVIDUAL + '</b></div>' +
+      '<div class="vb-linha"><span>Duplo, duas vagas</span><b>' + VL_DUPLO + '</b></div>' +
+      '<p class="vb-pe">Em até 12x no cartão. No duplo a segunda vaga sai por ' + VL_SEGUNDA + '. ' +
+      (LOTE_FECHOU
+        ? 'As inscrições desta turma já encerraram.'
+        : (LOTE === window.MARES_LOTES[window.MARES_LOTES.length - 1]
+            ? 'Este é o último lote. Depois dele as inscrições encerram.'
+            : 'Depois que o ' + LOTE.nome.toLowerCase() + ' fecha, o valor sobe e não volta.')) + '</p>';
   }
 
   function ligarVerValores() {
@@ -2341,8 +2416,10 @@ fbq('init','673278761920486');fbq('track','PageView');
     progresso(atual + 1, total);
 
     var ajuda = el("ajuda");
-    if (p.ajuda) { ajuda.textContent = p.ajuda; ajuda.hidden = false; }
-    else { ajuda.hidden = true; }
+    if (p.ajuda) {
+      ajuda.textContent = (typeof p.ajuda === "function") ? p.ajuda(respostas) : p.ajuda;
+      ajuda.hidden = false;
+    } else { ajuda.hidden = true; }
 
     var linha = el("link-passo");
     var caixaValores = linha.nextElementSibling;
@@ -2434,10 +2511,10 @@ fbq('init','673278761920486');fbq('track','PageView');
   function montarCheckout() {
     var ing = INGRESSOS[respostas.ingresso] || INGRESSOS["Individual, vou sozinho"];
     var texto = "Oi, Marcelis! Acabei de preencher a inscrição da Imersão Mares.IA, em Curitiba, no dia 17 de outubro."
-              + " Quero o ingresso " + ing.curto + ", que está " + ing.valor + " no lote 1."
+              + " Quero o ingresso " + ing.curto + ", que está " + ing.valor + " no " + LOTE.nome.toLowerCase() + "."
               + " Meu nome é " + (respostas.nome || "") + ", da " + (respostas.empresa || "") + ".";
     el("btn-checkout").href = "https://wa.me/5541992488092?text=" + encodeURIComponent(texto);
-    el("checkout-linha").textContent = "Lote 1 · ingresso " + ing.curto + " · " + ing.valor + " ou em até 12x";
+    el("checkout-linha").textContent = LOTE.nome + " · ingresso " + ing.curto + " · " + ing.valor + " ou em até 12x";
   }
 
   el("btn-voltar").addEventListener("click", function () {
@@ -2530,7 +2607,7 @@ fbq('init','673278761920486');fbq('track','PageView');
 
     <details>
       <summary>Preciso levar alguém do time?</summary>
-      <p>Não. Existe ingresso individual e ingresso duplo, e você escolhe na hora da inscrição. Só que é muito recomendado vir acompanhado: a segunda vaga sai por R$ 600 no lote 1, e o líder que participa vira o impulsionador da mudança na volta. Isso muda a chance de o plano sair do papel.</p>
+      <p>Não. Existe ingresso individual e ingresso duplo, e você escolhe na hora da inscrição. Só que é muito recomendado vir acompanhado: a segunda vaga sai pela diferença entre os dois ingressos do lote aberto, e o líder que participa vira o impulsionador da mudança na volta. Isso muda a chance de o plano sair do papel.</p>
     </details>
 
     <details>
@@ -2570,7 +2647,7 @@ fbq('init','673278761920486');fbq('track','PageView');
 
     <div class="cta-meio">
       <a class="cta" href="#investimento">Respondeu minha dúvida, quero me inscrever</a>
-      <p class="cta-note">17 de outubro, sábado · Curitiba · lote 1 a partir de R$ 997</p>
+      <p class="cta-note" data-preco="linha">17 de outubro, sábado · Curitiba</p>
     </div>
   </div>
 </section>
