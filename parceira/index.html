@@ -33,6 +33,9 @@ body{font-family:var(--corpo);background:var(--fundo);color:var(--tinta);line-he
 header.topo{background:var(--navy);padding:20px 0;color:var(--areia)}
 .topo-in{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
 .topo img{height:30px;width:auto;display:block}
+.marcas{display:flex;align-items:center;gap:16px}
+.marcas .sep{width:1px;height:28px;background:rgba(254,234,212,.35)}
+.marcas img.mares-co{height:24px;opacity:.9}
 .topo span{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(254,234,212,.7)}
 .faixa{height:4px;background:linear-gradient(90deg,var(--laranja) 0%,var(--turq) 55%,var(--azul) 100%)}
 
@@ -156,7 +159,7 @@ tr.ficha td{background:var(--fundo-2);padding:18px 20px}
 <body>
 <header class="topo">
   <div class="wrap topo-in">
-    <img src="/assets/logo-mares.png" alt="MARES Consultoria Empresarial">
+    <div class="marcas" id="marcas"><img src="/assets/logo-mares.png" alt="MARES Consultoria Empresarial"></div>
     <span>Painel da Parceira · Teste dos Temperamentos</span>
   </div>
 </header>
@@ -266,9 +269,15 @@ const PARCEIRA = (params.get('p') || params.get('parceira') || '').trim().toLowe
 const ACESSO = (params.get('acesso') || '').trim();
 const CHAVE = params.get('chave') || '';
 const LIMITE = 40;
+/* Logo da parceira, em branco com fundo transparente, ao lado do logo da MARES. */
+const LOGOS = {rhema: {src: '/parceira/logos/rhema.png', alt: 'Rhema Neuroeducação'}};
+if (LOGOS[PARCEIRA]) {
+  $('#marcas').innerHTML = '<img src="' + LOGOS[PARCEIRA].src + '" alt="' + LOGOS[PARCEIRA].alt + '"><span class="sep" aria-hidden="true"></span><img class="mares-co" src="/assets/logo-mares.png" alt="MARES Consultoria Empresarial">';
+}
 /* Parceiras em modo processo seletivo: o grupo é a vaga e o painel apoia a
    entrevista, sem eliminar ninguém. A mesma lista vive em /temperamentos/. */
 const SELECAO = ['rhema'].includes(PARCEIRA);
+if (SELECAO) document.querySelector('.topo-in > span').textContent = 'Processo seletivo · Teste dos Temperamentos';
 const T = SELECAO ? {
   eyebrow: 'Processo seletivo · Metodologia MARES',
   sub: 'O resultado de cada candidato que respondeu o Teste dos Temperamentos pelos links das suas vagas. Use como apoio para preparar e conduzir a entrevista. Clique em um nome para abrir a ficha completa.',
