@@ -1145,7 +1145,8 @@ function listarAcessosDaEquipe() {
    Para gerar o código: ?modo=acesso&time=parceira-<slug>&chave=CHAVE_PAINEL
    ============================================================================ */
 var PARCEIRAS = {
-  'maira-do-vale': 'Maira do Vale'   /* 08/10/2026, pedido da Marcelis */
+  'maira-do-vale': 'Maira do Vale',        /* 08/10/2026, pedido da Marcelis */
+  'rhema': 'Rhema Neuroeducação'            /* 08/10/2026, recrutamento e seleção */
 };
 
 function painelDaParceira(slug, acesso, chave) {
