@@ -42,6 +42,18 @@ fbq('init','673278761920486');fbq('track','PageView');
 .prod .pag{font-size:13px;font-weight:600;color:var(--blue);margin:8px 0 18px}
 .prod p{font-size:15px}
 .prod .btn{margin-top:auto}
+/* Pré-Black, outubro de 2026 */
+section.preblack{background:#000;color:#fff;border-bottom:3px solid var(--orange);padding:0}
+.preblack .container{display:flex;align-items:center;justify-content:space-between;gap:18px 28px;flex-wrap:wrap;padding-top:22px;padding-bottom:22px}
+.preblack .pb-tag{display:inline-block;background:var(--orange);color:#fff;font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;padding:6px 12px;border-radius:4px}
+.preblack .pb-tit{font-family:var(--display);font-weight:800;font-size:clamp(22px,3.2vw,32px);line-height:1.15;margin:10px 0 4px}
+.preblack .pb-tit em{font-style:normal;color:#f0a04a}
+.preblack .pb-sub{font-size:15px;color:rgba(255,255,255,.82);margin:0}
+.preblack .btn{flex:0 0 auto}
+.prod .off{display:inline-block;margin-left:6px;letter-spacing:.06em;background:#000;color:#fff;font-size:11px;font-weight:800;letter-spacing:.06em;padding:3px 7px;border-radius:4px;vertical-align:middle}
+.prod .de{font-size:14px;color:rgba(6,24,42,.74);margin-top:14px}
+.prod .de s{text-decoration-thickness:1.5px}
+.prod .de + .preco{margin-top:2px}
 .breve{border-style:dashed}
 </style>
 <link rel="icon" href="/favicon.ico" sizes="any"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><script type="application/ld+json">
@@ -234,6 +246,17 @@ fbq('init','673278761920486');fbq('track','PageView');
 
 <div class="page">
 
+<section class="preblack" aria-label="Promoção Pré-Black">
+  <div class="container">
+    <div>
+      <span class="pb-tag">Pré-Black MARES</span>
+      <div class="pb-tit"><em>50% de desconto</em> em todos os cursos e mentorias</div>
+      <p class="pb-sub">O desconto já vem aplicado no checkout. Por tempo limitado.</p>
+    </div>
+    <a class="btn" href="#cursos">Ver os cursos</a>
+  </div>
+</section>
+
 <section class="dark">
   <div class="container">
     <div class="eyebrow">Cursos e Mentorias</div>
@@ -243,16 +266,16 @@ fbq('init','673278761920486');fbq('track','PageView');
   </div>
 </section>
 
-<section>
+<section id="cursos">
   <div class="container">
     <div class="eyebrow">Disponíveis agora</div>
     <h2 class="sec-title">Escolha por onde começar</h2>
     <div class="grid3">
-      <div class="card prod"><span class="ptipo">Formação</span><h3>Formação de Lideranças · Metodologia MARES</h3><p>Para empresários e líderes que querem transformar a gestão de pessoas em motor de crescimento previsível. Usa o Mapa de Liderança em sete marcos: DISC, temperamentos, IKIGAI, forças e fraquezas, Círculo Dourado, sua jornada e metas para 2, 5 e 10 anos.</p><div class="preco">R$ 263,50 <small>à vista</small></div><div class="parc">ou 12x de R$ 27,25 no cartão</div><div class="pag">Cartão, Pix ou boleto</div><a class="btn" href="https://chk.eduzz.com/G96RXNOAW1?cupom=MARES50" target="_blank" rel="noopener">Quero este</a></div>
-      <div class="card prod"><span class="ptipo">Mentoria</span><h3>Mentoria Guia do Autoconhecimento</h3><p>Um mergulho no seu estilo de liderança. Você faz o seu Mapa de Liderança com testes online e trabalha Ikigai, Golden Circle, temperamentos, arquétipos e DISC, em aulas e conteúdos de apoio.</p><div class="preco">R$ 198,50 <small>à vista</small></div><div class="parc">ou 12x de R$ 20,53 no cartão</div><div class="pag">Cartão, Pix ou boleto</div><a class="btn" href="https://chk.eduzz.com/89AQKB5EWD?cupom=MARES50" target="_blank" rel="noopener">Quero este</a></div>
-      <div class="card prod"><span class="ptipo">Imersão online</span><h3>Liderança Lucrativa</h3><p>Como engajar pessoas e aumentar resultados: reter talentos de diferentes gerações, reduzir turnover e alinhar propósito, pessoas e resultados. Inclui Teste de Temperamentos, Mapa da Liderança, IKIGAI aplicado à gestão e guia de comunicação entre gerações.</p><div class="preco">R$ 19,95 <small>à vista</small></div><div class="parc">ou 4x de R$ 5,43 no cartão</div><div class="pag">Cartão, Pix ou boleto</div><a class="btn" href="https://chk.eduzz.com/60EERXVB03?cupom=MARES50" target="_blank" rel="noopener">Quero este</a></div>
-      <div class="card prod"><span class="ptipo">Masterclass</span><h3>RH 5.0 · Tendências e Inovações</h3><p>Para gestores de RH: as tendências que estão mudando a gestão de pessoas, o uso de IA e novas tecnologias no RH, a integração entre gerações e o autoconhecimento como ferramenta para liderar com propósito.</p><div class="preco">R$ 19,95 <small>à vista</small></div><div class="parc">ou 4x de R$ 5,43 no cartão</div><div class="pag">Cartão, Pix ou boleto</div><a class="btn" href="https://chk.eduzz.com/797VA818WE?cupom=MARES50" target="_blank" rel="noopener">Quero este</a></div>
-      <div class="card prod"><span class="ptipo">Livro digital</span><h3>A Jornada das Empreendedoras</h3><p>Histórias reais de mulheres empreendedoras que superaram desafios, com lições sobre gestão de pessoas, autoconhecimento, marketing, inovação e liderança de equipes.</p><div class="preco">R$ 19,95 <small>à vista</small></div><div class="parc">ou 4x de R$ 5,43 no cartão</div><div class="pag">Cartão ou Pix</div><a class="btn" href="https://sun.eduzz.com/G96V6Z4Y01?cupom=MARES50" target="_blank" rel="noopener">Quero este</a></div>
+      <div class="card prod"><span class="ptipo">Formação <span class="off">-50%</span></span><h3>Formação de Lideranças · Metodologia MARES</h3><p>Para empresários e líderes que querem transformar a gestão de pessoas em motor de crescimento previsível. Usa o Mapa de Liderança em sete marcos: DISC, temperamentos, IKIGAI, forças e fraquezas, Círculo Dourado, sua jornada e metas para 2, 5 e 10 anos.</p><div class="de">de <s>R$ 527,00</s> por</div><div class="preco">R$ 263,50 <small>à vista</small></div><div class="parc">ou 12x de R$ 27,25 no cartão</div><div class="pag">Cartão, Pix ou boleto</div><a class="btn" href="https://chk.eduzz.com/G96RXNOAW1?cupom=MARES50" target="_blank" rel="noopener">Quero este</a></div>
+      <div class="card prod"><span class="ptipo">Mentoria <span class="off">-50%</span></span><h3>Mentoria Guia do Autoconhecimento</h3><p>Um mergulho no seu estilo de liderança. Você faz o seu Mapa de Liderança com testes online e trabalha Ikigai, Golden Circle, temperamentos, arquétipos e DISC, em aulas e conteúdos de apoio.</p><div class="de">de <s>R$ 397,00</s> por</div><div class="preco">R$ 198,50 <small>à vista</small></div><div class="parc">ou 12x de R$ 20,53 no cartão</div><div class="pag">Cartão, Pix ou boleto</div><a class="btn" href="https://chk.eduzz.com/89AQKB5EWD?cupom=MARES50" target="_blank" rel="noopener">Quero este</a></div>
+      <div class="card prod"><span class="ptipo">Imersão online <span class="off">-50%</span></span><h3>Liderança Lucrativa</h3><p>Como engajar pessoas e aumentar resultados: reter talentos de diferentes gerações, reduzir turnover e alinhar propósito, pessoas e resultados. Inclui Teste de Temperamentos, Mapa da Liderança, IKIGAI aplicado à gestão e guia de comunicação entre gerações.</p><div class="de">de <s>R$ 39,90</s> por</div><div class="preco">R$ 19,95 <small>à vista</small></div><div class="parc">ou 4x de R$ 5,43 no cartão</div><div class="pag">Cartão, Pix ou boleto</div><a class="btn" href="https://chk.eduzz.com/60EERXVB03?cupom=MARES50" target="_blank" rel="noopener">Quero este</a></div>
+      <div class="card prod"><span class="ptipo">Masterclass <span class="off">-50%</span></span><h3>RH 5.0 · Tendências e Inovações</h3><p>Para gestores de RH: as tendências que estão mudando a gestão de pessoas, o uso de IA e novas tecnologias no RH, a integração entre gerações e o autoconhecimento como ferramenta para liderar com propósito.</p><div class="de">de <s>R$ 39,90</s> por</div><div class="preco">R$ 19,95 <small>à vista</small></div><div class="parc">ou 4x de R$ 5,43 no cartão</div><div class="pag">Cartão, Pix ou boleto</div><a class="btn" href="https://chk.eduzz.com/797VA818WE?cupom=MARES50" target="_blank" rel="noopener">Quero este</a></div>
+      <div class="card prod"><span class="ptipo">Livro digital <span class="off">-50%</span></span><h3>A Jornada das Empreendedoras</h3><p>Histórias reais de mulheres empreendedoras que superaram desafios, com lições sobre gestão de pessoas, autoconhecimento, marketing, inovação e liderança de equipes.</p><div class="de">de <s>R$ 39,90</s> por</div><div class="preco">R$ 19,95 <small>à vista</small></div><div class="parc">ou 4x de R$ 5,43 no cartão</div><div class="pag">Cartão ou Pix</div><a class="btn" href="https://sun.eduzz.com/G96V6Z4Y01?cupom=MARES50" target="_blank" rel="noopener">Quero este</a></div>
     </div>
   </div>
 </section>
