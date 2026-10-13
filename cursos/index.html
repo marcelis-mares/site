@@ -43,7 +43,7 @@ fbq('init','673278761920486');fbq('track','PageView');
 .prod p{font-size:15px}
 .prod .btn{margin-top:auto}
 /* Pré-Black, outubro de 2026 */
-section.preblack{background:#000;color:#fff;border-bottom:3px solid var(--orange);padding:0}
+section.preblack{background:#000;color:#fff;border-bottom:3px solid var(--orange);padding:0;position:sticky;top:71px;z-index:40}
 .preblack .container{display:flex;align-items:center;justify-content:space-between;gap:18px 28px;flex-wrap:wrap;padding-top:22px;padding-bottom:22px}
 .preblack .pb-tag{display:inline-block;background:var(--orange);color:#fff;font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;padding:6px 12px;border-radius:4px}
 .preblack .pb-tit{font-family:var(--display);font-weight:800;font-size:clamp(22px,3.2vw,32px);line-height:1.15;margin:10px 0 4px}
@@ -55,6 +55,15 @@ section.preblack{background:#000;color:#fff;border-bottom:3px solid var(--orange
 .prod .de s{text-decoration-thickness:1.5px}
 .prod .de + .preco{margin-top:2px}
 .breve{border-style:dashed}
+#cursos{scroll-margin-top:230px}
+@media(max-width:700px){
+ .preblack .container{padding-top:10px;padding-bottom:10px;gap:10px;flex-wrap:nowrap}
+ .preblack .pb-tag{font-size:10px;padding:4px 8px}
+ .preblack .pb-tit{font-size:16px;margin:6px 0 0}
+ .preblack .pb-sub{display:none}
+ .preblack .btn{padding:10px 14px;font-size:14px}
+}
+@media(max-width:700px){#cursos{scroll-margin-top:150px}}
 </style>
 <link rel="icon" href="/favicon.ico" sizes="any"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><script type="application/ld+json">
 {
