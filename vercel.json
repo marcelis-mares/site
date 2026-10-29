@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/vsc",
+      "destination": "/?utm_source=whatsapp&utm_medium=conexao_vsc&utm_campaign=networking",
+      "permanent": false
+    }
+  ]
+}
