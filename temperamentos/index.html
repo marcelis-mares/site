@@ -1027,8 +1027,13 @@ const CONFIG = {
 
   /* 4) WhatsApp de destino e link do Guia do Autoconhecimento. */
   WHATSAPP: '5541992488092',
-  GUIA: 'https://sun.eduzz.com/cxjd23nv?currency=BRL'
+  GUIA: 'https://sun.eduzz.com/cxjd23nv?currency=BRL',
+  /* Link rastreado: passa por /guia/, que grava o clique na central, alerta a
+     equipe, converte no RD (temperamentos-clique-guia) e segue para o GUIA.
+     Se o checkout mudar, trocar também o DESTINO de /guia/index.html. */
+  GUIA_RASTREADO: 'https://www.maresconsultoria.com.br/guia/'
 };
+function linkGuia(origem){ return CONFIG.GUIA_RASTREADO + '?s=' + encodeURIComponent(SESSAO) + '&o=' + origem; }
 window.TEMPERAMENTOS_CONFIG = CONFIG;
 
 /* ======================= DICIONÁRIO OFICIAL =======================
@@ -1315,7 +1320,7 @@ function validarTexto(html, r){
   const faltas = [];
   if (r.classe === 'oposta' && html.indexOf('não é a combinação mais natural') < 0) faltas.push('E008 alerta obrigatório ausente');
   if (r.classe === 'natural' && html.indexOf('combinação natural e comum') < 0) faltas.push('E008 reforço de combinação natural ausente');
-  if (html.indexOf(CONFIG.GUIA) < 0) faltas.push('E009 link do Guia ausente');
+  if (html.indexOf(CONFIG.GUIA_RASTREADO + '?s=') < 0) faltas.push('E009 link do Guia ausente');
   if (html.indexOf('Equipe MARES') < 0) faltas.push('E009 assinatura ausente');
   if (html.indexOf('não constitui diagnóstico') < 0) faltas.push('E009 nota de escopo ausente');
   if (r.primary === r.secondary) faltas.push('E004 secundário igual ao predominante');
@@ -1381,7 +1386,7 @@ function montarEmail(r, b){
     '<ul style="font-size:15px;line-height:1.6;color:#20313d;padding-left:20px;margin:0 0 16px">' + li(b.orientacoes) + '</ul>',
     '<div style="background:#06182a;border-radius:12px;padding:24px 22px;margin:30px 0 22px">',
     '<p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#FEEAD4">' + esc(b.fecho) + '</p>',
-    '<p style="margin:0;font-size:15px;line-height:1.7;color:#FEEAD4">Para aprofundar esse processo, conheça a mentoria Guia do Autoconhecimento: <a href="' + CONFIG.GUIA + '" style="color:#F0A04A">' + CONFIG.GUIA + '</a></p>',
+    '<p style="margin:0;font-size:15px;line-height:1.7;color:#FEEAD4">Para aprofundar esse processo, conheça a mentoria Guia do Autoconhecimento: <a href="' + linkGuia('email') + '" style="color:#F0A04A">Conhecer o Guia do Autoconhecimento</a></p>',
     '</div>',
     '<p style="font-size:12.5px;color:#66788a;line-height:1.6;margin:0 0 14px">' + esc(b.escopo) + ' Temperamento indica tendência de comportamento e de preferência, e não determina caráter, competência, inteligência, saúde mental nem destino profissional.</p>',
     '<p style="font-size:13px;color:#20313d;margin:0">Equipe MARES | Liderança Oxigênio<br>@marcelis.pereira · maresconsultoria.com.br · Guia do Autoconhecimento</p>',
@@ -1669,7 +1674,7 @@ function desenharResultado(){
        : PARCEIRA ? ' ' + NOME_PARCEIRA + ' vê o seu nome e o resultado do teste, como você autorizou.'
        : NOMINAL ? ' A sua liderança vê apenas o seu nome, a sua área e os seus dois perfis, como você autorizou.'
        : TURMA ? ' A sua empresa recebe apenas a leitura do time como conjunto, sem o resultado individual de ninguém.' : '');
-  $('#cta-guia').href = CONFIG.GUIA;
+  $('#cta-guia').href = linkGuia('tela');
   $('#cta-whats').href = 'https://wa.me/' + CONFIG.WHATSAPP + '?text=' +
     encodeURIComponent('Oi! Fiz o Teste dos Temperamentos e deu ' + P.animal + ' predominante com ' + S.animal + ' secundário. Quero entender melhor o meu resultado.');
 }
