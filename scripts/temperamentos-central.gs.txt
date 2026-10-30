@@ -770,6 +770,122 @@ function escapar(s) {
 }
 
 /* ============================================================================
+   CLIQUE NO GUIA DO AUTOCONHECIMENTO
+   ----------------------------------------------------------------------------
+   O link do Guia, no e-mail da análise e no botão da tela de resultado, passa
+   por /guia/?s=<sessao>&o=<email|tela>. A página avisa aqui e redireciona para
+   a Eduzz na mesma hora.
+
+   Clique é sinal de compra, então o primeiro clique de cada pessoa:
+   1. marca a linha dela na aba Respostas (guia_primeiro_clique e guia_cliques);
+   2. manda um alerta comercial para a equipe, com perfil e botão de WhatsApp;
+   3. converte no RD com o identificador temperamentos-clique-guia. No RD, a
+      automação que entra por essa conversão marca o lead como Oportunidade,
+      e é isso que leva a negociação para o RD CRM.
+   Cliques seguintes só somam na contagem, sem novo alerta.
+============================================================================ */
+
+var RD_TOKEN_PUBLICO = '10b02ef74f4e5da88354848634e7bbeb';
+var RD_CONVERSAO_GUIA = 'temperamentos-clique-guia';
+
+function registrarCliqueGuia(d) {
+  var sessao = String(d.sessao || '').trim();
+  if (!sessao) return;
+  var a = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(ABA);
+  if (!a) return;
+  var linha = linhaDaSessao(a, sessao);
+  if (!linha) return;   // sessão desconhecida: não inventa linha nova
+
+  var agora = new Date();
+  var colunas = ['guia_primeiro_clique','guia_ultimo_clique','guia_cliques','guia_origem','guia_avisado'];
+  atualizarEm(a, colunas, {}, linha);   // garante que as colunas existem
+
+  var cliques = Number(valorDaColuna(a, linha, 'guia_cliques')) || 0;
+  marcarColuna(a, linha, 'guia_cliques', cliques + 1);
+  marcarColuna(a, linha, 'guia_ultimo_clique', agora);
+  if (!valorDaColuna(a, linha, 'guia_primeiro_clique')) {
+    marcarColuna(a, linha, 'guia_primeiro_clique', agora);
+    marcarColuna(a, linha, 'guia_origem', d.origem_clique || '');
+  }
+  if (valorDaColuna(a, linha, 'guia_avisado')) return;
+
+  var p = {};
+  ['nome','email','whatsapp','empresa','enquadramento','salario','time','cargo',
+   'predominante','predominante_animal','secundario','secundario_animal','classe','processed_at']
+    .forEach(function (c) { p[c] = valorDaColuna(a, linha, c); });
+  p.origem_clique = d.origem_clique || '';
+
+  avisarCliqueGuia(p);
+  converterGuiaNoRD(p);
+  marcarColuna(a, linha, 'guia_avisado', agora);
+}
+
+function avisarCliqueGuia(p) {
+  if (!COPIA_EQUIPE) return;
+  var perfil = p.predominante_animal ? p.predominante_animal + ' · ' + p.predominante : p.predominante;
+  var assunto = 'Interesse no Guia · ' + (p.nome || 'sem nome') + (p.empresa ? ' · ' + p.empresa : '');
+  var fone = String(p.whatsapp || '').replace(/\D/g, '');
+  if (fone && fone.indexOf('55') !== 0) fone = '55' + fone;
+  var primeiro = String(p.nome || '').split(' ')[0];
+  var texto = 'Oi, ' + primeiro + '! Aqui é da equipe da Marcelis Pereira, da MARES. '
+            + 'Vi que você fez o Teste dos Temperamentos e se interessou pelo Guia do Autoconhecimento. '
+            + 'Posso te ajudar com alguma dúvida? 😊';
+  var linhas = [
+    ['Empresa', p.empresa], ['E-mail', p.email], ['WhatsApp', p.whatsapp],
+    ['Perfil predominante', perfil],
+    ['Secundário', p.secundario_animal ? p.secundario_animal + ' · ' + p.secundario : p.secundario],
+    ['Combinação', p.classe], ['Momento', p.enquadramento], ['Faixa salarial', p.salario],
+    ['Cargo', p.cargo], ['Turma', p.time],
+    ['Clicou pelo', p.origem_clique === 'tela' ? 'botão da tela de resultado' : 'e-mail da análise'],
+    ['Fez o teste em', p.processed_at]
+  ];
+  var corpo = '<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#0D2A3D">'
+    + '<p style="margin:0 0 6px;font-size:16px"><b>' + escapar(p.nome || 'Sem nome')
+    + '</b> clicou para comprar o Guia do Autoconhecimento.</p>'
+    + '<p style="margin:0 0 14px;color:#5b6b78">Momento bom para um contato comercial.</p>'
+    + '<table cellpadding="6" cellspacing="0" border="0">';
+  linhas.forEach(function (l) {
+    if (l[1] === '' || l[1] === undefined || l[1] === null) return;
+    corpo += '<tr><td style="vertical-align:top;color:#5b6b78;white-space:nowrap">' + escapar(l[0])
+          + '</td><td style="vertical-align:top"><b>' + escapar(String(l[1])) + '</b></td></tr>';
+  });
+  corpo += '</table>';
+  if (fone) {
+    corpo += '<p style="margin:18px 0 0"><a href="https://wa.me/' + fone + '?text='
+          + encodeURIComponent(texto) + '" style="background:#E26220;color:#fff;padding:10px 18px;'
+          + 'border-radius:24px;text-decoration:none;display:inline-block">Chamar no WhatsApp</a></p>';
+  }
+  corpo += '<p style="margin:18px 0 0;font-size:12px;color:#8b98a3">Se a compra não aparecer na Eduzz, '
+        + 'ela clicou e não concluiu. Dados completos na aba ' + ABA + ' da central.</p></div>';
+  try {
+    MailApp.sendEmail({ to: COPIA_EQUIPE, subject: assunto, htmlBody: corpo,
+                        name: 'MARES · Alerta comercial', replyTo: p.email || COPIA_EQUIPE });
+  } catch (err) { /* cota estourada não pode derrubar a gravação */ }
+}
+
+function converterGuiaNoRD(p) {
+  if (!RD_TOKEN_PUBLICO || !p.email) return;
+  var payload = {
+    conversion_identifier: RD_CONVERSAO_GUIA,
+    email: String(p.email).trim(),
+    name: p.nome || '',
+    company_name: p.empresa || '',
+    tags: ['interesse-guia-autoconhecimento']
+  };
+  var fone = String(p.whatsapp || '').replace(/\D/g, '');
+  if (fone) {
+    if (fone.indexOf('55') === 0 && fone.length > 11) fone = fone.slice(2);
+    payload.mobile_phone = '+55' + fone;
+  }
+  try {
+    UrlFetchApp.fetch('https://api.rd.services/platform/conversions?api_key=' + RD_TOKEN_PUBLICO, {
+      method: 'post', contentType: 'application/json', muteHttpExceptions: true,
+      payload: JSON.stringify({ event_type: 'CONVERSION', event_family: 'CDP', payload: payload })
+    });
+  } catch (err) {}
+}
+
+/* ============================================================================
    MAPA DE INDICADORES
    ----------------------------------------------------------------------------
    Página da imersão, em /imersao/mapa/. A pessoa faz um cadastro rápido para
@@ -961,6 +1077,13 @@ function processar(dados) {
   // Bússola de IA. Cadastro completo na aba própria, e aviso para a equipe.
   if (dados.registro === 'bussola') {
     gravarBussola(dados);
+    return ContentService.createTextOutput('ok');
+  }
+
+  // Clique no link do Guia do Autoconhecimento, vindo de /guia/. Nunca pode cair
+  // no caminho padrão abaixo, senão vira uma linha vazia na aba Respostas.
+  if (dados.registro === 'clique-guia') {
+    registrarCliqueGuia(dados);
     return ContentService.createTextOutput('ok');
   }
 

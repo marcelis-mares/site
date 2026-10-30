@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia do Autoconhecimento | MARES</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="canonical" href="https://www.maresconsultoria.com.br/guia/">
+<!--
+  Ponte do link do Guia do Autoconhecimento.
+  O e-mail da análise do Teste dos Temperamentos e o botão da tela de resultado
+  apontam para /guia/?s=<sessao>&o=<email|tela>. Esta página avisa a central
+  (registro clique-guia), manda o evento guia_clique para o Google Analytics e
+  segue para a Eduzz. A central grava o clique na linha da pessoa, alerta a
+  equipe e converte no RD (temperamentos-clique-guia).
+  Se o link do checkout mudar, trocar aqui E no CONFIG.GUIA de /temperamentos/.
+-->
+<style>
+  @font-face{font-family:'Aileron';src:url('/fonts/Aileron-Regular.woff2') format('woff2');font-weight:400;font-display:swap}
+  :root{--ink:#06182a;--fundo:#fff;--link:#1C6795}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ink:#FEEAD4;--fundo:#06182a;--link:#f0a04a}}
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+       font-family:'Aileron',system-ui,sans-serif;background:var(--fundo);color:var(--ink);padding:16px;text-align:center}
+  a{color:var(--link)}
+</style>
+<script src="/cookies.js" defer></script>
+</head>
+<body>
+<p>Abrindo o Guia do Autoconhecimento…<br>
+<small>Se não abrir sozinho, <a id="ir" href="https://sun.eduzz.com/cxjd23nv?currency=BRL">clique aqui</a>.</small></p>
+<script>
+(function(){
+  var DESTINO = 'https://sun.eduzz.com/cxjd23nv?currency=BRL';
+  var CENTRAL = 'https://script.google.com/macros/s/AKfycbx4UBHQ5yh13Tx3IEX8SN4xEHMCZtYoSz_Vm53f2P7v44nQidwErRvq_uximUQdmU58/exec';
+  var q = new URLSearchParams(location.search);
+  var sessao = (q.get('s') || '').replace(/[^A-Za-z0-9-]/g, '').slice(0, 60);
+  var origem = q.get('o') === 'tela' ? 'tela' : 'email';
+  var foi = false;
+  function seguir(){ if (foi) return; foi = true; location.replace(DESTINO); }
+
+  if (sessao) {
+    var corpo = JSON.stringify({ registro: 'clique-guia', sessao: sessao, origem_clique: origem });
+    var mandou = false;
+    try { mandou = navigator.sendBeacon && navigator.sendBeacon(CENTRAL, new Blob([corpo], { type: 'text/plain;charset=utf-8' })); } catch (e) {}
+    if (!mandou) {
+      try { fetch(CENTRAL, { method: 'POST', mode: 'no-cors', keepalive: true,
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: corpo }); } catch (e) {}
+    }
+  }
+
+  /* Evento no Analytics, sem segurar a pessoa: espera o cookies.js no máximo 700ms. */
+  var inicio = Date.now();
+  (function analytics(){
+    if (window.maresEvento) {
+      try { window.maresEvento('guia_clique', { origem_clique: origem, rastreado: sessao ? 'sim' : 'nao', transport_type: 'beacon' }); } catch (e) {}
+      setTimeout(seguir, 150);
+    } else if (Date.now() - inicio < 700) {
+      setTimeout(analytics, 50);
+    } else {
+      seguir();
+    }
+  })();
+  setTimeout(seguir, 1200);
+})();
+</script>
+</body>
+</html>
