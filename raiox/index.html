@@ -882,7 +882,12 @@ const CONFIG = {
 
   // Identificadores dos campos personalizados no RD Station.
   // Confira em RD > Configurações > Campos personalizados (coluna do meio).
-  RD_CAMPO_FATURAMENTO: 'cf_faixa_de_faturamento_anual',
+  /* Vazio de propósito desde 30/10/2026: o campo cf_faixa_de_faturamento_anual do RD é lista
+     fechada com as faixas anuais antigas (500 mil, 2 mi, 10 mi), e as faixas do RaioX seguem o
+     Simples Nacional. Valor fora da lista faz o RD recusar a conversão inteira, e era isso que
+     acontecia. A faixa continua indo para a planilha do RaioX. Quando existir no RD um campo de
+     texto para a faixa, colocar o identificador dele aqui. */
+  RD_CAMPO_FATURAMENTO: '',
   RD_CAMPO_FUNCIONARIOS: 'cf_numero_de_funcionarios',
   RD_CAMPO_MOMENTO: 'cf_estagio_de_maturidade',
   RD_CAMPO_OBSERVACOES: 'cf_observacoes_raiox',
@@ -1598,7 +1603,7 @@ function enviarRD(identificador, extra){
       personal_phone: telefoneE164(lead.whatsapp),
       mobile_phone: telefoneE164(lead.whatsapp),
       company_name: lead.empresa,
-      [CONFIG.RD_CAMPO_FATURAMENTO]: lead.faturamento || '',
+      ...(CONFIG.RD_CAMPO_FATURAMENTO && lead.faturamento ? {[CONFIG.RD_CAMPO_FATURAMENTO]: lead.faturamento} : {}),
       [CONFIG.RD_CAMPO_FUNCIONARIOS]: lead.funcionarios || '',
       [CONFIG.RD_CAMPO_MOMENTO]: lead.momento || '',
       [CONFIG.RD_CAMPO_MENSAGEM]: lead.mensagem || '',
