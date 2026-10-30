@@ -612,13 +612,15 @@ fbq('init','673278761920486');fbq('track','PageView');
         </div>
 
         <div class="campo">
-          <label for="f-faturamento">Faixa de faturamento anual</label>
+          <label for="f-faturamento">Faixa de faturamento mensal</label>
           <select id="f-faturamento" name="faturamento" required>
             <option value="" disabled selected>Selecione a faixa</option>
-            <option value="Até R$500 Mil ano">Até R$500 Mil ano</option>
-            <option value="De R$500 Mil á R$2 milhões ano">De R$500 Mil á R$2 milhões ano</option>
-            <option value="De R$2 milhões á R$10 milhões ano">De R$2 milhões á R$10 milhões ano</option>
-            <option value="Acima de R$10 milhões ano">Acima de R$10 milhões ano</option>
+            <option value="Até R$ 20 mil/mês">Até R$ 20 mil/mês</option>
+            <option value="De R$ 20 mil a R$ 50 mil/mês">De R$ 20 mil a R$ 50 mil/mês</option>
+            <option value="De R$ 50 mil a R$ 150 mil/mês">De R$ 50 mil a R$ 150 mil/mês</option>
+            <option value="De R$ 150 mil a R$ 300 mil/mês">De R$ 150 mil a R$ 300 mil/mês</option>
+            <option value="De R$ 300 mil a R$ 1 milhão/mês">De R$ 300 mil a R$ 1 milhão/mês</option>
+            <option value="Acima de R$ 1 milhão/mês">Acima de R$ 1 milhão/mês</option>
           </select>
           <div class="msg-erro" id="e-faturamento">Escolha a faixa de faturamento.</div>
         </div>
@@ -742,7 +744,11 @@ const CONFIG = {
 
   // Identificadores dos campos personalizados no RD Station.
   // Confira em RD > Configurações > Campos personalizados (coluna do meio).
-  RD_CAMPO_FATURAMENTO: 'cf_faixa_de_faturamento_anual',
+  /* Vazio de propósito desde 30/10/2026: o campo cf_faixa_de_faturamento_anual do RD é lista
+     fechada com as faixas anuais antigas, e valor fora da lista faz o RD recusar a conversão
+     inteira. A faixa mensal padronizada continua indo para a planilha central. Quando existir
+     no RD um campo de texto para a faixa mensal, colocar o identificador dele aqui. */
+  RD_CAMPO_FATURAMENTO: '',
   RD_CAMPO_MENSAGEM: 'cf_mensagem_diagnostico_sonda',
 
   // 3) WhatsApp de destino do CTA final.
@@ -1107,7 +1113,7 @@ function enviarRD(identificador, extra){
       personal_phone: telefoneE164(lead.whatsapp),
       mobile_phone: telefoneE164(lead.whatsapp),
       company_name: lead.empresa,
-      [CONFIG.RD_CAMPO_FATURAMENTO]: lead.faturamento || '',
+      ...(CONFIG.RD_CAMPO_FATURAMENTO && lead.faturamento ? {[CONFIG.RD_CAMPO_FATURAMENTO]: lead.faturamento} : {}),
       [CONFIG.RD_CAMPO_MENSAGEM]: lead.mensagem || '',
       ...extra
     }
