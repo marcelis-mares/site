@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Turma de Curitiba, 28 de novembro de 2026, na Uniopet Centro Cívico, Rua Nilo Peçanha, 1501. Remarcada em 30/10/2026.
+<!-- Turma de Curitiba, 28 de novembro de 2026, local ainda a definir (Uniopet não confirmou em 04/11/2026). Remarcada em 30/10/2026.
      Checkout da Eduzz ligado em 04/11/2026: cada lote do MARES_LOTES tem o link do ingresso
      individual e do duplo, e o botão final troca sozinho quando o lote vira.
      Para abrir a página aos buscadores: apagar a linha robots abaixo, incluir /mares-ia/
      no sitemap.xml e conferir que o robots.txt não bloqueia. -->
 
 <title>Imersão Mares.IA · Curitiba, 28 de novembro de 2026 | MARES</title>
-<meta name="description" content="Imersão presencial de um dia em Curitiba, 28 de novembro de 2026, para donos e líderes redesenharem a empresa a partir do que a Inteligência Artificial já tornou possível. Ingresso individual ou duplo, em três lotes.">
+<meta name="description" content="Imersão presencial de um dia em Curitiba, 28 de novembro de 2026, para donos e líderes redesenharem a empresa a partir do que a Inteligência Artificial já tornou possível. Ingresso individual ou duplo, com valores de lançamento.">
 <link rel="canonical" href="https://www.maresconsultoria.com.br/mares-ia/">
 
 <meta property="og:locale" content="pt_BR">
@@ -64,8 +64,8 @@ fbq('init','673278761920486');fbq('track','PageView');
   "endDate": "2026-11-28T18:00:00-03:00",
   "location": {
     "@type": "Place",
-    "name": "Uniopet Centro Cívico",
-    "address": { "@type": "PostalAddress", "streetAddress": "Rua Nilo Peçanha, 1501", "addressLocality": "Curitiba", "addressRegion": "PR", "addressCountry": "BR" }
+    "name": "Curitiba, local a definir",
+    "address": { "@type": "PostalAddress", "addressLocality": "Curitiba", "addressRegion": "PR", "addressCountry": "BR" }
   },
   "organizer": {
     "@type": "Organization",
@@ -1511,7 +1511,7 @@ html{scroll-padding-top:80px}
     <div class="hero-facts">
       <div><b>Data</b>28 de novembro, sábado</div>
       <div><b>Cidade</b>Curitiba</div>
-      <div><b>Local</b>Uniopet Centro Cívico</div>
+      <div><b>Local</b>A definir</div>
       <div><b>Formato</b>Presencial, dia inteiro</div>
     </div>
 
@@ -1813,7 +1813,7 @@ html{scroll-padding-top:80px}
 window.MARES_LOTES = [
   { nome: "Lote 1", cond: "até 9 de novembro",        fim: new Date(2026, 10, 9, 23, 59),  individual: 997,  duplo: 1597, checkout: { individual: "https://chk.eduzz.com/efmoox67", duplo: "https://chk.eduzz.com/gxxwn2iu" } },
   { nome: "Lote 2", cond: "de 10 a 20 de novembro",   fim: new Date(2026, 10, 20, 23, 59), individual: 1297, duplo: 1997, checkout: { individual: "https://chk.eduzz.com/yjzjl2rh", duplo: "https://chk.eduzz.com/oo2cjqtm" } },
-  { nome: "Lote 3", cond: "de 21 a 25 de novembro",   fim: new Date(2026, 10, 25, 23, 59), individual: 1597, duplo: 2397, checkout: { individual: "https://chk.eduzz.com/sc7p7ein", duplo: "https://chk.eduzz.com/eiaiepcs" } }
+  { nome: "Valor oficial", oficial: true, cond: "de 21 a 25 de novembro",   fim: new Date(2026, 10, 25, 23, 59), individual: 1597, duplo: 2397, checkout: { individual: "https://chk.eduzz.com/sc7p7ein", duplo: "https://chk.eduzz.com/eiaiepcs" } }
 ];
 
 /* 997 vira "R$ 997" e 998.5 vira "R$ 998,50" */
@@ -1843,7 +1843,7 @@ window.maresLinhaLote = function () {
   <div class="wrap-narrow">
     <p class="eyebrow">Investimento</p>
     <h2>Você escolhe se vem sozinho ou acompanhado</h2>
-    <p class="lead">São dois ingressos, o individual e o duplo, e o preço dos dois vira em três lotes. Quem decide antes paga menos, e é sempre assim.</p>
+    <p class="lead">São dois ingressos, o individual e o duplo, e antes do valor oficial existem dois lotes de lançamento. Quem decide antes paga menos, e é sempre assim.</p>
 
     <div class="lotes" id="lotes"></div>
 
@@ -1861,7 +1861,7 @@ window.maresLinhaLote = function () {
           var ultimo = (i === window.MARES_LOTES.length - 1);
           var estado = (aberto && l === aberto) ? "ativo" : (l.fim <= new Date() ? "encerrado" : "futuro");
           html += '<div class="lote ' + estado + '">';
-          html += '<div class="lote-nome">' + l.nome + (ultimo ? " · último" : "") +
+          html += '<div class="lote-nome">' + l.nome +
                   (estado === "ativo" ? " · aberto" : "") + '</div>';
           html += '<div class="lote-precos">' +
                     '<div><span>Individual</span><b>' + window.maresPreco(l.individual) + '</b></div>' +
@@ -1982,8 +1982,9 @@ window.maresLinhaLote = function () {
       var ultimo = (l === window.MARES_LOTES[window.MARES_LOTES.length - 1]);
       pintar("aviso-lote", fechou
         ? "As inscrições desta turma estão encerradas. Fale comigo no WhatsApp para saber da próxima."
-        : "O " + l.nome.toLowerCase() + " vale " + l.cond +
-          (ultimo ? ", e é o último. Depois dele as inscrições encerram." : ". Depois o valor sobe e não volta."));
+        : (l.oficial
+          ? "O valor oficial vale " + l.cond + ", e as inscrições encerram no dia 25."
+          : "O " + l.nome.toLowerCase() + " vale " + l.cond + ". Depois o valor sobe e não volta."));
     };
     window.maresPintarPrecos();
     </script>
@@ -2196,7 +2197,7 @@ window.maresLinhaLote = function () {
           : "Você vem sozinho ou vem com mais alguém da empresa?";
       },
       ajuda: function () {
-        return "No " + LOTE.nome.toLowerCase() + " o individual está " + VL_INDIVIDUAL +
+        return (LOTE.oficial ? "No valor oficial" : "No " + LOTE.nome.toLowerCase()) + " o individual está " + VL_INDIVIDUAL +
                " e o duplo " + VL_DUPLO + ", ou seja, a segunda vaga sai por " + VL_SEGUNDA + ".";
       },
       o: function (r) {
@@ -2331,7 +2332,7 @@ window.maresLinhaLote = function () {
 
     el("preco-ajuda").textContent = LOTE_FECHOU
       ? "As inscrições desta turma já encerraram. Siga assim mesmo e eu confirmo com você no WhatsApp se ainda sobrou vaga."
-      : "Veja o valor antes de continuar. É o preço do " + LOTE.nome.toLowerCase() + ", que vale " + LOTE.cond + ".";
+      : "Veja o valor antes de continuar. " + (LOTE.oficial ? "É o valor oficial, que vale " : "É o preço do " + LOTE.nome.toLowerCase() + ", que vale ") + LOTE.cond + ".";
     el("preco-tag").textContent = ing.tag;
     el("preco-valor").textContent = ing.valor;
 
@@ -2411,7 +2412,7 @@ window.maresLinhaLote = function () {
       (LOTE_FECHOU
         ? 'As inscrições desta turma já encerraram.'
         : (LOTE === window.MARES_LOTES[window.MARES_LOTES.length - 1]
-            ? 'Este é o último lote. Depois dele as inscrições encerram.'
+            ? 'Este é o valor oficial. As inscrições encerram em 25 de novembro.'
             : 'Depois que o ' + LOTE.nome.toLowerCase() + ' fecha, o valor sobe e não volta.')) + '</p>';
   }
 
@@ -2733,7 +2734,7 @@ window.maresLinhaLote = function () {
     <h2>A IA já está no ambiente.<br>A pergunta é se a sua empresa está <em>preparada para operar nele</em>.</h2>
     <p>Enquanto uns discutem qual ferramenta usar, outros já estão reduzindo custo, ganhando velocidade e crescendo sem inchar a estrutura.</p>
     <a class="cta" href="#investimento">Quero garantir minha vaga</a>
-    <p class="cta-note" style="margin-top:16px">28 de novembro de 2026, sábado · Uniopet Centro Cívico, Rua Nilo Peçanha, 1501, Curitiba</p>
+    <p class="cta-note" style="margin-top:16px">28 de novembro de 2026, sábado · Curitiba · local a definir</p>
   </div>
 </section>
 
