@@ -98,6 +98,45 @@ fbq('init','673278761920486');fbq('track','PageView');
 
 <link rel="icon" href="/favicon.ico" sizes="any"><link rel="apple-touch-icon" href="/apple-touch-icon.png"></head>
 <body>
+<style>
+/* cabeçalho do site, isolado do CSS próprio da página */
+html{scroll-padding-top:80px}
+#site-top{position:sticky;top:0;z-index:999;background:rgba(6,24,42,.94);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08);font-family:'Aileron',system-ui,sans-serif;line-height:1.4}
+#site-top *{box-sizing:border-box;margin:0}
+#site-top .st-wrap{max-width:1160px;margin:0 auto;padding:0 24px;height:70px;display:flex;align-items:center;justify-content:space-between}
+#site-top .st-brand{display:inline-flex;align-items:center}
+#site-top .st-logo{height:38px;display:block}
+#site-top .st-menu{display:flex;gap:26px;align-items:center}
+#site-top .st-menu a{color:#b9c6d3;font-weight:500;font-size:15px;text-decoration:none;transition:color .2s}
+#site-top .st-menu a:hover{color:#fff}
+#site-top .st-menu a.st-btn{display:inline-block;background:#E26220;color:#fff;padding:12px 22px;border-radius:10px;font-weight:600}
+#site-top .st-menu a.st-btn:hover{background:#f0a04a}
+#site-top .st-dd{position:relative;display:flex;align-items:center}
+#site-top .st-top::after{content:'';display:inline-block;width:6px;height:6px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);margin:0 0 4px 8px}
+#site-top .st-sub{position:absolute;top:100%;left:-18px;margin-top:12px;min-width:250px;background:#06182a;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:8px 0;display:none;flex-direction:column;box-shadow:0 18px 40px rgba(0,0,0,.35);z-index:60}
+#site-top .st-sub::before{content:'';position:absolute;top:-14px;left:0;right:0;height:14px}
+#site-top .st-dd:hover .st-sub,#site-top .st-dd:focus-within .st-sub{display:flex}
+#site-top .st-sub a{padding:10px 18px;font-size:14px;white-space:nowrap}
+#site-top .st-sub a:hover{background:rgba(255,255,255,.06);color:#fff}
+#site-top .st-sub a.st-dest{color:#fff;font-weight:600}
+#site-top .st-sub a.st-all{border-top:1px solid rgba(255,255,255,.1);margin-top:6px;padding-top:12px;color:#f0a04a}
+#site-top .st-novo{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;background:#E26220;color:#fff;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;vertical-align:middle}
+#site-top .st-hamb{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:6px}
+#site-top .st-hamb span{width:26px;height:2px;background:#fff;display:block}
+@media(max-width:900px){
+ #site-top .st-wrap{padding:0 16px}
+ #site-top .st-menu{display:none;position:absolute;top:70px;left:0;right:0;background:#06182a;flex-direction:column;padding:20px 24px;gap:16px;border-bottom:1px solid rgba(255,255,255,.1);max-height:calc(100vh - 70px);overflow-y:auto}
+ #site-top .st-menu.show{display:flex}
+ #site-top .st-hamb{display:flex}
+ #site-top .st-dd{flex-direction:column;align-items:center}
+ #site-top .st-top::after{display:none}
+ #site-top .st-sub{position:static;display:flex;align-items:center;margin:10px 0 0;padding:10px 0;border:0;border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1);border-radius:0;box-shadow:none;background:none;min-width:0;gap:12px}
+ #site-top .st-sub::before{display:none}
+ #site-top .st-sub a{padding:0;white-space:normal;font-size:13.5px}
+ #site-top .st-sub a.st-all{border-top:0;margin-top:0;padding-top:0}
+}
+</style>
+<div id="site-top"><div class="st-wrap"><a href="/" class="st-brand"><img class="st-logo" src="/assets/logo-mares.png" alt="MARES Consultoria Empresarial"></a><nav class="st-menu" id="st-menu"><a href="/">Início</a><a href="/sobre/">Sobre</a><a href="/metodo/">Método</a><div class="st-dd"><a href="/servicos/" class="st-top">Serviços</a><div class="st-sub"><a href="/consultoria/">Consultoria Empresarial</a><a href="/consultoria-educacional/">Consultoria Educacional</a><a href="/planejamento-estrategico/">Planejamento Estratégico</a><a href="/diagnostico/">Diagnóstico MARES</a><a href="/mares-ia/" class="st-dest atual">Imersão Mares.IA <span class="st-novo">novo</span></a><a href="/cursos/">Cursos e Mentorias</a><a href="/palestras/">Palestras e Workshops</a><a href="/servicos/" class="st-all">Todos os serviços</a></div></div><a href="/cursos/">Cursos</a><a href="/cases/">Cases</a><a href="/blog/">Blog</a><a href="/contato/">Contato</a><a class="st-btn" href="/diagnostico/">Quero o Diagnóstico MARES</a></nav><button class="st-hamb" onclick="document.getElementById('st-menu').classList.toggle('show')"><span></span><span></span><span></span></button></div></div>
 
 <style>
   :root {
