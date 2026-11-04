@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- Turma de Curitiba, 28 de novembro de 2026, na Uniopet Centro Cívico, Rua Nilo Peçanha, 1501. Remarcada em 30/10/2026.
-     Falta o link de checkout da Eduzz e o endereço do campus: enquanto isso, os botões de
-     compra levam para o WhatsApp com a mensagem pronta.
+     Checkout da Eduzz ligado em 04/11/2026: cada lote do MARES_LOTES tem o link do ingresso
+     individual e do duplo, e o botão final troca sozinho quando o lote vira.
      Para abrir a página aos buscadores: apagar a linha robots abaixo, incluir /mares-ia/
      no sitemap.xml e conferir que o robots.txt não bloqueia. -->
 
@@ -1811,9 +1811,9 @@ html{scroll-padding-top:80px}
    `fim` é o último instante em que o lote ainda vale.
    ===================================================================== */
 window.MARES_LOTES = [
-  { nome: "Lote 1", cond: "até 9 de novembro",        fim: new Date(2026, 10, 9, 23, 59),  individual: 997,  duplo: 1597 },
-  { nome: "Lote 2", cond: "de 10 a 20 de novembro",   fim: new Date(2026, 10, 20, 23, 59), individual: 1297, duplo: 1997 },
-  { nome: "Lote 3", cond: "de 21 a 25 de novembro",   fim: new Date(2026, 10, 25, 23, 59), individual: 1597, duplo: 2397 }
+  { nome: "Lote 1", cond: "até 9 de novembro",        fim: new Date(2026, 10, 9, 23, 59),  individual: 997,  duplo: 1597, checkout: { individual: "https://chk.eduzz.com/efmoox67", duplo: "https://chk.eduzz.com/gxxwn2iu" } },
+  { nome: "Lote 2", cond: "de 10 a 20 de novembro",   fim: new Date(2026, 10, 20, 23, 59), individual: 1297, duplo: 1997, checkout: { individual: "https://chk.eduzz.com/yjzjl2rh", duplo: "https://chk.eduzz.com/oo2cjqtm" } },
+  { nome: "Lote 3", cond: "de 21 a 25 de novembro",   fim: new Date(2026, 10, 25, 23, 59), individual: 1597, duplo: 2397, checkout: { individual: "https://chk.eduzz.com/sc7p7ein", duplo: "https://chk.eduzz.com/eiaiepcs" } }
 ];
 
 /* 997 vira "R$ 997" e 998.5 vira "R$ 998,50" */
@@ -2086,10 +2086,11 @@ window.maresLinhaLote = function () {
         <div class="ok-selo">✓</div>
         <h3 class="diag-titulo" style="text-align:center">Recebi as suas respostas.</h3>
         <p class="diag-texto" style="text-align:center;max-width:44ch;margin:0 auto 22px">
-          Agora é só fechar a sua vaga comigo pelo WhatsApp. Eu confirmo a disponibilidade da turma e te mando o link de pagamento na hora.
+          Agora é só garantir a sua vaga no pagamento seguro da Eduzz, à vista ou em até 12x no cartão.
         </p>
-        <a class="cta" id="btn-checkout" href="#" target="_blank" rel="noopener" style="width:100%;text-align:center">Fechar minha vaga no WhatsApp</a>
+        <a class="cta" id="btn-checkout" href="#" style="width:100%;text-align:center">Ir para o pagamento</a>
         <p class="form-nota" style="text-align:center" id="checkout-linha">&nbsp;</p>
+        <p class="form-nota" style="text-align:center">Prefere tirar uma dúvida antes? <a id="btn-whats-duvida" href="#" target="_blank" rel="noopener">Fale com a gente no WhatsApp</a></p>
       </div>
 
       <!-- NÃO É O MOMENTO -->
@@ -2570,7 +2571,17 @@ window.maresLinhaLote = function () {
     var texto = "Oi, Marcelis! Acabei de preencher a inscrição da Imersão Mares.IA, em Curitiba, no dia 28 de novembro."
               + " Quero o ingresso " + ing.curto + ", que está " + ing.valor + " no " + LOTE.nome.toLowerCase() + "."
               + " Meu nome é " + (respostas.nome || "") + ", da " + (respostas.empresa || "") + ".";
-    el("btn-checkout").href = "https://wa.me/5541992488092?text=" + encodeURIComponent(texto);
+    var tel = String(el("whats") ? el("whats").value : "").replace(/\D/g, "").replace(/^55(?=\d{10,11}$)/, "");
+    var base = (LOTE.checkout && LOTE.checkout[ing.curto]) || "";
+    if (base) {
+      el("btn-checkout").href = base + (base.indexOf("?") >= 0 ? "&" : "?")
+        + "nome=" + encodeURIComponent(respostas.nome || "")
+        + "&email=" + encodeURIComponent(respostas.email || "")
+        + "&tel=" + encodeURIComponent(tel);
+    } else {
+      el("btn-checkout").href = "https://wa.me/5541992488092?text=" + encodeURIComponent(texto);
+    }
+    el("btn-whats-duvida").href = "https://wa.me/5541992488092?text=" + encodeURIComponent(texto + " Antes de pagar, queria tirar uma dúvida.");
     el("checkout-linha").textContent = LOTE.nome + " · ingresso " + ing.curto + " · " + ing.valor + " ou em até 12x";
   }
 
