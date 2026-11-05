@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Turma de Curitiba, 28 de novembro de 2026, local ainda a definir (Uniopet não confirmou em 04/11/2026). Remarcada em 30/10/2026.
+<!-- Turma de Curitiba, 28 de novembro de 2026, local confirmado em 05/11/2026: Uniopet Rebouças, Av. Presidente Getúlio Vargas, 892, Rebouças. Remarcada em 30/10/2026.
      Checkout da Eduzz ligado em 04/11/2026: cada lote do MARES_LOTES tem o link do ingresso
      individual e do duplo, e o botão final troca sozinho quando o lote vira.
      Para abrir a página aos buscadores: apagar a linha robots abaixo, incluir /mares-ia/
@@ -64,8 +64,8 @@ fbq('init','673278761920486');fbq('track','PageView');
   "endDate": "2026-11-28T18:00:00-03:00",
   "location": {
     "@type": "Place",
-    "name": "Curitiba, local a definir",
-    "address": { "@type": "PostalAddress", "addressLocality": "Curitiba", "addressRegion": "PR", "addressCountry": "BR" }
+    "name": "Uniopet Rebouças",
+    "address": { "@type": "PostalAddress", "streetAddress": "Av. Presidente Getúlio Vargas, 892", "addressLocality": "Curitiba", "addressRegion": "PR", "addressCountry": "BR" }
   },
   "organizer": {
     "@type": "Organization",
@@ -1511,7 +1511,7 @@ html{scroll-padding-top:80px}
     <div class="hero-facts">
       <div><b>Data</b>28 de novembro, sábado</div>
       <div><b>Cidade</b>Curitiba</div>
-      <div><b>Local</b>A definir</div>
+      <div><b>Local</b>Uniopet Rebouças<br><span style="font-weight:400">Av. Presidente Getúlio Vargas, 892, Rebouças</span></div>
       <div><b>Formato</b>Presencial, dia inteiro</div>
     </div>
 
@@ -1630,7 +1630,7 @@ html{scroll-padding-top:80px}
 
     <div class="cta-meio">
       <a class="cta" href="#investimento">Quero passar esse dia na minha empresa</a>
-      <p class="cta-note" data-preco="linha">28 de novembro, sábado · Curitiba</p>
+      <p class="cta-note" data-preco="linha">28 de novembro, sábado · Uniopet Rebouças, Curitiba</p>
     </div>
   </div>
 </section>
@@ -1721,7 +1721,7 @@ html{scroll-padding-top:80px}
 
     <div class="cta-meio">
       <a class="cta" href="#investimento">É para mim, quero minha vaga</a>
-      <p class="cta-note" data-preco="linha">28 de novembro, sábado · Curitiba</p>
+      <p class="cta-note" data-preco="linha">28 de novembro, sábado · Uniopet Rebouças, Curitiba</p>
     </div>
   </div>
 </section>
@@ -1757,7 +1757,7 @@ html{scroll-padding-top:80px}
 
     <div class="cta-meio">
       <a class="cta" href="#investimento">Quero garantir minha vaga</a>
-      <p class="cta-note" data-preco="linha">28 de novembro, sábado · Curitiba</p>
+      <p class="cta-note" data-preco="linha">28 de novembro, sábado · Uniopet Rebouças, Curitiba</p>
     </div>
   </div>
 </section>
@@ -1833,8 +1833,8 @@ window.maresLoteAberto = function () {
 /* a linha que aparece embaixo de cada botão ao longo da página */
 window.maresLinhaLote = function () {
   var l = window.maresLoteAberto();
-  if (!l) { return "28 de novembro, sábado · Curitiba · inscrições encerradas"; }
-  return "28 de novembro, sábado · Curitiba · " + l.nome.toLowerCase() + " a partir de " + window.maresPreco(l.individual);
+  if (!l) { return "28 de novembro, sábado · Uniopet Rebouças, Curitiba · inscrições encerradas"; }
+  return "28 de novembro, sábado · Uniopet Rebouças, Curitiba · " + l.nome.toLowerCase() + " a partir de " + window.maresPreco(l.individual);
 };
 </script>
 
@@ -2174,7 +2174,7 @@ window.maresLinhaLote = function () {
 
     { id: "data", tipo: "escolha",
       t: "A imersão é presencial em Curitiba, no sábado 28 de novembro. Você consegue estar lá?",
-      ajuda: "O endereço exato é divulgado em breve, com antecedência.",
+      ajuda: "Local: Uniopet Rebouças, Av. Presidente Getúlio Vargas, 892, Rebouças, Curitiba.",
       o: ["Sim, moro na região",
           "Sim, viajo para participar",
           "Preciso ajustar a agenda, mas dá",
@@ -2569,7 +2569,7 @@ window.maresLinhaLote = function () {
      Quando os dois links existirem, é só trocar este trecho pelos endereços. */
   function montarCheckout() {
     var ing = INGRESSOS[respostas.ingresso] || INGRESSOS["Individual, vou sozinho"];
-    var texto = "Oi, Marcelis! Acabei de preencher a inscrição da Imersão Mares.IA, em Curitiba, no dia 28 de novembro."
+    var texto = "Oi, Marcelis! Acabei de preencher a inscrição da Imersão Mares.IA, em Curitiba, no dia 28 de novembro, na Uniopet Rebouças."
               + " Quero o ingresso " + ing.curto + ", que está " + ing.valor + " no " + LOTE.nome.toLowerCase() + "."
               + " Meu nome é " + (respostas.nome || "") + ", da " + (respostas.empresa || "") + ".";
     var tel = String(el("whats") ? el("whats").value : "").replace(/\D/g, "").replace(/^55(?=\d{10,11}$)/, "");
@@ -2723,7 +2723,7 @@ window.maresLinhaLote = function () {
 
     <div class="cta-meio">
       <a class="cta" href="#investimento">Respondeu minha dúvida, quero me inscrever</a>
-      <p class="cta-note" data-preco="linha">28 de novembro, sábado · Curitiba</p>
+      <p class="cta-note" data-preco="linha">28 de novembro, sábado · Uniopet Rebouças, Curitiba</p>
     </div>
   </div>
 </section>
@@ -2734,7 +2734,7 @@ window.maresLinhaLote = function () {
     <h2>A IA já está no ambiente.<br>A pergunta é se a sua empresa está <em>preparada para operar nele</em>.</h2>
     <p>Enquanto uns discutem qual ferramenta usar, outros já estão reduzindo custo, ganhando velocidade e crescendo sem inchar a estrutura.</p>
     <a class="cta" href="#investimento">Quero garantir minha vaga</a>
-    <p class="cta-note" style="margin-top:16px">28 de novembro de 2026, sábado · Curitiba · local a definir</p>
+    <p class="cta-note" style="margin-top:16px">28 de novembro de 2026, sábado · Uniopet Rebouças, Curitiba</p>
   </div>
 </section>
 
