@@ -124,7 +124,7 @@ const P = [
  {id:"k2", bloco:"Pergunta 2", t:"O que fez você decidir blindar o seu aparelho?"},
  {id:"k3", bloco:"Pergunta 3", t:"Antes de fazer, qual era a sua maior dúvida ou receio?"},
  {id:"k4", bloco:"Pergunta 4", t:"Em uma palavra, como você descreveria a InQuebra?", tipoC:"curto", ph:"Uma palavra"},
- {id:"nps", bloco:"Pergunta 5", t:"De 0 a 10, o quanto você recomendaria a blindagem da InQuebra para um amigo ou familiar?", tipoC:"nps", extra:"O que mais pesou na sua nota? (opcional)"},
+ {id:"nps", bloco:"Pergunta 5", t:"De 0 a 10, o quanto você recomendaria a blindagem da InQuebra para um amigo ou familiar?", tipoC:"nps"},
  {id:"ident", bloco:"Para fechar", t:"Como podemos te chamar?", tipoC:"ident"},
  {tipo:"fim"}
 ];
@@ -148,7 +148,8 @@ function respondida(p){
   if(p.opcional) return true;
   if(p.tipoC==="ident") return v && (v.nome||"").trim().length>1;
   if(p.tipoC==="escalas") return v && p.esc.every((_,j)=>v[j]);
-  if(p.tipoC==="escolha"||p.tipoC==="cores"||p.tipoC==="nps") return v && v.op!==undefined && v.op!=="";
+  if(p.tipoC==="nps") return v && v.op!==undefined && v.op!=="" && !!v.mot && (v.mot!=="Outro" || (v.txt||"").trim().length>1);
+  if(p.tipoC==="escolha"||p.tipoC==="cores") return v && v.op!==undefined && v.op!=="";
   return v && String(v).trim().length>0;
 }
 function progresso(){
@@ -188,7 +189,7 @@ function render(){
     const v = R[p.id]||{};
     corpo = `<div class="nps">${[0,1,2,3,4,5,6,7,8,9,10].map(n=>`<button class="op nb ${String(v.op)===String(n)?"sel":""}" data-o="${n}">${n}</button>`).join("")}</div>
       <div class="rot nrot"><span>Nada provável</span><span>Muito provável</span></div>
-      <p class="dica" style="margin-top:16px">${esc(p.extra)}</p><textarea id="extra" style="min-height:90px">${esc(v.txt||"")}</textarea>`;
+      <div id="motivos"></div>`;
   } else if(p.tipoC==="escalas"){
     const v = R[p.id]||{};
     corpo = p.esc.map((e,j)=>`<div class="escala"><div class="rot"><span>${e[0]}</span><span>${e[1]}</span></div>
@@ -202,7 +203,22 @@ function render(){
   const atual = ()=>{ seg.disabled = !respondida(p); };
   const campo = document.getElementById("campo");
   if(campo){ campo.oninput = ()=>{ R[p.id]=campo.value; salvar(); atual(); }; setTimeout(()=>campo.focus(),50); }
-  tela.querySelectorAll(".op,.cor").forEach(b=>b.onclick=()=>{ R[p.id]=Object.assign({},R[p.id],{op:b.dataset.o}); tela.querySelectorAll(".op,.cor").forEach(x=>x.classList.toggle("sel",x===b)); salvar(); atual(); });
+  tela.querySelectorAll(".opcoes > .op:not(.mot),.cor").forEach(b=>b.onclick=()=>{ R[p.id]=Object.assign({},R[p.id],{op:b.dataset.o}); tela.querySelectorAll(".op,.cor").forEach(x=>x.classList.toggle("sel",x===b)); salvar(); atual(); });
+  if(p.tipoC==="nps"){
+    const box=document.getElementById("motivos");
+    const desenha=()=>{
+      const v=R[p.id]||{}; if(v.op===undefined||v.op===""){ box.innerHTML=""; return; }
+      const n=+v.op, g=MOTIVOS[n>=9?"pro":(n>=7?"neu":"det")];
+      box.innerHTML=`<p class="dica" style="margin:20px 0 10px;font-weight:600;color:#fff">${g.t}</p>
+        <div class="opcoes">${g.ops.map(o=>`<button class="op mot ${v.mot===o?"sel":""}" data-m="${esc(o)}"><span class="bola"></span>${esc(o)}</button>`).join("")}</div>
+        <textarea id="outro" placeholder="Conta pra gente o que foi" style="min-height:80px;margin-top:10px;${v.mot==="Outro"?"":"display:none"}">${esc(v.txt||"")}</textarea>`;
+      box.querySelectorAll(".mot").forEach(b=>b.onclick=(e)=>{ e.stopPropagation(); R[p.id]=Object.assign({},R[p.id],{mot:b.dataset.m}); salvar(); desenha(); atual(); });
+      const ot=document.getElementById("outro"); ot.oninput=()=>{ R[p.id]=Object.assign({},R[p.id],{txt:ot.value}); salvar(); atual(); };
+      if(v.mot==="Outro") setTimeout(()=>ot.focus(),30);
+    };
+    tela.querySelectorAll(".nps .op").forEach(b=>b.onclick=()=>{ const ant=R[p.id]||{}; const mudouGrupo=ant.op===undefined||grupo(+ant.op)!==grupo(+b.dataset.o); R[p.id]=Object.assign({},ant,{op:b.dataset.o},mudouGrupo?{mot:"",txt:""}:{}); tela.querySelectorAll(".nps .op").forEach(x=>x.classList.toggle("sel",x===b)); salvar(); desenha(); atual(); });
+    desenha();
+  }
   const inome=document.getElementById("inome"), iwh=document.getElementById("iwhats");
   if(inome){ const up=()=>{ R[p.id]={nome:inome.value,whats:iwh.value}; salvar(); atual(); }; inome.oninput=up; iwh.oninput=up; }
   const ex = document.getElementById("extra");
@@ -212,13 +228,19 @@ function render(){
   seg.onclick = ()=>{ if(!respondida(p)) return; ev("inquebra_cliente_pergunta",{numero:i,campo:p.id}); dir=1; i++; render(); window.scrollTo(0,0); };
   atual();
 }
+const MOTIVOS = {
+ pro:{t:"O que mais fez você dar essa nota?", ops:["Atendimento da equipe","Inovação do produto: sem película e sem capinha","O aparelho ficou protegido de verdade","Aplicação rápida, feita na hora","Localização no ParkShopping Barigüi","Preço justo pelo que entrega","Outro"]},
+ neu:{t:"O que faltou para ser 10?", ops:["Preço","Tempo de espera ou de aplicação","Atendimento da equipe","Ainda não tive como testar a proteção","Faltou explicar garantia e durabilidade","Localização ou dificuldade de chegar","Outro"]},
+ det:{t:"O que mais pesou na sua nota?", ops:["Preço alto","Demora no atendimento ou na aplicação","Atendimento da equipe","Resultado abaixo do esperado","Faltou clareza sobre garantia e durabilidade","Localização ou dificuldade de chegar","Outro"]}
+};
+const grupo = n => n>=9?"pro":(n>=7?"neu":"det");
 function codigo(){
   const n=((R.ident||{}).nome||"cliente").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z]/g,"").slice(0,10)||"cliente";
   return n+"-"+SESSAO.slice(-4);
 }
 function linha(cod){
   const o=k=>(R[k]||{}).op??""; const g=k=>R[k]||"";
-  return [(R.ident||{}).nome||"",(R.ident||{}).whats||"",o("k1"),g("k2"),g("k3"),g("k4"),o("nps"),(R.nps||{}).txt||"",cod];
+  return [(R.ident||{}).nome||"",(R.ident||{}).whats||"",o("k1"),g("k2"),g("k3"),g("k4"),o("nps"),(()=>{const v=R.nps||{}; return (v.mot||"")+(v.mot==="Outro"&&v.txt?": "+v.txt:"");})(),cod];
 }
 function fim(){
   const cod = codigo();
