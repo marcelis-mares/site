@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<link rel="canonical" href="https://www.maresconsultoria.com.br/inquebra/marca/">
+<title>Construção da Marca InQuebra · MARES</title>
+<style>
+@font-face{font-family:'Bricolage Grotesque';src:url('/fonts/Bricolage-Medium.woff2') format('woff2');font-weight:500;font-display:swap}
+@font-face{font-family:'Bricolage Grotesque';src:url('/fonts/Bricolage-Bold.woff2') format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'Bricolage Grotesque';src:url('/fonts/Bricolage-ExtraBold.woff2') format('woff2');font-weight:800;font-display:swap}
+@font-face{font-family:'Aileron';src:url('/fonts/Aileron-Regular.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Aileron';src:url('/fonts/Aileron-SemiBold.woff2') format('woff2');font-weight:600;font-display:swap}
+@font-face{font-family:'Aileron';src:url('/fonts/Aileron-Bold.woff2') format('woff2');font-weight:700;font-display:swap}
+:root{--navy:#06182a;--azul:#1C6795;--turq:#15A5A8;--laranja:#E26220;--lclaro:#f0a04a;--areia:#FEEAD4;--ink:#06182a;--muted:rgba(6,24,42,.68)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{font-family:Aileron,system-ui,sans-serif;color:var(--ink);background:radial-gradient(120% 90% at 0% 0%,#0d3a5c 0%,var(--navy) 55%) fixed;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 16px 40px}
+.faixa{position:fixed;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--turq),var(--azul),var(--laranja));z-index:5}
+.topo{width:100%;max-width:640px;display:flex;justify-content:space-between;align-items:center;color:#fff;margin:8px 0 16px}
+.marca{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;letter-spacing:.06em;font-size:15px}
+.marca span{color:var(--lclaro)}
+.contador{font-size:13px;opacity:.75}
+.barra{width:100%;max-width:640px;height:6px;background:rgba(255,255,255,.12);border-radius:99px;overflow:hidden;margin-bottom:18px}
+.barra i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--turq),var(--laranja));transition:width .35s}
+.card{width:100%;max-width:640px;background:#fff;border-radius:20px;padding:32px 28px;box-shadow:0 20px 60px rgba(0,0,0,.35);animation:entra .3s ease}
+@keyframes entra{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.bloco{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--azul);background:rgba(28,103,149,.09);padding:6px 12px;border-radius:99px;margin-bottom:16px}
+h1{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:30px;line-height:1.12;margin-bottom:14px}
+h1 em{font-style:normal;color:var(--laranja)}
+h2{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:23px;line-height:1.25;margin-bottom:10px}
+p{font-size:16px;line-height:1.6;color:var(--muted);margin-bottom:12px}
+.dica{font-size:14px;color:var(--muted);margin-bottom:16px}
+textarea,input[type=text]{width:100%;font:inherit;font-size:16px;color:var(--ink);border:1.5px solid rgba(6,24,42,.18);border-radius:12px;padding:14px;outline:none;transition:border .2s;background:#fff}
+textarea{min-height:150px;resize:vertical;line-height:1.5}
+textarea:focus,input[type=text]:focus{border-color:var(--turq)}
+.opcoes{display:grid;gap:10px}
+.op{display:flex;align-items:center;gap:12px;border:1.5px solid rgba(6,24,42,.16);border-radius:12px;padding:14px 16px;cursor:pointer;font-size:16px;transition:all .15s;background:#fff;text-align:left;font-family:inherit;color:var(--ink)}
+.op:hover{border-color:var(--turq)}
+.op.sel{border-color:var(--laranja);background:rgba(226,98,32,.07)}
+.op .bola{width:20px;height:20px;border-radius:50%;border:2px solid rgba(6,24,42,.3);flex:none}
+.op.sel .bola{border-color:var(--laranja);background:radial-gradient(var(--laranja) 45%,transparent 50%)}
+.cores{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.cor{border:2px solid rgba(6,24,42,.14);border-radius:14px;padding:10px;cursor:pointer;background:#fff;font-family:inherit;color:var(--ink);text-align:center;font-size:14px;font-weight:600}
+.cor.sel{border-color:var(--laranja);box-shadow:0 0 0 3px rgba(226,98,32,.18)}
+.amostra{height:70px;border-radius:10px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;letter-spacing:.04em;font-size:15px}
+.nps{display:grid;grid-template-columns:repeat(11,1fr);gap:6px}.nps .nb{justify-content:center;padding:12px 0;font-weight:600}.nrot{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-top:8px}
+@media(max-width:480px){.nps{grid-template-columns:repeat(6,1fr)}}
+.escala{margin:18px 0 6px}
+.escala .rot{display:flex;justify-content:space-between;font-size:14px;font-weight:600;margin-bottom:8px}
+.pontos{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.pontos button{height:44px;border-radius:10px;border:1.5px solid rgba(6,24,42,.16);background:#fff;font:600 15px Aileron,sans-serif;color:var(--ink);cursor:pointer}
+.pontos button.sel{background:var(--laranja);border-color:var(--laranja);color:#fff}
+.acoes{display:flex;justify-content:space-between;align-items:center;margin-top:24px;gap:12px}
+.btn{font-family:Aileron,sans-serif;font-weight:600;font-size:16px;border:none;border-radius:12px;padding:14px 22px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn-l{background:var(--laranja);color:#fff}
+.btn-l:hover{filter:brightness(1.06)}
+.btn-l[disabled]{opacity:.45;cursor:not-allowed}
+.btn-v{background:transparent;color:var(--muted);padding:14px 6px}
+.btn-z{background:#25D366;color:#063;font-weight:700;color:#04381c;width:100%}
+.btn-c{background:var(--navy);color:#fff;width:100%}
+.final{display:grid;gap:12px;margin-top:20px}
+.aviso{font-size:13px;color:var(--muted);margin-top:10px}
+.ok{color:#0b7a4b;font-weight:600;font-size:14px;margin-top:8px;min-height:20px}
+.rodape{color:rgba(255,255,255,.55);font-size:12px;margin-top:22px;text-align:center}
+.resumo{max-height:260px;overflow:auto;background:#f6f8fa;border-radius:12px;padding:14px;font-size:13px;line-height:1.5;white-space:pre-wrap;color:var(--ink);margin-top:14px}
+@media(max-width:480px){.card{padding:26px 20px}h1{font-size:26px}h2{font-size:20px}.cores{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="faixa"></div>
+<div class="topo"><div class="marca">MARES <span>·</span> InQuebra</div><div class="contador" id="contador"></div></div>
+<div class="barra"><i id="progresso"></i></div>
+<main class="card" id="tela"></main>
+<div class="rodape">MARES Consultoria · Pessoas, Dados e Gestão</div>
+
+<script>
+const CHAVE = "inquebra_marca_v3"; const TIPO = "marca";
+const WEBHOOK = "https://script.google.com/macros/s/AKfycbz6DsPT2jpw7i-FM2-YIVgfX9G1hD-i2zUzHv2FW6MkbtU-rIgTj1FsxEnfPS84L-24/exec";
+const SESSAO = (()=>{ try{ let s=localStorage.getItem(CHAVE+"_sessao"); if(!s){ s=Date.now().toString(36)+Math.random().toString(36).slice(2,7); localStorage.setItem(CHAVE+"_sessao",s);} return s; }catch(e){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); } })();
+function ev(nome, extra){ try { if (window.maresEvento) window.maresEvento(nome, extra || {}); } catch(e) {} }
+function enviar(linha){
+  return fetch(WEBHOOK,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({tipo:TIPO,sessao:SESSAO,linha})});
+}
+
+const P = [
+ {tipo:"intro"},
+ {id:"nome", bloco:"Antes de começar", t:"Qual é o seu nome?", tipoC:"curto", ph:"Seu nome e sobrenome"},
+ {id:"papel", bloco:"Antes de começar", t:"Qual é o seu papel na InQuebra?", tipoC:"escolha", ops:["Sócio(a) ou fundador(a)","Gerente","Equipe de vendas","Outro"]},
+
+ {id:"h1", so:1, bloco:"1 · A história", t:"Como a InQuebra nasceu? Conta do começo, do jeito que você contaria para um amigo.", d:"Quem estava junto, o que aconteceu, onde vocês estavam. Quanto mais detalhe, melhor."},
+ {id:"h2", so:1, bloco:"1 · A história", t:"Qual foi o momento em que você pensou: isso aqui é um negócio?"},
+ {id:"h3", so:1, bloco:"1 · A história", t:"Por que vocês decidiram desenvolver a própria fórmula, em vez de revender um produto pronto?", d:"O que a blindagem de vocês tem de diferente das outras que existem por aí?"},
+ {id:"h4", so:1, bloco:"1 · A história", t:"O que vocês já registraram ou protegeram (patente, marca, fórmula) e o que disso pode ser contado ao público?"},
+ {id:"h5", so:1, bloco:"1 · A história", t:"Do que você mais se orgulha até aqui, desde a primeira aplicação?"},
+
+ {id:"p1", bloco:"2 · Propósito e promessa", t:"O que o cliente leva da InQuebra que ele não encontra em nenhum outro lugar?"},
+ {id:"p2", bloco:"2 · Propósito e promessa", t:"Qual é a promessa que a InQuebra faz e que nenhum concorrente faz?"},
+ {id:"p3", bloco:"2 · Propósito e promessa", t:"Como funciona a garantia hoje?", d:"Prazo, o que cobre, e o que acontece se a tela quebrar mesmo com a blindagem."},
+ {id:"p4", bloco:"2 · Propósito e promessa", t:"Quanto tempo a blindagem dura? Em algum momento precisa reaplicar?"},
+
+ {id:"c1", bloco:"3 · O cliente", t:"Quem compra mais de vocês hoje?", d:"Homem ou mulher, idade, profissão, aparelho, de onde vem. Pode ser a sua percepção do balcão."},
+ {id:"c2", bloco:"3 · O cliente", t:"Qual é a frase que vocês mais ouvem logo antes de o cliente dizer: vou fazer?"},
+ {id:"c3", bloco:"3 · O cliente", t:"E quem vai embora sem comprar, o que costuma dizer?", d:"Dúvidas, medos, objeções de preço."},
+ {id:"c4", bloco:"3 · O cliente", t:"Para quem a InQuebra NÃO quer vender? Por quê?"},
+
+ {id:"v1", bloco:"4 · Personalidade e voz", t:"Se a InQuebra fosse uma pessoa, como ela seria?", d:"Idade, jeito de vestir, como fala, onde gosta de estar."},
+ {id:"escalas", bloco:"4 · Personalidade e voz", t:"Marque onde a InQuebra deve ficar em cada linha.", tipoC:"escalas", esc:[["Séria","Descontraída"],["Técnica","Simples de entender"],["Acessível","Premium"],["Discreta","Ousada"]]},
+ {id:"v2", bloco:"4 · Personalidade e voz", t:"Quais palavras a InQuebra NUNCA pode usar ou prometer?", d:"Exemplos para pensar: película, inquebrável, indestrutível, barato."},
+ {id:"v3", bloco:"4 · Personalidade e voz", t:"A assinatura hoje é: InQuebra. Tecnologia que protege. O que você acha dela?", tipoC:"escolha", ops:["Gosto, é para continuar","Gosto, mas quero melhorar","Quero trocar por outra"], extra:"Se quiser, escreva o porquê ou uma ideia nova"},
+
+ {id:"i1", bloco:"5 · Visual", t:"O que você gosta e o que não gosta no stand de hoje?"},
+ {id:"i2", bloco:"5 · Visual", t:"Olhando só para as cores, qual combinação passa mais segurança e confiança para você?", tipoC:"cores"},
+ {id:"i3", bloco:"5 · Visual", t:"Existe alguma marca, de qualquer ramo, que você admira pelo visual ou pelo jeito de falar? Qual e por quê?"},
+
+ {id:"f1", bloco:"6 · Futuro", t:"Qual é o preço da blindagem hoje? Tem valores diferentes por aparelho?"},
+ {id:"f2", so:1, bloco:"6 · Futuro", t:"Até onde vocês querem levar a marca nos próximos anos?", tipoC:"escolha", ops:["Um quiosque muito bem resolvido","Algumas lojas próprias em Curitiba","Rede própria em várias cidades","Franquia nacional"], extra:"Quer explicar melhor?"},
+ {id:"f3", bloco:"6 · Futuro", t:"Você topa aparecer como um dos rostos da marca, contando a história em vídeo?", tipoC:"escolha", ops:["Sim, topo","Topo, mas com pouca exposição","Prefiro não aparecer"]},
+ {id:"f4", bloco:"6 · Futuro", t:"Tem mais alguma coisa sobre a InQuebra que você acha importante a gente saber?", opcional:true},
+ {id:"nps", bloco:"Para fechar", t:"De 0 a 10, o quanto você recomendaria a blindagem da InQuebra para um amigo ou familiar?", tipoC:"nps", extra:"O que mais pesou na sua nota?"},
+ {tipo:"fim"}
+];
+const CORES = [
+ {k:"Verde e preto (verde elétrico)", bg:"#0b1a14", fg:"#2EE59D"},
+ {k:"Azul e branco", bg:"#0d3b66", fg:"#ffffff"},
+ {k:"Marrom e dourado (o stand de hoje)", bg:"#4a2f1d", fg:"#e6b85c"},
+ {k:"Preto e prata", bg:"#111214", fg:"#c9ccd1"}
+];
+let R = {}; let i = 0; let dir = 1;
+const socio = ()=> (R.papel||{}).op==="Sócio(a) ou fundador(a)";
+const vis = p => !p.so || socio();
+try{ const s = localStorage.getItem(CHAVE); if(s){ const o=JSON.parse(s); R=o.R||{}; i=o.i||0; } }catch(e){}
+const salvar = ()=>{ try{ localStorage.setItem(CHAVE, JSON.stringify({R,i})); }catch(e){} };
+const tela = document.getElementById("tela");
+const tot = ()=> P.filter(p=>p.id&&vis(p)).length;
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function respondida(p){
+  const v = R[p.id];
+  if(p.opcional) return true;
+  if(p.tipoC==="escalas") return v && p.esc.every((_,j)=>v[j]);
+  if(p.tipoC==="escolha"||p.tipoC==="cores"||p.tipoC==="nps") return v && v.op!==undefined && v.op!=="";
+  return v && String(v).trim().length>0;
+}
+function progresso(){
+  const n = P.slice(0,i).filter(p=>p.id&&vis(p)).length; const total=tot();
+  document.getElementById("progresso").style.width = (P[i].tipo==="fim"?100:Math.round(n/total*100))+"%";
+  document.getElementById("contador").textContent = P[i].id ? ("Pergunta "+(n+1)+" de "+total) : "";
+}
+function render(){
+  while(P[i] && P[i].id && !vis(P[i])) i += dir;
+  const p = P[i]; progresso(); salvar();
+  if(p.tipo==="intro"){
+    tela.innerHTML = `<div class="bloco">Construção da marca</div>
+    <h1>Vamos construir a marca <em>InQuebra</em> juntos.</h1>
+    <p>Este questionário é a base do manual de marca: história, propósito, jeito de falar e visual.</p>
+    <p>Não existe resposta certa. Escreva como se estivesse contando para alguém, sem se preocupar com texto bonito. Se sair no meio, suas respostas ficam guardadas neste aparelho.</p>
+    <p class="dica">Leva cerca de 15 a 20 minutos. Sócios respondem também o bloco da história da marca.</p>
+    <div class="acoes"><span></span><button class="btn btn-l" id="ir">Começar</button></div>`;
+    document.getElementById("ir").onclick = ()=>{ ev("inquebra_marca_inicio"); dir=1; i++; render(); };
+    return;
+  }
+  if(p.tipo==="fim"){ fim(); return; }
+  let corpo = "";
+  if(p.tipoC==="curto"){
+    corpo = `<input type="text" id="campo" placeholder="${esc(p.ph||"")}" value="${esc(R[p.id]||"")}">`;
+  } else if(p.tipoC==="escolha"){
+    const v = R[p.id]||{};
+    corpo = `<div class="opcoes">${p.ops.map(o=>`<button class="op ${v.op===o?"sel":""}" data-o="${esc(o)}"><span class="bola"></span>${esc(o)}</button>`).join("")}</div>`
+      + (p.extra?`<p class="dica" style="margin-top:16px">${esc(p.extra)}</p><textarea id="extra" style="min-height:90px">${esc(v.txt||"")}</textarea>`:"");
+  } else if(p.tipoC==="cores"){
+    const v = R[p.id]||{};
+    corpo = `<div class="cores">${CORES.map(c=>`<button class="cor ${v.op===c.k?"sel":""}" data-o="${esc(c.k)}"><div class="amostra" style="background:${c.bg};color:${c.fg}">INQUEBRA</div>${esc(c.k)}</button>`).join("")}</div>
+      <p class="dica" style="margin-top:16px">Por que essa? Se pensou em outra cor, escreva aqui.</p><textarea id="extra" style="min-height:90px">${esc(v.txt||"")}</textarea>`;
+  } else if(p.tipoC==="nps"){
+    const v = R[p.id]||{};
+    corpo = `<div class="nps">${[0,1,2,3,4,5,6,7,8,9,10].map(n=>`<button class="op nb ${String(v.op)===String(n)?"sel":""}" data-o="${n}">${n}</button>`).join("")}</div>
+      <div class="rot nrot"><span>Nada provável</span><span>Muito provável</span></div>
+      <p class="dica" style="margin-top:16px">${esc(p.extra)}</p><textarea id="extra" style="min-height:90px">${esc(v.txt||"")}</textarea>`;
+  } else if(p.tipoC==="escalas"){
+    const v = R[p.id]||{};
+    corpo = p.esc.map((e,j)=>`<div class="escala"><div class="rot"><span>${e[0]}</span><span>${e[1]}</span></div>
+      <div class="pontos">${[1,2,3,4,5].map(n=>`<button data-j="${j}" data-n="${n}" class="${v[j]===n?"sel":""}">${n}</button>`).join("")}</div></div>`).join("");
+  } else {
+    corpo = `<textarea id="campo" placeholder="Escreva aqui...">${esc(R[p.id]||"")}</textarea>`;
+  }
+  tela.innerHTML = `<div class="bloco">${esc(p.bloco)}</div><h2>${esc(p.t)}</h2>${p.d?`<p class="dica">${esc(p.d)}</p>`:""}${corpo}
+   <div class="acoes"><button class="btn btn-v" id="volta">Voltar</button><button class="btn btn-l" id="seg">${(P.slice(i+1).find(q=>!q.id||vis(q))||{}).tipo==="fim"?"Concluir":"Continuar"}</button></div>`;
+  const seg = document.getElementById("seg");
+  const atual = ()=>{ seg.disabled = !respondida(p); };
+  const campo = document.getElementById("campo");
+  if(campo){ campo.oninput = ()=>{ R[p.id]=campo.value; salvar(); atual(); }; setTimeout(()=>campo.focus(),50); }
+  tela.querySelectorAll(".op,.cor").forEach(b=>b.onclick=()=>{ R[p.id]=Object.assign({},R[p.id],{op:b.dataset.o}); tela.querySelectorAll(".op,.cor").forEach(x=>x.classList.toggle("sel",x===b)); salvar(); atual(); });
+  const ex = document.getElementById("extra");
+  if(ex) ex.oninput = ()=>{ R[p.id]=Object.assign({},R[p.id],{txt:ex.value}); salvar(); };
+  tela.querySelectorAll(".pontos button").forEach(b=>b.onclick=()=>{ const v=Object.assign({},R[p.id]); v[b.dataset.j]=+b.dataset.n; R[p.id]=v; b.parentNode.querySelectorAll("button").forEach(x=>x.classList.toggle("sel",x===b)); salvar(); atual(); });
+  document.getElementById("volta").onclick = ()=>{ dir=-1; i--; render(); };
+  seg.onclick = ()=>{ if(!respondida(p)) return; ev("inquebra_marca_pergunta",{numero:i,campo:p.id}); dir=1; i++; render(); window.scrollTo(0,0); };
+  atual();
+}
+function linha(){
+  const g=k=>R[k]||""; const o=k=>(R[k]||{}).op??""; const t=k=>(R[k]||{}).txt||""; const e=j=>(R.escalas||{})[j]||"";
+  return [g("nome"),o("papel"),g("h1"),g("h2"),g("h3"),g("h4"),g("h5"),g("p1"),g("p2"),g("p3"),g("p4"),g("c1"),g("c2"),g("c3"),g("c4"),g("v1"),e(0),e(1),e(2),e(3),g("v2"),o("v3"),t("v3"),g("i1"),o("i2"),t("i2"),g("i3"),g("f1"),o("f2"),t("f2"),o("f3"),g("f4"),o("nps"),t("nps")];
+}
+function fim(){
+  const nome = (R.nome||"").split(" ")[0];
+  tela.innerHTML = `<div class="bloco">Enviando</div><h1>Só um instante...</h1><p>Estamos guardando as suas respostas.</p>`;
+  enviar(linha()).catch(()=>{}).finally(()=>{
+    ev("inquebra_marca_concluido",{papel:(R.papel||{}).op||"",nps:(R.nps||{}).op??""});
+    try{ localStorage.removeItem(CHAVE); }catch(e){}
+    tela.innerHTML = `<div class="bloco">Pronto</div>
+     <h1>Obrigada${nome?", "+esc(nome):""}! Suas respostas <em>chegaram</em>.</h1>
+     <p>Elas vão direto para a equipe da MARES e viram a base do manual de marca da InQuebra.</p>
+     <p class="dica">Pode fechar esta página.</p>`;
+  });
+}
+render();
+</script>
+<script src="/cookies.js" defer></script>
+</body>
+</html>

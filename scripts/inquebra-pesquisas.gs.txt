@@ -1,0 +1,38 @@
+// InQuebra · Pesquisas (questionário de marca e pesquisa de cliente)
+// Grava no Google Sheets as respostas enviadas pelas páginas
+// maresconsultoria.com.br/inquebra/marca/ e /inquebra/pesquisa/
+const PLANILHA_ID = '1EuA0-7vClH99vNTN4h7KMULpaPd1LfZ8DXkEmi5PBqA';
+const ABAS = { marca: 'Time e sócios', cliente: 'Clientes' };
+
+function doPost(e) {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    const d = JSON.parse(e.postData.contents);
+    const nomeAba = ABAS[d.tipo];
+    if (!nomeAba || !Array.isArray(d.linha)) return saida({ ok: false, erro: 'tipo' });
+    const sh = SpreadsheetApp.openById(PLANILHA_ID).getSheetByName(nomeAba);
+    const linha = [new Date()].concat(d.linha.map(v => (v === null || v === undefined) ? '' : String(v)));
+    linha.push(d.sessao || '');
+    // não duplica a mesma sessão
+    const ultima = sh.getLastRow();
+    if (ultima > 1 && d.sessao) {
+      const col = linha.length;
+      const sess = sh.getRange(2, col, ultima - 1, 1).getValues().map(r => String(r[0]));
+      const idx = sess.indexOf(String(d.sessao));
+      if (idx >= 0) { sh.getRange(idx + 2, 1, 1, linha.length).setValues([linha]); return saida({ ok: true, atualizado: true }); }
+    }
+    sh.appendRow(linha);
+    return saida({ ok: true });
+  } catch (err) {
+    return saida({ ok: false, erro: String(err) });
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function doGet() { return saida({ ok: true, servico: 'inquebra-pesquisas' }); }
+
+function saida(o) {
+  return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);
+}
