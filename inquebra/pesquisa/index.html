@@ -67,24 +67,43 @@ textarea:focus,input[type=text]:focus{border-color:var(--turq)}
 .resumo{overflow-wrap:anywhere;max-height:260px;overflow:auto;background:#f6f8fa;border-radius:12px;padding:14px;font-size:13px;line-height:1.5;white-space:pre-wrap;color:var(--ink);margin-top:14px}
 @media(max-width:480px){.card{padding:26px 20px}h1{font-size:26px}h2{font-size:20px}.cores{grid-template-columns:1fr 1fr}}
 
-/* identidade InQuebra: preto, branco e prata do logo */
-body{background:radial-gradient(110% 80% at 80% 0%,#2a2e33 0%,#111316 55%,#08090a 100%) fixed}
-.faixa{background:linear-gradient(90deg,#6b7178,#e6e9ec,#6b7178)}
+/* identidade InQuebra: grafite + verde do halo de proteção (aprovado em 16/11/2026) */
+:root{--verde:#2EE59D;--grafite:#0a0d10;--carvao:#12171b;--linha:rgba(255,255,255,.12)}
+body{background:radial-gradient(70% 45% at 85% 8%,rgba(46,229,157,.16) 0%,transparent 60%),radial-gradient(90% 70% at 10% 100%,#0f2a20 0%,transparent 55%),var(--grafite) fixed;color:#fff}
+.halo{position:fixed;width:620px;height:220px;right:-220px;top:40px;border-radius:50%;border:2px solid rgba(46,229,157,.55);box-shadow:0 0 28px rgba(46,229,157,.45),inset 0 0 22px rgba(46,229,157,.25);transform:rotate(-18deg);pointer-events:none;z-index:0}
+.halo:after{content:"";position:absolute;inset:18px -30px;border-radius:50%;border:1px solid rgba(46,229,157,.25)}
+.faixa{background:linear-gradient(90deg,transparent,var(--verde),transparent);height:3px}
+.topo,.barra,.card,.rodape{position:relative;z-index:1}
 .topo .logo{height:44px}
-.bloco{color:#111316;background:#eceef0}
-h1 em{color:#111316;background:linear-gradient(transparent 62%,#d9dde2 62%)}
-.btn-l{background:#111316;color:#fff}
-.op.sel,.cor.sel{border-color:#111316;background:#f2f3f5;box-shadow:none}
-.op.sel .bola{border-color:#111316;background:radial-gradient(#111316 45%,transparent 50%)}
-.pontos button.sel{background:#111316;border-color:#111316}
-textarea:focus,input[type=text]:focus{border-color:#8b9198}
-.barra i{background:linear-gradient(90deg,#8b9198,#ffffff)}
-.btn-c{background:#eceef0;color:#111316}
-.ok{color:#111316}
+.contador{color:rgba(255,255,255,.7)}
+.barra{background:rgba(255,255,255,.08)}
+.barra i{background:linear-gradient(90deg,rgba(46,229,157,.4),var(--verde));box-shadow:0 0 12px rgba(46,229,157,.6)}
+.card{background:var(--carvao);border:1px solid var(--linha);box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 1px rgba(46,229,157,.06)}
+h1,h2{color:#fff}
+h1 em{color:var(--verde);background:none;text-shadow:0 0 24px rgba(46,229,157,.45)}
+p,.dica,.aviso{color:rgba(255,255,255,.7)}
+.bloco{color:var(--verde);background:rgba(46,229,157,.10);border:1px solid rgba(46,229,157,.3)}
+textarea,input[type=text]{background:#0d1114;color:#fff;border-color:var(--linha)}
+textarea::placeholder,input::placeholder{color:rgba(255,255,255,.38)}
+textarea:focus,input[type=text]:focus{border-color:var(--verde);box-shadow:0 0 0 3px rgba(46,229,157,.15)}
+.op,.cor{background:#0d1114;color:#fff;border-color:var(--linha)}
+.op:hover{border-color:rgba(46,229,157,.6)}
+.op .bola{border-color:rgba(255,255,255,.35)}
+.op.sel,.cor.sel{border-color:var(--verde);background:rgba(46,229,157,.10);box-shadow:0 0 14px rgba(46,229,157,.25)}
+.op.sel .bola{border-color:var(--verde);background:radial-gradient(var(--verde) 45%,transparent 50%)}
+.nrot{color:rgba(255,255,255,.55)}
+.btn-l{background:var(--verde);color:#062016;font-weight:700;box-shadow:0 0 22px rgba(46,229,157,.35)}
+.btn-l[disabled]{opacity:.35;box-shadow:none}
+.btn-v{color:rgba(255,255,255,.6)}
+.btn-c{background:transparent;color:#fff;border:1px solid var(--linha)}
+.resumo{background:#0d1114;color:rgba(255,255,255,.88);border:1px solid var(--linha)}
+.ok{color:var(--verde)}
+.rodape{color:rgba(255,255,255,.45)}
 </style>
 </head>
 <body>
 <div class="faixa"></div>
+<div class="halo" aria-hidden="true"></div>
 <div class="topo"><img class="logo" src="/inquebra/img/logo-branco.png" alt="InQuebra Blindagem de Celular"><div class="contador" id="contador"></div></div>
 <div class="barra"><i id="progresso"></i></div>
 <main class="card" id="tela"></main>
