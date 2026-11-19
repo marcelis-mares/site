@@ -99,6 +99,32 @@ textarea:focus,input[type=text]:focus{border-color:var(--verde);box-shadow:0 0 0
 .resumo{background:#0d1114;color:rgba(255,255,255,.88);border:1px solid var(--linha)}
 .ok{color:var(--verde)}
 .rodape{color:rgba(255,255,255,.45)}
+
+/* Black: oferta em dourado (cor quente), verde continua de acento */
+:root{--ouro:#C9A85A;--ouro2:#E8CF8E}
+.bloco.ouro{color:var(--ouro2);background:rgba(201,168,90,.10);border-color:rgba(201,168,90,.4)}
+h1 .oferta{color:var(--ouro2);text-shadow:0 0 22px rgba(201,168,90,.35);white-space:nowrap}
+h1 .oferta small{font-size:.55em;font-weight:700;margin-right:.15em;vertical-align:.25em}
+.passos{display:grid;gap:10px;margin:18px 0 4px}
+.passo{display:flex;gap:12px;align-items:flex-start;background:#0d1114;border:1px solid var(--linha);border-radius:12px;padding:12px 14px;font-size:15px;line-height:1.45;color:rgba(255,255,255,.85)}
+.passo b{flex:none;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;background:rgba(46,224,127,.12);color:var(--verde);border:1px solid rgba(46,224,127,.4)}
+.passo strong{color:var(--ouro2)}
+.cupom{position:relative;margin:18px 0 14px;padding:22px 18px 18px;border-radius:16px;text-align:center;background:radial-gradient(80% 90% at 50% 0%,rgba(201,168,90,.16),transparent 70%),#0d1114;border:1.5px solid var(--ouro);box-shadow:0 0 0 4px rgba(201,168,90,.08),0 0 30px rgba(201,168,90,.18)}
+.cupom .c-rot{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ouro2)}
+.cupom .c-valor{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:64px;line-height:1;margin:10px 0 6px;color:#fff;display:flex;align-items:center;justify-content:center;gap:8px}
+.cupom .c-valor small{font-size:24px;color:var(--ouro2);align-self:flex-start;margin-top:8px}
+.cupom .off{font-size:18px;font-weight:800;letter-spacing:.06em;background:var(--ouro);color:#1a1406;border-radius:8px;padding:6px 9px}
+.cupom .c-obs{font-size:14px;color:rgba(255,255,255,.75)}
+.cupom .c-cod{margin-top:14px;padding-top:12px;border-top:1px dashed rgba(201,168,90,.45);font-size:14px;color:rgba(255,255,255,.7)}
+.cupom .c-cod b{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;color:#fff;letter-spacing:.04em}
+.cupom.subiu{animation:pulsa .6s ease}
+@keyframes pulsa{0%{transform:scale(1)}40%{transform:scale(1.04)}100%{transform:scale(1)}}
+.sobe{margin-top:18px;padding:18px;border-radius:14px;border:1px solid rgba(46,224,127,.35);background:rgba(46,224,127,.05)}
+.sobe h2{font-size:20px}
+.sobe p{font-size:15px}
+.sobe .final{margin-top:12px}
+.falta{font-size:13px;color:var(--ouro2);min-height:18px;margin-top:10px}
+.nova{display:block;margin:18px auto 0;background:none;border:none;color:rgba(255,255,255,.45);font:inherit;font-size:13px;text-decoration:underline;cursor:pointer}
 </style>
 </head>
 <body>
@@ -112,7 +138,15 @@ textarea:focus,input[type=text]:focus{border-color:var(--verde);box-shadow:0 0 0
 <script>
 const CHAVE = "inquebra_cliente_v2"; const TIPO = "cliente";
 const WEBHOOK = "https://script.google.com/macros/s/AKfycbz6DsPT2jpw7i-FM2-YIVgfX9G1hD-i2zUzHv2FW6MkbtU-rIgTj1FsxEnfPS84L-24/exec";
-const SESSAO = (()=>{ try{ let s=localStorage.getItem(CHAVE+"_sessao"); if(!s){ s=Date.now().toString(36)+Math.random().toString(36).slice(2,7); localStorage.setItem(CHAVE+"_sessao",s);} return s; }catch(e){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); } })();
+let SESSAO = (()=>{ try{ let s=localStorage.getItem(CHAVE+"_sessao"); if(!s){ s=Date.now().toString(36)+Math.random().toString(36).slice(2,7); localStorage.setItem(CHAVE+"_sessao",s);} return s; }catch(e){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); } })();
+
+// Black InQuebra: pesquisa libera R$ 50 OFF, pesquisa + indicação libera R$ 100 OFF (celular e tablet).
+// Fora do período a página volta a ser a pesquisa normal. Para testar antes: ?black=1
+// Para estender a Black, mudar só a data de fim.
+const BLACK = { ini:new Date("2026-11-24T00:00:00-03:00"), fim:new Date("2026-11-27T23:59:59-03:00"), base:50, topo:100 };
+const EM_BLACK = (()=>{ try{ if(new URLSearchParams(location.search).get("black")==="1") return true; }catch(e){} const t=Date.now(); return t>=BLACK.ini.getTime() && t<=BLACK.fim.getTime(); })();
+const ATE = BLACK.fim.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",timeZone:"America/Sao_Paulo"});
+const CUPOM = "inquebra_cupom_black";
 function ev(nome, extra){ try { if (window.maresEvento) window.maresEvento(nome, extra || {}); } catch(e) {} }
 function enviar(linha){
   return fetch(WEBHOOK,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({tipo:TIPO,sessao:SESSAO,linha})});
@@ -120,7 +154,7 @@ function enviar(linha){
 
 const P = [
  {tipo:"intro"},
- {id:"k1", bloco:"Pergunta 1", t:"Como você conheceu a InQuebra?", tipoC:"escolha", ops:["Instagram","Passando no shopping","Indicação de amigo ou familiar","Loja de celular ou vendedor parceiro","Outro"]},
+ {id:"k1", bloco:"Pergunta 1", t:"Como você conheceu a InQuebra?", tipoC:"escolha", outro:"Conta pra gente como foi", ops:["Instagram","Passando no shopping","Indicação de amigo ou familiar","Loja de celular ou vendedor parceiro","Outro"]},
  {id:"k2", bloco:"Pergunta 2", t:"O que fez você decidir blindar o seu aparelho?"},
  {id:"k3", bloco:"Pergunta 3", t:"Antes de fazer, qual era a sua maior dúvida ou receio?"},
  {id:"k4", bloco:"Pergunta 4", t:"Em uma palavra, como você descreveria a InQuebra?", tipoC:"curto", ph:"Uma palavra"},
@@ -143,14 +177,29 @@ const tela = document.getElementById("tela");
 const tot = ()=> P.filter(p=>p.id&&vis(p)&&p.tipoC!=="ident").length;
 const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
+// mínimo de caracteres para liberar o botão em cada tipo de campo de texto
+const MIN = { longo:10, curto:3, outro:5, nome:2, whats:10 };
+const tam = s => String(s||"").trim().length;
+const digitos = s => String(s||"").replace(/\D/g,"").length;
 function respondida(p){
   const v = R[p.id];
   if(p.opcional) return true;
-  if(p.tipoC==="ident") return v && (v.nome||"").trim().length>1;
+  if(p.tipoC==="ident") return v && tam(v.nome)>=MIN.nome && (!tam(v.whats) || digitos(v.whats)>=MIN.whats);
   if(p.tipoC==="escalas") return v && p.esc.every((_,j)=>v[j]);
-  if(p.tipoC==="nps") return v && v.op!==undefined && v.op!=="" && !!v.mot && (v.mot!=="Outro" || (v.txt||"").trim().length>1);
-  if(p.tipoC==="escolha"||p.tipoC==="cores") return v && v.op!==undefined && v.op!=="";
-  return v && String(v).trim().length>0;
+  if(p.tipoC==="nps") return v && v.op!==undefined && v.op!=="" && !!v.mot && (v.mot!=="Outro" || tam(v.txt)>=MIN.outro);
+  if(p.tipoC==="escolha"||p.tipoC==="cores") return v && v.op!==undefined && v.op!=="" && (!p.outro || v.op!=="Outro" || tam(v.txt)>=MIN.outro);
+  if(p.tipoC==="curto") return tam(v)>=MIN.curto;
+  return tam(v)>=MIN.longo;
+}
+// aviso de quanto falta escrever, mostrado embaixo do campo que está segurando o botão
+function falta(p){
+  const v = R[p.id]; const m=(n,min)=> n<min ? `Escreva pelo menos ${min} caracteres${n?` (faltam ${min-n})`:""}.` : "";
+  if(p.tipoC==="ident"){ const v2=v||{}; if(tam(v2.nome)<MIN.nome) return "Escreva o seu nome."; if(tam(v2.whats)&&digitos(v2.whats)<MIN.whats) return "Confira o WhatsApp: DDD e número."; return ""; }
+  if(p.tipoC==="nps"){ const v2=v||{}; return v2.mot==="Outro" ? m(tam(v2.txt),MIN.outro) : ""; }
+  if(p.tipoC==="escolha"){ const v2=v||{}; return p.outro && v2.op==="Outro" ? m(tam(v2.txt),MIN.outro) : ""; }
+  if(p.tipoC==="curto") return m(tam(v),MIN.curto);
+  if(p.tipoC==="cores"||p.tipoC==="escalas") return "";
+  return m(tam(v),MIN.longo);
 }
 function progresso(){
   const n = P.slice(0,i).filter(p=>p.id&&vis(p)&&p.tipoC!=="ident").length; const total=tot();
@@ -160,6 +209,20 @@ function progresso(){
 function render(){
   while(P[i] && P[i].id && !vis(P[i])) i += dir;
   const p = P[i]; progresso(); salvar();
+  if(p.tipo==="intro" && EM_BLACK){
+    tela.innerHTML = `<div class="bloco ouro">Black InQuebra</div>
+    <h1>Ganhe <span class="oferta"><small>até</small>R$ 100 OFF</span> na sua blindagem.</h1>
+    <p>Responda 5 perguntas rápidas sobre a InQuebra. Leva menos de 2 minutos.</p>
+    <div class="passos">
+      <div class="passo"><b>1</b><span>Respondeu a pesquisa: <strong>R$ 50 OFF</strong> liberado.</span></div>
+      <div class="passo"><b>2</b><span>Indicou um amigo pelo WhatsApp: o desconto sobe para <strong>R$ 100 OFF</strong>.</span></div>
+      <div class="passo"><b>3</b><span>Mostre o seu cupom no balcão do quiosque.</span></div>
+    </div>
+    <p class="aviso">Vale para celular e tablet, até ${ATE}, no quiosque do ParkShopping Barigüi.</p>
+    <div class="acoes"><span></span><button class="btn btn-l" id="ir">Começar</button></div>`;
+    document.getElementById("ir").onclick = ()=>{ ev("inquebra_cliente_inicio",{black:1}); dir=1; i++; render(); };
+    return;
+  }
   if(p.tipo==="intro"){
     tela.innerHTML = `<div class="bloco">Sua opinião</div>
     <h1>Você blindou com a <em>InQuebra</em>. Conta pra gente como foi?</h1>
@@ -175,7 +238,8 @@ function render(){
   } else if(p.tipoC==="escolha"){
     const v = R[p.id]||{};
     corpo = `<div class="opcoes">${p.ops.map(o=>`<button class="op ${v.op===o?"sel":""}" data-o="${esc(o)}"><span class="bola"></span>${esc(o)}</button>`).join("")}</div>`
-      + (p.extra?`<p class="dica" style="margin-top:16px">${esc(p.extra)}</p><textarea id="extra" style="min-height:90px">${esc(v.txt||"")}</textarea>`:"");
+      + (p.extra?`<p class="dica" style="margin-top:16px">${esc(p.extra)}</p><textarea id="extra" style="min-height:90px">${esc(v.txt||"")}</textarea>`:"")
+      + (p.outro?`<textarea id="outroE" placeholder="${esc(p.outro)}" style="min-height:80px;margin-top:10px;${v.op==="Outro"?"":"display:none"}">${esc(v.txt||"")}</textarea>`:"");
   } else if(p.tipoC==="cores"){
     const v = R[p.id]||{};
     corpo = `<div class="cores">${CORES.map(c=>`<button class="cor ${v.op===c.k?"sel":""}" data-o="${esc(c.k)}"><div class="amostra" style="background:${c.bg};color:${c.fg}">INQUEBRA</div>${esc(c.k)}</button>`).join("")}</div>
@@ -184,7 +248,7 @@ function render(){
     const v = R[p.id]||{};
     corpo = `<input type="text" id="inome" placeholder="Seu nome" value="${esc(v.nome||"")}" style="margin-bottom:12px">
       <input type="text" id="iwhats" inputmode="tel" placeholder="Seu WhatsApp com DDD (opcional)" value="${esc(v.whats||"")}">
-      <p class="dica" style="margin-top:12px">Com o seu nome a gente gera um link de indicação só seu.</p>`;
+      <p class="dica" style="margin-top:12px">${EM_BLACK?"Seu nome vai no cupom de desconto que você mostra no balcão.":"Com o seu nome a gente gera um link de indicação só seu."}</p>`;
   } else if(p.tipoC==="nps"){
     const v = R[p.id]||{};
     corpo = `<div class="nps">${[0,1,2,3,4,5,6,7,8,9,10].map(n=>`<button class="op nb ${String(v.op)===String(n)?"sel":""}" data-o="${n}">${n}</button>`).join("")}</div>
@@ -198,12 +262,16 @@ function render(){
     corpo = `<textarea id="campo" placeholder="Escreva aqui...">${esc(R[p.id]||"")}</textarea>`;
   }
   tela.innerHTML = `<div class="bloco">${esc(p.bloco)}</div><h2>${esc(p.t)}</h2>${p.d?`<p class="dica">${esc(p.d)}</p>`:""}${corpo}
+   <div class="falta" id="falta"></div>
    <div class="acoes"><button class="btn btn-v" id="volta">Voltar</button><button class="btn btn-l" id="seg">${(P.slice(i+1).find(q=>!q.id||vis(q))||{}).tipo==="fim"?"Concluir":"Continuar"}</button></div>`;
   const seg = document.getElementById("seg");
-  const atual = ()=>{ seg.disabled = !respondida(p); };
+  const avisoF = document.getElementById("falta");
+  const atual = ()=>{ seg.disabled = !respondida(p); avisoF.textContent = falta(p); };
   const campo = document.getElementById("campo");
   if(campo){ campo.oninput = ()=>{ R[p.id]=campo.value; salvar(); atual(); }; setTimeout(()=>campo.focus(),50); }
-  tela.querySelectorAll(".opcoes > .op:not(.mot),.cor").forEach(b=>b.onclick=()=>{ R[p.id]=Object.assign({},R[p.id],{op:b.dataset.o}); tela.querySelectorAll(".op,.cor").forEach(x=>x.classList.toggle("sel",x===b)); salvar(); atual(); });
+  tela.querySelectorAll(".opcoes > .op:not(.mot),.cor").forEach(b=>b.onclick=()=>{ R[p.id]=Object.assign({},R[p.id],{op:b.dataset.o}); tela.querySelectorAll(".op,.cor").forEach(x=>x.classList.toggle("sel",x===b)); const oe=document.getElementById("outroE"); if(oe){ oe.style.display=b.dataset.o==="Outro"?"":"none"; if(b.dataset.o==="Outro") setTimeout(()=>oe.focus(),30); } salvar(); atual(); });
+  const oe = document.getElementById("outroE");
+  if(oe) oe.oninput = ()=>{ R[p.id]=Object.assign({},R[p.id],{txt:oe.value}); salvar(); atual(); };
   if(p.tipoC==="nps"){
     const box=document.getElementById("motivos");
     const desenha=()=>{
@@ -238,15 +306,83 @@ function codigo(){
   const n=((R.ident||{}).nome||"cliente").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z]/g,"").slice(0,10)||"cliente";
   return n+"-"+SESSAO.slice(-4);
 }
-function linha(cod){
-  const o=k=>(R[k]||{}).op??""; const g=k=>R[k]||"";
-  return [(R.ident||{}).nome||"",(R.ident||{}).whats||"",o("k1"),g("k2"),g("k3"),g("k4"),o("nps"),(()=>{const v=R.nps||{}; return (v.mot||"")+(v.mot==="Outro"&&v.txt?": "+v.txt:"");})(),cod];
+// colunas: B nome, C WhatsApp, D como conheceu, E por que decidiu, F maior dúvida, G uma palavra, H NPS, I motivo, J código, K desconto liberado (L sessão, posta pelo Apps Script)
+function linha(cod, desc){
+  const o=k=>{ const v=R[k]||{}; return (v.op??"")+(v.op==="Outro"&&v.txt?": "+v.txt:""); }; const g=k=>R[k]||"";
+  return [(R.ident||{}).nome||"",(R.ident||{}).whats||"",o("k1"),g("k2"),g("k3"),g("k4"),(R.nps||{}).op??"",(()=>{const v=R.nps||{}; return (v.mot||"")+(v.mot==="Outro"&&v.txt?": "+v.txt:"");})(),cod,desc||""];
 }
+function msgIndicacao(cod){
+  const link = "https://inquebrablindagem.com.br/?utm_source=indicacao&utm_campaign=amigo&utm_content="+cod;
+  return "Oi! Blindei meu aparelho na InQuebra, no ParkShopping Barigüi. É uma proteção à base de titânio aplicada direto no vidro, sem película e sem mudar o toque. Recomendo!"
+    + (EM_BLACK ? " Até "+ATE+" tem Black lá no quiosque, com até R$ 100 OFF." : "")
+    + " Dá uma olhada: "+link;
+}
+function salvaCupom(c){ try{ localStorage.setItem(CUPOM, JSON.stringify(c)); }catch(e){} }
+function lerCupom(){ try{ return JSON.parse(localStorage.getItem(CUPOM)||"null"); }catch(e){ return null; } }
+// tela do cupom da Black: R$ 50 OFF com a pesquisa, sobe para R$ 100 OFF quando indica
+function telaCupom(c){
+  progressoFim();
+  const subiu = c.valor===BLACK.topo;
+  const msg = msgIndicacao(c.cod);
+  tela.innerHTML = `<div class="bloco ouro">Desconto liberado</div>
+   <h1>${c.nome?esc(c.nome)+", seu":"Seu"} desconto <em>está liberado</em>.</h1>
+   <div class="cupom" id="cupom">
+     <div class="c-rot">Black InQuebra</div>
+     <div class="c-valor"><small>R$</small><span id="cval">${c.valor}</span><span class="off">OFF</span></div>
+     <div class="c-obs">na blindagem de celular ou tablet</div>
+     <div class="c-cod">Código <b>${esc(c.cod)}</b><br>válido até ${ATE}, no quiosque do ParkShopping Barigüi</div>
+   </div>
+   <p><strong style="color:#fff">Mostre esta tela no balcão.</strong> ${subiu?"Mostre também a mensagem de indicação enviada no seu WhatsApp.":""}</p>
+   ${subiu?`<div class="ok">Indicação feita. Você chegou ao desconto máximo.</div>`:`
+   <div class="sobe">
+     <h2>Quer R$ 100 OFF?</h2>
+     <p>Indique a InQuebra para um amigo pelo WhatsApp. A mensagem já está pronta. No balcão, mostre a mensagem enviada e o desconto sobe para R$ 100 OFF.</p>
+     <div class="resumo">${esc(msg)}</div>
+     <div class="final">
+       <a class="btn btn-l" id="zap" href="https://wa.me/?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">Indicar pelo WhatsApp</a>
+       <button class="btn btn-c" id="copiar">Copiar mensagem</button>
+     </div>
+     <div class="ok" id="ok"></div>
+   </div>`}
+   <button class="nova" id="nova">Não é você? Começar uma nova resposta</button>`;
+  const sobe = canal=>{
+    ev("inquebra_cliente_indicar",{canal,black:1});
+    if(c.valor===BLACK.topo) return;
+    c.valor = BLACK.topo; salvaCupom(c);
+    SESSAO = c.sessao || SESSAO;
+    enviar(c.linha.slice(0,9).concat(["R$ "+BLACK.topo+" OFF (indicou pelo "+canal+")"])).catch(()=>{});
+    setTimeout(()=>{ telaCupom(c); const k=document.getElementById("cupom"); if(k) k.classList.add("subiu"); window.scrollTo(0,0); }, canal==="WhatsApp"?600:1200);
+  };
+  const zap=document.getElementById("zap"); if(zap) zap.onclick = ()=>sobe("WhatsApp");
+  const cp=document.getElementById("copiar");
+  if(cp) cp.onclick = async ()=>{
+    const ok=document.getElementById("ok");
+    try{ await navigator.clipboard.writeText(msg); ok.textContent="Mensagem copiada. Cole no WhatsApp do seu amigo e envie."; }
+    catch(e){ ok.textContent="Selecione o texto acima e copie."; }
+    sobe("copiar");
+  };
+  document.getElementById("nova").onclick = ()=>{
+    try{ localStorage.removeItem(CUPOM); localStorage.removeItem(CHAVE); localStorage.removeItem(CHAVE+"_sessao"); }catch(e){}
+    location.reload();
+  };
+}
+function progressoFim(){ document.getElementById("progresso").style.width="100%"; document.getElementById("contador").textContent=""; }
 function fim(){
   const cod = codigo();
   const nome = ((R.ident||{}).nome||"").trim().split(" ")[0];
-  const link = "https://inquebrablindagem.com.br/?utm_source=indicacao&utm_campaign=amigo&utm_content="+cod;
-  const msg = "Oi! Fiz a blindagem do meu celular na InQuebra, no ParkShopping Barigüi. É uma proteção à base de titânio aplicada direto no vidro, sem película e sem mudar o toque. Recomendo! Dá uma olhada: "+link;
+  if(EM_BLACK){
+    const l = linha(cod, "R$ "+BLACK.base+" OFF (pesquisa)");
+    tela.innerHTML = `<div class="bloco ouro">Liberando</div><h1>Liberando o seu desconto...</h1>`;
+    enviar(l).catch(()=>{}).finally(()=>{
+      ev("inquebra_cliente_concluido",{nps:(R.nps||{}).op??"",origem:(R.k1||{}).op||"",black:1});
+      const c = {cod, nome, valor:BLACK.base, sessao:SESSAO, linha:l};
+      salvaCupom(c);
+      try{ localStorage.removeItem(CHAVE); }catch(e){}
+      telaCupom(c);
+    });
+    return;
+  }
+  const msg = msgIndicacao(cod);
   tela.innerHTML = `<div class="bloco">Enviando</div><h1>Só um instante...</h1>`;
   enviar(linha(cod)).catch(()=>{}).finally(()=>{
     ev("inquebra_cliente_concluido",{nps:(R.nps||{}).op??"",origem:(R.k1||{}).op||""});
@@ -268,7 +404,9 @@ function fim(){
     try{ localStorage.removeItem(CHAVE); }catch(e){}
   });
 }
-render();
+// quem já pegou o cupom e reabre a página volta direto para ele
+const cupomSalvo = EM_BLACK ? lerCupom() : null;
+if(cupomSalvo && cupomSalvo.cod) telaCupom(cupomSalvo); else render();
 </script>
 <!-- sem cookies.js de propósito: página com a marca InQuebra, não da MARES; a medição é a própria planilha -->
 </body>
