@@ -181,10 +181,13 @@ const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&g
 const MIN = { longo:10, curto:3, outro:5, nome:2, whats:10 };
 const tam = s => String(s||"").trim().length;
 const digitos = s => String(s||"").replace(/\D/g,"").length;
+// WhatsApp: DDD + número, 10 ou 11 dígitos; com 11, o primeiro depois do DDD tem que ser 9
+const foneOk = s => { const d=String(s||"").replace(/\D/g,""); return (d.length===10 || (d.length===11 && d[2]==="9")) && +d.slice(0,2)>=11; };
+const mascara = s => { const d=String(s||"").replace(/\D/g,"").slice(0,11); if(d.length<=2) return d?"("+d:""; if(d.length<=6) return "("+d.slice(0,2)+") "+d.slice(2); if(d.length<=10) return "("+d.slice(0,2)+") "+d.slice(2,6)+"-"+d.slice(6); return "("+d.slice(0,2)+") "+d.slice(2,7)+"-"+d.slice(7); };
 function respondida(p){
   const v = R[p.id];
   if(p.opcional) return true;
-  if(p.tipoC==="ident") return v && tam(v.nome)>=MIN.nome && (!tam(v.whats) || digitos(v.whats)>=MIN.whats);
+  if(p.tipoC==="ident") return v && tam(v.nome)>=MIN.nome && (!digitos(v.whats) || foneOk(v.whats));
   if(p.tipoC==="escalas") return v && p.esc.every((_,j)=>v[j]);
   if(p.tipoC==="nps") return v && v.op!==undefined && v.op!=="" && !!v.mot && (v.mot!=="Outro" || tam(v.txt)>=MIN.outro);
   if(p.tipoC==="escolha"||p.tipoC==="cores") return v && v.op!==undefined && v.op!=="" && (!p.outro || v.op!=="Outro" || tam(v.txt)>=MIN.outro);
@@ -194,7 +197,7 @@ function respondida(p){
 // aviso de quanto falta escrever, mostrado embaixo do campo que está segurando o botão
 function falta(p){
   const v = R[p.id]; const m=(n,min)=> n<min ? `Escreva pelo menos ${min} caracteres${n?` (faltam ${min-n})`:""}.` : "";
-  if(p.tipoC==="ident"){ const v2=v||{}; if(tam(v2.nome)<MIN.nome) return "Escreva o seu nome."; if(tam(v2.whats)&&digitos(v2.whats)<MIN.whats) return "Confira o WhatsApp: DDD e número."; return ""; }
+  if(p.tipoC==="ident"){ const v2=v||{}; if(tam(v2.nome)<MIN.nome) return "Escreva o seu nome."; const dw=digitos(v2.whats); if(dw && !foneOk(v2.whats)) return dw<MIN.whats ? `WhatsApp incompleto: coloque o DDD e o número (faltam ${MIN.whats-dw} dígitos).` : "Confira o WhatsApp: celular com DDD tem 11 dígitos e começa com 9 depois do DDD."; return ""; }
   if(p.tipoC==="nps"){ const v2=v||{}; return v2.mot==="Outro" ? m(tam(v2.txt),MIN.outro) : ""; }
   if(p.tipoC==="escolha"){ const v2=v||{}; return p.outro && v2.op==="Outro" ? m(tam(v2.txt),MIN.outro) : ""; }
   if(p.tipoC==="curto") return m(tam(v),MIN.curto);
@@ -247,7 +250,7 @@ function render(){
   } else if(p.tipoC==="ident"){
     const v = R[p.id]||{};
     corpo = `<input type="text" id="inome" placeholder="Seu nome" value="${esc(v.nome||"")}" style="margin-bottom:12px">
-      <input type="text" id="iwhats" inputmode="tel" placeholder="Seu WhatsApp com DDD (opcional)" value="${esc(v.whats||"")}">
+      <input type="text" id="iwhats" inputmode="tel" maxlength="15" placeholder="Seu WhatsApp com DDD (opcional)" value="${esc(mascara(v.whats||""))}">
       <p class="dica" style="margin-top:12px">${EM_BLACK?"Seu nome vai no cupom de desconto que você mostra no balcão.":"Com o seu nome a gente gera um link de indicação só seu."}</p>`;
   } else if(p.tipoC==="nps"){
     const v = R[p.id]||{};
@@ -288,7 +291,7 @@ function render(){
     desenha();
   }
   const inome=document.getElementById("inome"), iwh=document.getElementById("iwhats");
-  if(inome){ const up=()=>{ R[p.id]={nome:inome.value,whats:iwh.value}; salvar(); atual(); }; inome.oninput=up; iwh.oninput=up; }
+  if(inome){ const up=()=>{ R[p.id]={nome:inome.value,whats:iwh.value}; salvar(); atual(); }; inome.oninput=up; iwh.oninput=()=>{ iwh.value=mascara(iwh.value); up(); }; }
   const ex = document.getElementById("extra");
   if(ex) ex.oninput = ()=>{ R[p.id]=Object.assign({},R[p.id],{txt:ex.value}); salvar(); };
   tela.querySelectorAll(".pontos button").forEach(b=>b.onclick=()=>{ const v=Object.assign({},R[p.id]); v[b.dataset.j]=+b.dataset.n; R[p.id]=v; b.parentNode.querySelectorAll("button").forEach(x=>x.classList.toggle("sel",x===b)); salvar(); atual(); });
