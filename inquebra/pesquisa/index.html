@@ -312,10 +312,14 @@ function linha(cod, desc){
   return [(R.ident||{}).nome||"",(R.ident||{}).whats||"",o("k1"),g("k2"),g("k3"),g("k4"),(R.nps||{}).op??"",(()=>{const v=R.nps||{}; return (v.mot||"")+(v.mot==="Outro"&&v.txt?": "+v.txt:"");})(),cod,desc||""];
 }
 function msgIndicacao(cod){
-  const link = "https://inquebrablindagem.com.br/?utm_source=indicacao&utm_campaign=amigo&utm_content="+cod;
-  return "Oi! Blindei meu aparelho na InQuebra, no ParkShopping Barigüi. É uma proteção à base de titânio aplicada direto no vidro, sem película e sem mudar o toque. Recomendo!"
-    + (EM_BLACK ? " Até "+ATE+" tem Black lá no quiosque, com até R$ 100 OFF." : "")
-    + " Dá uma olhada: "+link;
+  // link abre o WhatsApp da InQuebra (o mesmo do site) já com o nome de quem indicou e o código
+  const quem = ((R.ident||{}).nome||(lerCupom()||{}).nome||"").trim().split(" ")[0];
+  const abre = "Oi! Vim pela indicação"+(quem?" de "+quem:"")+" (código "+cod+") e quero saber mais sobre a blindagem.";
+  const link = "https://wa.me/5541987098485?text="+encodeURIComponent(abre);
+  return "Oi! Quero te indicar uma coisa que eu conheci: a blindagem da InQuebra.\n\n"
+    + "É uma tecnologia inovadora que protege o vidro e a estrutura de celulares, tablets e smartwatches contra riscos e impactos. Não é película: é aplicada direto no aparelho, não muda o toque nem o visual e fica pronta na hora, no quiosque do ParkShopping Barigüi.\n\n"
+    + (EM_BLACK ? "Até "+ATE+" eles estão com até R$ 100 OFF na Black.\n\n" : "")
+    + "Este é o link para você falar com eles e garantir a sua proteção com a minha indicação:\n"+link;
 }
 function salvaCupom(c){ try{ localStorage.setItem(CUPOM, JSON.stringify(c)); }catch(e){} }
 function lerCupom(){ try{ return JSON.parse(localStorage.getItem(CUPOM)||"null"); }catch(e){ return null; } }
