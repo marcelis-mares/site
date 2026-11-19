@@ -324,8 +324,8 @@ function msgIndicacao(cod){
   const quem = ((R.ident||{}).nome||(lerCupom()||{}).nome||"").trim().split(" ")[0];
   const abre = "Oi! Vim pela indicação"+(quem?" de "+quem:"")+" (código "+cod+") e quero saber mais sobre a blindagem.";
   const link = "https://wa.me/5541987098485?text="+encodeURIComponent(abre);
-  return "Oi! Quero te indicar uma coisa que eu conheci: a blindagem da InQuebra.\n\n"
-    + "É uma tecnologia inovadora que protege o vidro e a estrutura de celulares, tablets e smartwatches contra riscos e impactos. Não é película: é aplicada direto no aparelho, não muda o toque nem o visual e fica pronta na hora, no quiosque do ParkShopping Barigüi.\n\n"
+  return "Oi! Quero te indicar uma tecnologia que conheci para proteger o vidro e a estrutura de eletrônicos: a BLINDAGEM da InQuebra.\n\n"
+    + "É uma tecnologia inovadora que protege o vidro e a estrutura de celulares, tablets e smartwatches contra riscos e impactos. NÃO É PELÍCULA: é aplicada direto no aparelho, não muda o toque nem o visual e fica pronta na hora, no quiosque do ParkShopping Barigüi.\n\n"
     + (EM_BLACK ? "Até "+ATE+" eles estão com até R$ 100 OFF na Black.\n\n" : "")
     + "Este é o link para você falar com eles e garantir a sua proteção com a minha indicação:\n"+link;
 }
