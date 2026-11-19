@@ -178,12 +178,17 @@ const tot = ()=> P.filter(p=>p.id&&vis(p)&&p.tipoC!=="ident").length;
 const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 // mínimo de caracteres para liberar o botão em cada tipo de campo de texto
-const MIN = { longo:10, curto:3, outro:5, nome:2, whats:10 };
+const MIN = { longo:10, curto:3, outro:5, nome:2 };
 const tam = s => String(s||"").trim().length;
 const digitos = s => String(s||"").replace(/\D/g,"").length;
-// WhatsApp: DDD + número, 10 ou 11 dígitos; com 11, o primeiro depois do DDD tem que ser 9
-const foneOk = s => { const d=String(s||"").replace(/\D/g,""); return (d.length===10 || (d.length===11 && d[2]==="9")) && +d.slice(0,2)>=11; };
-const mascara = s => { const d=String(s||"").replace(/\D/g,"").slice(0,11); if(d.length<=2) return d?"("+d:""; if(d.length<=6) return "("+d.slice(0,2)+") "+d.slice(2); if(d.length<=10) return "("+d.slice(0,2)+") "+d.slice(2,6)+"-"+d.slice(6); return "("+d.slice(0,2)+") "+d.slice(2,7)+"-"+d.slice(7); };
+// WhatsApp: celular com DDD (11 dígitos) ou com +55 na frente (13 dígitos, até 14 caracteres contando o +)
+// com 13 dígitos começando em 55, o 55 é o código do país; com 11, o 55 seria o DDD (RS)
+const fone = s => { const raw=String(s||""); let d=raw.replace(/\D/g,"").slice(0,13); const intl = raw.trim().startsWith("+") || d.length>11; return {d, intl, local: intl ? d.slice(2) : d}; };
+const foneOk = s => { const f=fone(s); return (!f.intl || f.d.startsWith("55")) && f.local.length===11 && f.local[2]==="9" && +f.local.slice(0,2)>=11; };
+const faltaFone = s => { const f=fone(s); return (f.intl?13:11) - f.d.length; };
+const mascara = s => { const f=fone(s); const l=f.local; let m;
+  if(!l.length) m=""; else if(l.length<=2) m="("+l; else if(l.length<=7) m="("+l.slice(0,2)+") "+l.slice(2); else m="("+l.slice(0,2)+") "+l.slice(2,7)+"-"+l.slice(7);
+  return f.intl ? ("+"+f.d.slice(0,2)+(m?" "+m:"")) : m; };
 function respondida(p){
   const v = R[p.id];
   if(p.opcional) return true;
@@ -196,8 +201,8 @@ function respondida(p){
 }
 // aviso de quanto falta escrever, mostrado embaixo do campo que está segurando o botão
 function falta(p){
-  const v = R[p.id]; const m=(n,min)=> n<min ? `Escreva pelo menos ${min} caracteres${n?` (faltam ${min-n})`:""}.` : "";
-  if(p.tipoC==="ident"){ const v2=v||{}; if(tam(v2.nome)<MIN.nome) return "Escreva o seu nome."; const dw=digitos(v2.whats); if(dw && !foneOk(v2.whats)) return dw<MIN.whats ? `WhatsApp incompleto: coloque o DDD e o número (faltam ${MIN.whats-dw} dígitos).` : "Confira o WhatsApp: celular com DDD tem 11 dígitos e começa com 9 depois do DDD."; return ""; }
+  const v = R[p.id]; const m=(n,min)=> n<min ? `Escreva pelo menos ${min} caracteres${n?` (${min-n>1?"faltam "+(min-n):"falta 1"})`:""}.` : "";
+  if(p.tipoC==="ident"){ const v2=v||{}; if(tam(v2.nome)<MIN.nome) return "Escreva o seu nome."; const dw=digitos(v2.whats); if(dw && !foneOk(v2.whats)) return faltaFone(v2.whats)>0 ? `WhatsApp incompleto: coloque o DDD e o número (${faltaFone(v2.whats)>1?"faltam "+faltaFone(v2.whats)+" dígitos":"falta 1 dígito"}).` : "Confira o WhatsApp: DDD e celular começando com 9, como (41) 99999-0000 ou +55 (41) 99999-0000."; return ""; }
   if(p.tipoC==="nps"){ const v2=v||{}; return v2.mot==="Outro" ? m(tam(v2.txt),MIN.outro) : ""; }
   if(p.tipoC==="escolha"){ const v2=v||{}; return p.outro && v2.op==="Outro" ? m(tam(v2.txt),MIN.outro) : ""; }
   if(p.tipoC==="curto") return m(tam(v),MIN.curto);
@@ -250,7 +255,7 @@ function render(){
   } else if(p.tipoC==="ident"){
     const v = R[p.id]||{};
     corpo = `<input type="text" id="inome" placeholder="Seu nome" value="${esc(v.nome||"")}" style="margin-bottom:12px">
-      <input type="text" id="iwhats" inputmode="tel" maxlength="15" placeholder="Seu WhatsApp com DDD (opcional)" value="${esc(mascara(v.whats||""))}">
+      <input type="text" id="iwhats" inputmode="tel" maxlength="19" placeholder="Seu WhatsApp com DDD (opcional)" value="${esc(mascara(v.whats||""))}">
       <p class="dica" style="margin-top:12px">${EM_BLACK?"Seu nome vai no cupom de desconto que você mostra no balcão.":"Com o seu nome a gente gera um link de indicação só seu."}</p>`;
   } else if(p.tipoC==="nps"){
     const v = R[p.id]||{};
