@@ -76,20 +76,20 @@ fbq('init','673278761920486');fbq('track','PageView');
   "offers": [
     {
       "@type": "Offer",
-      "name": "Ingresso individual · Lote 1",
-      "price": "997.00",
+      "name": "Ingresso individual · Lote 2 (semana Black)",
+      "price": "1297.00",
       "priceCurrency": "BRL",
       "availability": "https://schema.org/InStock",
-      "validThrough": "2026-11-13T23:59:00-03:00",
+      "validThrough": "2026-11-25T23:59:00-03:00",
       "url": "https://www.maresconsultoria.com.br/mares-ia/"
     },
     {
       "@type": "Offer",
-      "name": "Ingresso duplo, dono e um líder · Lote 1",
-      "price": "1597.00",
+      "name": "Ingresso duplo, dono e um líder · Lote 2 (semana Black)",
+      "price": "1997.00",
       "priceCurrency": "BRL",
       "availability": "https://schema.org/InStock",
-      "validThrough": "2026-11-13T23:59:00-03:00",
+      "validThrough": "2026-11-25T23:59:00-03:00",
       "url": "https://www.maresconsultoria.com.br/mares-ia/"
     }
   ]
@@ -1812,8 +1812,8 @@ html{scroll-padding-top:80px}
    ===================================================================== */
 window.MARES_LOTES = [
   { nome: "Lote 1", cond: "até 13 de novembro",       fim: new Date(2026, 10, 13, 23, 59),  individual: 997,  duplo: 1597, checkout: { individual: "https://chk.eduzz.com/efmoox67", duplo: "https://chk.eduzz.com/gxxwn2iu" } },
-  { nome: "Lote 2", cond: "de 14 a 20 de novembro",   fim: new Date(2026, 10, 20, 23, 59), individual: 1297, duplo: 1997, checkout: { individual: "https://chk.eduzz.com/yjzjl2rh", duplo: "https://chk.eduzz.com/oo2cjqtm" } },
-  { nome: "Valor oficial", oficial: true, cond: "de 21 a 25 de novembro",   fim: new Date(2026, 10, 25, 23, 59), individual: 1597, duplo: 2397, checkout: { individual: "https://chk.eduzz.com/sc7p7ein", duplo: "https://chk.eduzz.com/eiaiepcs" } }
+  { nome: "Lote 2", cond: "mantido na semana Black, até 25 de novembro", aviso: "Semana Black: o lote 2 foi mantido até 25 de novembro, quando as inscrições encerram.", fim: new Date(2026, 10, 25, 23, 59), individual: 1297, duplo: 1997, checkout: { individual: "https://chk.eduzz.com/yjzjl2rh", duplo: "https://chk.eduzz.com/oo2cjqtm" } },
+  { nome: "Valor oficial", oficial: true, referencia: true, cond: "valor fora da semana Black",   fim: new Date(2026, 10, 25, 23, 59), individual: 1597, duplo: 2397, checkout: { individual: "https://chk.eduzz.com/sc7p7ein", duplo: "https://chk.eduzz.com/eiaiepcs" } }
 ];
 
 /* 997 vira "R$ 997" e 998.5 vira "R$ 998,50" */
@@ -1881,7 +1881,7 @@ window.maresLinhaLote = function () {
           } else if (estado === "encerrado") {
             html += '<div class="lote-encerrado">Lote encerrado</div>';
           } else {
-            html += '<div class="lote-selo">Ainda não aberto</div>';
+            html += '<div class="lote-selo">' + (l.referencia ? 'Na Black você paga o lote 2' : 'Ainda não aberto') + '</div>';
           }
           html += '</div>';
         });
@@ -1982,7 +1982,7 @@ window.maresLinhaLote = function () {
       var ultimo = (l === window.MARES_LOTES[window.MARES_LOTES.length - 1]);
       pintar("aviso-lote", fechou
         ? "As inscrições desta turma estão encerradas. Fale comigo no WhatsApp para saber da próxima."
-        : (l.oficial
+        : (l.aviso ? l.aviso : l.oficial
           ? "O valor oficial vale " + l.cond + ", e as inscrições encerram no dia 25."
           : "O " + l.nome.toLowerCase() + " vale " + l.cond + ". Depois o valor sobe e não volta."));
     };
